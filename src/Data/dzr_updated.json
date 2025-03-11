@@ -1,0 +1,123 @@
+{
+    "_comment": "Unitățile de măsură: mg (miligram) pentru majoritatea vitaminelor și mineralelor, µg (microgram) pentru B12, D, și altele specifice.",
+    "Vitamina A": {
+        "dzr": 900,
+        "unitate": "µg"
+    },
+    "Vitamina D": {
+        "dzr": 15,
+        "unitate": "µg"
+    },
+    "Vitamina E": {
+        "dzr": 15,
+        "unitate": "mg"
+    },
+    "Vitamina K": {
+        "dzr": 120,
+        "unitate": "µg"
+    },
+    "Vitamina C": {
+        "dzr": 90,
+        "unitate": "mg"
+    },
+    "Vitamina B1": {
+        "dzr": 1.2,
+        "unitate": "mg"
+    },
+    "Vitamina B2": {
+        "dzr": 1.3,
+        "unitate": "mg"
+    },
+    "Vitamina B3": {
+        "dzr": 16,
+        "unitate": "mg"
+    },
+    "Vitamina B5": {
+        "dzr": 5,
+        "unitate": "mg"
+    },
+    "Vitamina B6": {
+        "dzr": 1.7,
+        "unitate": "mg"
+    },
+    "Vitamina B7": {
+        "dzr": 30,
+        "unitate": "µg"
+    },
+    "Vitamina B9": {
+        "dzr": 400,
+        "unitate": "µg"
+    },
+    "Vitamina B12": {
+        "dzr": 2.4,
+        "unitate": "µg"
+    },
+    "Calciu": {
+        "dzr": 1000,
+        "unitate": "mg"
+    },
+    "Fosfor": {
+        "dzr": 700,
+        "unitate": "mg"
+    },
+    "Magneziu": {
+        "dzr": 400,
+        "unitate": "mg"
+    },
+    "Sodiu": {
+        "dzr": 1500,
+        "unitate": "mg"
+    },
+    "Potasiu": {
+        "dzr": 4700,
+        "unitate": "mg"
+    },
+    "Clor": {
+        "dzr": 2300,
+        "unitate": "mg"
+    },
+    "Sulfur": {
+        "dzr": 800,
+        "unitate": "mg"
+    },
+    "Fier": {
+        "dzr": 18,
+        "unitate": "mg"
+    },
+    "Zinc": {
+        "dzr": 11,
+        "unitate": "mg"
+    },
+    "Cupru": {
+        "dzr": 0.9,
+        "unitate": "mg"
+    },
+    "Mangan": {
+        "dzr": 2.3,
+        "unitate": "mg"
+    },
+    "Seleniu": {
+        "dzr": 55,
+        "unitate": "µg"
+    },
+    "Iod": {
+        "dzr": 150,
+        "unitate": "µg"
+    },
+    "Fluor": {
+        "dzr": 4,
+        "unitate": "mg"
+    },
+    "Molibden": {
+        "dzr": 45,
+        "unitate": "µg"
+    },
+    "Omega-3": {
+        "dzr": 1.6,
+        "unitate": "g"
+    },
+    "Omega-6": {
+        "dzr": 17,
+        "unitate": "g"
+    }
+}

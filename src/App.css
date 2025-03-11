@@ -1,38 +1,114 @@
-.App {
+.selected-food-card {
+  width: 160px; /* Mai îngust */
+  max-width: 160px;
+  word-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  margin: 5px auto;
+  box-shadow: 0px 1px 4px rgba(0, 0, 1.6, 4);
+  border-radius: 5px;
+  background: white;
+}
+
+.selected-food-card button {
+  padding: 4px 6px; /* Micșorează butonul */
+  font-size: 12px;
+}
+
+.selected-food-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3px; /* Reducem distanța dintre carduri */
+}
+
+.header, .footer {
+  background-color: rgba(0, 0, 0, 0.85); /* Negru cu 85% opacitate */
+  backdrop-filter: blur(5px); /* Efect de blur pentru fundal */
+  color: white; /* Text alb pentru contrast */
+  padding: 10px 0; /* Spațiere sus și jos */
+  position: fixed; /* Fixat în partea de sus și jos */
+  width: 100%; /* Să acopere întreaga lățime */
+  z-index: 1000; /* Să fie deasupra altor elemente */
+}
+
+.footer {
+  bottom: 0;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.header {
+  top: 0;
+  text-align: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+/* Asigură că aplicația ocupă toată înălțimea ecranului */
+.app-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  min-height: 100vh;
 }
 
-.App-link {
-  color: #61dafb;
+/* Permite conținutului să se extindă și să împingă footer-ul în jos */
+.content {
+  padding-top: 80px;
+  padding-bottom: 80px;  
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.diet-info-title {
+  font-size: 2rem; /* Mărește dimensiunea textului */
+  font-weight: bold; /* Îngroașă textul */
+  text-align: center; /* Centrează textul */
+  color: white; /* Text alb pentru contrast */
+  background: rgba(0, 0, 0, 0.6); /* Fundal negru semi-transparent */
+  padding: 10px 20px; /* Spațiere interioară */
+  border-radius: 8px; /* Colțuri rotunjite */
+  backdrop-filter: blur(5px); /* Efect de blur în spatele textului */
+
+  /* Centrare orizontală și verticală */
+  display: flex;
+  justify-content: center; /* Centrează pe orizontală */
+  align-items: center; /* Centrează pe verticală */
+  width: 30%; /* Asigură că ocupă toată lățimea */
+  height: 3rem; /* Înălțime fixă pentru un aspect uniform */
+  margin: 20px auto; /* Spațiu de sus și jos + centrare */
 }
+
+.custom-button {
+  display: block;
+  width: 60%; /* Ajustează lățimea pentru a nu fi full width */
+  max-width: 150px; /* Evită să fie prea mari */
+  margin: 5px auto; /* Centrează butonul */
+  background-color: #2c2c2c !important; /* Asortează culoarea */
+  padding: 6px 10px;
+  border: none; /* Elimină bordura */
+  box-shadow: none; /* Elimină efectele de focus */
+}
+
+
+
+.custom-button:hover {
+  background: rgba(0, 0, 0, 1); /* Ușor mai închis la hover */
+  transform: scale(1.05); /* Efect de mărire la hover */
+}
+
+.custom-button:focus {
+  outline: none !important; /* Elimină marginea albastră */
+  box-shadow: none !important;
+}
+
+.dropdown-menu {
+  z-index: 1050 !important; /* Mai mare decât header-ul */
+}
+
+
+
+

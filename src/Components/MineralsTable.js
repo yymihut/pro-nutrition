@@ -15,7 +15,7 @@ const MineralsTable = ({ selectedFoods }) => {
 /* */
   return (
     <Container className="mt-4 text-center">
-      <h5 className="diet-info-title">Total minerale din alimentele alese </h5>
+      <h5 className="diet-info-title">Total minerale & vitamine</h5>
       <Table striped bordered hover className="minerals-table table-sm table-dark" responsive>
         <thead>
           <tr>

@@ -1,114 +1,524 @@
-.selected-food-card {
-  width: 160px; /* Mai îngust */
-  max-width: 160px;
-  word-wrap: break-word;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 5px;
-  margin: 5px auto;
-  box-shadow: 0px 1px 4px rgba(0, 0, 1.6, 4);
-  border-radius: 5px;
-  background: white;
+/* 🔹 Stiluri Generale */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
 }
 
-.selected-food-card button {
-  padding: 4px 6px; /* Micșorează butonul */
-  font-size: 12px;
-}
-
-.selected-food-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 3px; /* Reducem distanța dintre carduri */
-}
-
-.header, .footer {
-  background-color: rgba(0, 0, 0, 0.85); /* Negru cu 85% opacitate */
-  backdrop-filter: blur(5px); /* Efect de blur pentru fundal */
-  color: white; /* Text alb pentru contrast */
-  padding: 10px 0; /* Spațiere sus și jos */
-  position: fixed; /* Fixat în partea de sus și jos */
-  width: 100%; /* Să acopere întreaga lățime */
-  z-index: 1000; /* Să fie deasupra altor elemente */
-}
-
-.footer {
-  bottom: 0;
-  text-align: center;
-}
-
-.header {
-  top: 0;
-  text-align: center;
-}
-
-
-/* Asigură că aplicația ocupă toată înălțimea ecranului */
+/* 🔹 Container principal */
 .app-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-/* Permite conținutului să se extindă și să împingă footer-ul în jos */
+.custom-badge-diet {
+  background-color: rgb(255, 193, 9) !important;
+  color: black !important;
+  font-weight: bold;
+  height: 36px !important;
+  text-align: center !important;
+  align-content: center !important;
+}
+
 .content {
-  padding-top: 80px;
-  padding-bottom: 80px;  
+  display: flex;
+  flex-direction: column;
+  min-height: 30%;
+}
+
+/* 🔹 Lista de sugestii optimizată */
+.search-suggestions {
+  position: absolute;
+  width: 100%;
+  max-width: 500px; /* ✅ Ajustăm pentru aliniere corectă */
+  max-height: 450px;
+  overflow-y: auto;
+  background: rgba(0, 0, 0, 0.9); /* ✅ Fundal semitransparent */
+  color: white;
+  border-radius: 5px;
+  z-index: 1000;
+  top: 40px; /* ✅ Evităm suprapunerea */
+  left: 0;
+}
+
+/* 🔹 Stil pentru fiecare element din listă */
+.search-suggestions .list-group-item {
+  background: transparent !important;
+  color: white !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  word-wrap: break-word; /* ✅ Evită textul tăiat */
+  white-space: normal !important; /* ✅ Permite wrap pe text */
+  overflow-wrap: break-word !important; /* ✅ Asigură că textul nu este trunchiat */
+  padding: 7px;
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 100%; /* ✅ Se ajustează la conținut */
+}
+
+/* 🔹 Efect hover pentru sugestii */
+.search-suggestions .list-group-item:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* 🔹 Stil pentru header cu fundal semitransparent */
+.header {
+  background-color: rgba(0, 0, 0, 0.7); /* ✅ Negru cu transparență 70% */
+  padding: 20px;
+  text-align: center;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  backdrop-filter: blur(5px); /* ✅ Adaugă un efect de blur */
+}
+
+/* 🔹 Titlul aplicației */
+.header-title {
+  font-size: 26px;
+  font-weight: bold;
+  color: white;
+  margin-bottom: 2px;
+}
+
+/* 🔹 Slogan */
+.header-subtitle {
+  font-size: 14px;
+  color: #ccc;
+  margin-bottom: 15px;
+}
+
+/* 🔹 Container pentru inputuri și butoane */
+.header-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* 🔹 Inputuri */
+.header-controls input {
+  flex-grow: 1;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+/* 🔹 Butonul „Adaugă” */
+.header-controls button {
+  color: white;
+  background: rgba(3, 184, 12, 0.911); /* Fundal gri semitransparent */
+  white-space: pre-wrap;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  width: auto; /* ✅ Ajustează dimensiunea automată */
+  min-width: 120px;
+  max-width: 200px;
+}
+
+.header-controls button:hover {
+  background-color: #23612e;
+}
+
+/* 🔹 Buton „Nicio dietă” */
+.header-controls .diet-button {
+  background-color: #e6c405 !important;
+  font-weight: bold;
+}
+
+.col {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
+  align-items: flex-start;
 }
 
-.diet-info-title {
-  font-size: 2rem; /* Mărește dimensiunea textului */
-  font-weight: bold; /* Îngroașă textul */
-  text-align: center; /* Centrează textul */
-  color: white; /* Text alb pentru contrast */
-  background: rgba(0, 0, 0, 0.6); /* Fundal negru semi-transparent */
-  padding: 10px 20px; /* Spațiere interioară */
-  border-radius: 8px; /* Colțuri rotunjite */
-  backdrop-filter: blur(5px); /* Efect de blur în spatele textului */
 
-  /* Centrare orizontală și verticală */
+
+/* 🔹 Container pentru alimentele selectate */
+.selected-foods-container {
+  background: rgba(0, 0, 0, 0.7); /* Fundal negru semitransparent */
+  padding: 5px;
+  border-radius: 8px;
+  margin-top: 10px;
+  max-width: 45em;
+  text-align: center;
+  color: white; /* Text alb pentru lizibilitate */
+}
+
+.food-item {
   display: flex;
-  justify-content: center; /* Centrează pe orizontală */
-  align-items: center; /* Centrează pe verticală */
-  width: 30%; /* Asigură că ocupă toată lățimea */
-  height: 3rem; /* Înălțime fixă pentru un aspect uniform */
-  margin: 20px auto; /* Spațiu de sus și jos + centrare */
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1); /* Fundal semitransparent */
+  color: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-weight: bold;
+  width: 100%;
 }
 
-.custom-button {
-  display: block;
-  width: 60%; /* Ajustează lățimea pentru a nu fi full width */
-  max-width: 150px; /* Evită să fie prea mari */
-  margin: 5px auto; /* Centrează butonul */
-  background-color: #2c2c2c !important; /* Asortează culoarea */
+.mt-3 {
+  margin-top: 1rem!important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 🔹 Stilizare pentru lista de alimente selectate */
+.selected-food-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgb(5 5 5 / 69%);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-weight: bold;
+  width: 100%;
+}
+
+/* 🔹 Numele alimentului și cantitatea */
+.food-name {
+  flex-grow: 1;
+  text-align: left;
+  padding-right: 10px;
+}
+
+/* 🔹 Stilizare pentru butonul „Șterge” */
+.delete-button {
+  background-color: red !important;
+  color: white !important;
+  border: none !important;
   padding: 6px 10px;
-  border: none; /* Elimină bordura */
-  box-shadow: none; /* Elimină efectele de focus */
+  border-radius: 8px;
+  cursor: pointer;
 }
 
+.minerals-table.table-dark  {
+  font-size: 12px;
+  width: 100%;
+  max-width: 750px;
+  margin: 0 auto;
+  border-radius: 19px;
+  --bs-table-bg: rgba(0, 0, 0, 0.6);
+  --bs-table-striped-bg: #2c303470;
+  color: white !important;
+}
+
+
+
+
+/* 🔹 Container pentru valorile nutriționale */
+.nutrition-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3x;
+  text-align: center;
+  margin-top: 3px;
+}
+
+/* 🔹 Stil pentru fiecare coloană nutrițională */
+.nutrition-info .col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white; /* ✅ Face textul alb */
+  font-size: 16px;
+  font-weight: bold;
+  padding: 1px 2px;
+}
+
+/* 🔹 Ajustăm badge-urile pentru vizibilitate mai bună */
+.nutrition-info .badge {
+  font-size: 14px;
+  padding: 6px 10px;
+}
+
+/* 🔹 Fix pentru badge-urile „light” */
+.nutrition-info .badge-light {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  color: white !important; /* ✅ Text alb */
+}
+
+/* 🔹 Fix pentru badge-ul calorii */
+.nutrition-info .badge-warning {
+  background-color: #ffcc00 !important;
+  color: black !important;
+}
+
+/* 🔹 Stil pentru fiecare categorie nutrițională */
+.nutrition-item {
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 8px 12px;
+  border-radius: 8px;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+}
+
+/* 🔹 Stil pentru etichetele valorilor nutriționale */
+.nutrition-label {
+  color: white; /* ✅ Culoare albă pentru lizibilitate */
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.delete-button:hover {
+  background-color: darkred !important;
+}
+
+/* 🔹 Dropdown și input pe aceeași linie */
+.food-selection {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  width: 100%;
+}
+
+
+/* 🔹 Lărgim dropdown-ul pentru a încăpea textul complet */
+.food-selection select {
+  min-width: 190px; /* Asigură suficient spațiu pentru text */
+  max-width: 50%; /* Nu depășește containerul */
+  flex-grow: 1; /* Se ajustează automat */
+  text-overflow: ellipsis; /* Evită suprapunerea textului */
+  white-space: nowrap; /* Menține textul pe un singur rând */
+  overflow: hidden;
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  --bs-body-font-weight: 700;
+  --bs-body-color: #000000;
+}
+
+.form-select {
+  max-height: 200px;
+  overflow-y: auto;
+  font-size: 14px;
+  color: black;
+}
+
+.category-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  justify-content: center;
+  padding: 10px;
+}
+
+/* 🔹 Fix pentru inputul de cantitate (g/ml) */
+.quantity-input {
+  width: 70px; /* ✅ Lărgim inputul pentru cantitate */
+  min-width: 60px; /* ✅ Asigură o dimensiune minimă */
+  max-width: 90px; /* ✅ Evităm să fie prea mare */
+  text-align: center;
+  padding: 5px;
+  font-size: 14px; /* ✅ Text mai mare pentru lizibilitate */
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #f8f9fa;
+}
+
+/* 🔹 Buton centrat */
+.button-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 5px;
+}
+
+/* 🔹 Butonul „Adaugă” */
+.custom-button {
+  width: 50%;
+  background-color: rgb(25, 135, 84) !important;
+  color: white !important;
+  border: none !important;
+  padding: 6px 12px;
+}
 
 
 .custom-button:hover {
-  background: rgba(0, 0, 0, 1); /* Ușor mai închis la hover */
-  transform: scale(1.05); /* Efect de mărire la hover */
+  background-color: #333 !important;
 }
 
-.custom-button:focus {
-  outline: none !important; /* Elimină marginea albastră */
-  box-shadow: none !important;
+/* 🔹 Stilizare pentru titlul „Informații despre diete” */
+.diet-info-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  background: rgba(0, 0, 0, 0.5); /* Fundal gri semitransparent */
+  padding: 10px;
+  border-radius: 8px;
+  width: fit-content;
+  margin: 20px auto; /* Centrează elementul pe orizontală */
 }
 
-.dropdown-menu {
-  z-index: 1050 !important; /* Mai mare decât header-ul */
+/* 🔹 Cardurile categoriilor */
+.category-card {
+  padding: 15px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.7);;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  color: white;
+  text-align: center;
+  min-width: 250px;
+  max-width: 320px;
+  margin: auto;
+}
+
+/* 🔹 Responsivitate pentru 913px - Fixăm problema */
+@media (max-width: 1024px) {
+  .category-container {
+    grid-template-columns: repeat(2, minmax(250px, 1fr)); /* 2 coloane pe tabletă */
+  }
+  .minerals-table {
+    max-width: 400px;
+    font-size: 11px;
+  }
+}
+
+/* Pe telefoane, fiecare card ocupă toată lățimea */
+@media (max-width: 768px) {
+  .category-container {
+    grid-template-columns: repeat(1, minmax(250px, 1fr)); /* 1 coloană pe telefoane */
+  }
+    .diet-info-title {
+    font-size: 20px;
+    padding: 8px;
+  }
+
+  .minerals-table {
+    max-width: 100%;
+    font-size: 10px;
+  }
+  
+  .minerals-title {
+    font-size: 14px;
+  }
+  .food-selection {
+    flex-direction: row;
+    gap: 5px;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+   
+}
+
+  .search-suggestions {
+    max-width: 90%;
+  }  
+
+  .custom-button {
+    min-width: 120px;
+    max-width: 200px;
+  }
+  .category-card {
+    max-width: 100%;
+  }
+  .selected-food-item {
+    font-size: 14px;
+    padding: 6px;
+  }
+
+  .delete-button {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+  .header-title {
+    font-size: 22px;
+  }
+
+  .header-controls {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+  
+
+  .header-controls input {
+    width: 100%;
+  }
+
+  .header-controls button {
+    width: 100%; /* ✅ Dimensiune mai mică pe rezoluții medii */
+  }
+  .nutrition-info {
+    flex-direction: row;
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+}
+  .nutrition-info .col {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .nutrition-item {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+/* 🔹 Layout optimizat pentru categorii */
+@media (max-width: 1200px) {
+  .category-card {
+    max-width: 300px;
+  }
+
+}
+
+@media (max-width: 1400px) {
+  .category-card {
+    max-width: 280px;
+  }
+
 }
 
 
+@media (max-width: 992px) {
+  /* Reducem numărul de coloane pe tabletă */
+  .category-card {
+    max-width: 350px;
+  }
+}
 
+@media (max-width: 480px) {
+  .food-item {
+    font-size: 10px;
+    padding: 4px;
+  }
 
+  .minerals-table {
+    font-size: 9px;
+  }
+
+  .minerals-title {
+    font-size: 12px;
+  }
+
+  .custom-button {
+    font-size: 12px;
+    padding: 5px;
+  }
+}

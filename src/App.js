@@ -235,7 +235,7 @@ const App = () => {
         />
 
         {/* CONȚINUTUL paginii – se asigură că nu este acoperit de header */}
-        <div className="content" style={{ marginTop: `${headerHeight + 1}px` }}>
+        <div className="content">
           {/* Lista alimentelor selectate */}
           <SelectedFoodList
             selectedFoods={selectedFoods}

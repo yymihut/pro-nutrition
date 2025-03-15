@@ -1,0 +1,83 @@
+{
+    "Cholesterol [mg]": {
+        "daily_recommended_intake": "None"
+    },
+    "Sodiu [mg]": {
+        "daily_recommended_intake": 1500
+    },
+    "Potassiu [mg]": {
+        "daily_recommended_intake": 3200
+    },
+    "Calciu [mg]": {
+        "daily_recommended_intake": 1000
+    },
+    "Phosphor [mg]": {
+        "daily_recommended_intake": 700
+    },
+    "Magnesiu [mg]": {
+        "daily_recommended_intake": 420
+    },
+    "Iron [mg]": {
+        "daily_recommended_intake": 14
+    },
+    "Cupru [mg]": {
+        "daily_recommended_intake": 1
+    },
+    "Seleniu [mcg]": {
+        "daily_recommended_intake": 55
+    },
+    "Zinc [mg]": {
+        "daily_recommended_intake": 10
+    },
+    "Iod [mcg]": {
+        "daily_recommended_intake": 150
+    },
+    "Retinol  Vit-A [mcg]": {
+        "daily_recommended_intake": 900
+    },
+    "Beta-carotene Vit-A [mcg]": {
+        "daily_recommended_intake": "None"
+    },
+    "Alfa-carotene Vit-A [mcg]": {
+        "daily_recommended_intake": "None"
+    },
+    "Luteina Vit-A [mcg]": {
+        "daily_recommended_intake": "None"
+    },
+    "Zeaxanthin Vit-A [mcg]": {
+        "daily_recommended_intake": "None"
+    },
+    "Beta-cryptox. Vit-A [mcg]": {
+        "daily_recommended_intake": "None"
+    },
+    "Lycopen Vit-A [mcg]": {
+        "daily_recommended_intake": "None"
+    },
+    "VitaminaD [mcg]": {
+        "daily_recommended_intake": 15
+    },
+    "VitaminaE [mg]": {
+        "daily_recommended_intake": 15
+    },
+    "VitaminaB1 [mg]": {
+        "daily_recommended_intake": 1.2
+    },
+    "VitaminaB2 [mg]": {
+        "daily_recommended_intake": 1.4
+    },
+    "VitaminaB6 [mg]": {
+        "daily_recommended_intake": 1.6
+    },
+    "VitaminaB12 [mcg]": {
+        "daily_recommended_intake": 2.5
+    },
+    "VitaminaB3 [mg]": {
+        "daily_recommended_intake": 16
+    },
+    "VitaminaB9 [mcg]": {
+        "daily_recommended_intake": 400
+    },
+    "VitaminaC [mg]": {
+        "daily_recommended_intake": 90
+    }
+}

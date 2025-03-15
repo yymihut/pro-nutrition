@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Card, Form, Button, Container } from "react-bootstrap";
+import {  Form, Button, Container } from "react-bootstrap";
 
 const CategoryDropdown = ({ foods, addFood }) => {
   const categories = [...new Set(foods.map((food) => food.categorie))];

@@ -149,8 +149,8 @@ body, html {
   background: rgba(0, 0, 0, 0.7); /* Fundal negru semitransparent */
   padding: 5px;
   border-radius: 8px;
-  margin-top: 10px;
-  max-width: 45em;
+  margin-top: 5px;
+  width: auto;
   text-align: center;
   color: white; /* Text alb pentru lizibilitate */
 }
@@ -161,7 +161,7 @@ body, html {
   align-items: center;
   background: rgba(255, 255, 255, 0.1); /* Fundal semitransparent */
   color: white;
-  padding: 8px 12px;
+  padding: 4px 8px;
   border-radius: 5px;
   font-weight: bold;
   width: 100%;
@@ -206,7 +206,7 @@ body, html {
 }
 
 .minerals-table.table-dark  {
-  font-size: 12px;
+  font-size: 17px;
   width: 100%;
   max-width: 750px;
   margin: 0 auto;
@@ -407,9 +407,9 @@ body, html {
     padding: 8px;
   }
 
-  .minerals-table {
+  .minerals-table.table-dark  {
     max-width: 100%;
-    font-size: 10px;
+    font-size: 14px;
   }
   
   .minerals-title {

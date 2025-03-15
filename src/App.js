@@ -91,7 +91,6 @@ const App = () => {
     : 0;
 
   const headerRef = React.useRef(null);
-  const [headerHeight, setHeaderHeight] = useState(0);
 
   const determineDietType = () => {
     const total = totalProtein + totalCarbs + totalFat;
@@ -186,12 +185,6 @@ const App = () => {
 
   const dietType = determineDietType();
 
-  useEffect(() => {
-    if (headerRef.current) {
-      setHeaderHeight(headerRef.current.offsetHeight);
-    }
-  }, []);
-  console.log("totalCalories value:", totalCalories, typeof totalCalories);
   return (
     <div>
       <BackgroundChanger />

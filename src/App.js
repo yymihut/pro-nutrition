@@ -8,6 +8,7 @@ import DietInfo from "./Components/DietInfo";
 import Footer from "./Components/Footer";
 import "./App.css";
 
+
 const LOCAL_STORAGE_KEY = "selectedFoods";
 
 const App = () => {

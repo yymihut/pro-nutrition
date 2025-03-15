@@ -31,15 +31,16 @@ body, html {
 .search-suggestions {
   position: absolute;
   width: 100%;
-  max-width: 500px; /* ✅ Ajustăm pentru aliniere corectă */
+  max-width: 500px;
   max-height: 450px;
   overflow-y: auto;
-  background: rgba(0, 0, 0, 0.9); /* ✅ Fundal semitransparent */
+  background: rgba(0, 0, 0, 0.9);
   color: white;
   border-radius: 5px;
-  z-index: 1000;
-  top: 40px; /* ✅ Evităm suprapunerea */
+  z-index: 9999 !important; /* 🔥 Asigură-te că e deasupra */
+  top: 40px;
   left: 0;
+  pointer-events: auto !important; /* 🔥 Permite click-uri pe listă */
 }
 
 /* 🔹 Stil pentru fiecare element din listă */

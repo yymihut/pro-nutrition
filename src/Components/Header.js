@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Form, Button, Badge, ListGroup } from "react-bootstrap";
+
 
 const Header = ({
   headerRef,
@@ -14,12 +15,13 @@ const Header = ({
   totalCarbs,
   totalFat,
   totalFiber,
-  dietType, // 🔹 Adăugăm acest parametru
+  dietType,
   proteinPercentage,
   carbsPercentage,
   fatPercentage,
 }) => {
   const [filteredFoods, setFilteredFoods] = useState([]);
+  const searchContainerRef = useRef(null); // 🔹 Referință pentru zona de căutare
 
   const handleSearchChange = (e) => {
     const query = e.target.value;
@@ -41,33 +43,31 @@ const Header = ({
     setFilteredFoods([]);
   };
 
+    // 🔹 Închidem lista când utilizatorul face click în afara inputului
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (
+          searchContainerRef.current &&
+          !searchContainerRef.current.contains(event.target)
+        ) {
+          setFilteredFoods([]); // ✅ Ascundem lista
+        }
+      };
+  
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
   return (
     <header
-      foods={foods}
-      search={search}
-      setSearch={setSearch}
-      quantity={quantity}
-      setQuantity={setQuantity}
-      addFood={addFood}
-      totalCalories={
-        Number(totalCalories) ? Number(totalCalories).toFixed(1) : "0.0"
-      }
-      totalProtein={
-        Number(totalProtein) ? Number(totalProtein).toFixed(1) : "0.0"
-      }
-      totalCarbs={Number(totalCarbs) ? Number(totalCarbs).toFixed(1) : "0.0"}
-      totalFat={Number(totalFat) ? Number(totalFat).toFixed(1) : "0.0"}
-      totalFiber={Number(totalFiber) ? Number(totalFiber).toFixed(1) : "0.0"}
-      dietType={dietType} // 🔹 Trimite rezultatul funcției către Header.js
       ref={headerRef}
       className="header"
     >
       <h1 className="header-title">Calculator Nutrițional</h1>
       <p className="header-subtitle">- norme UE, surse EFSA</p>
-
       <div className="header-controls">
         {/* Căutare aliment */}
-        <div className="position-relative">
+        <div className="position-relative" ref={searchContainerRef}>
           <Form.Control
             type="text"
             placeholder="Caută aliment..."

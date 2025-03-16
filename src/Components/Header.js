@@ -111,7 +111,7 @@ const Header = ({
         {/* Cantitate */}
         <Form.Control
           type="number"
-          placeholder="Cant (g/ml)"
+          placeholder="g/ml"
           value={quantity}
           onChange={(e) => {
             const value = parseInt(e.target.value, 10);
@@ -121,8 +121,8 @@ const Header = ({
               setQuantity(""); // Resetăm dacă valoarea este invalidă
             }
           }}
-          className="form-control-sm"
-          style={{ width: "80px", fontSize: "14px" }}
+          className="form-control"
+          style={{ width: "60px" , fontSize: "14px" }}
         />
 
         {/* Buton „Adaugă” și Tipul dietei */}

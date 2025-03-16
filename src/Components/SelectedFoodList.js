@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext  } from "react";
 import { Button } from "react-bootstrap";
 import MineralsTable from "./MineralsTable"; // Importăm tabelul de minerale
+import { LanguageContext } from "../LanguageContext";
 
 const OPENAI_API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
 
@@ -8,6 +9,7 @@ const SelectedFoodList = ({ selectedFoods, removeFood, resetSelections }) => {
   const [analysis, setAnalysis] = useState(""); // 🔥 Stocăm rezultatul analizei
   const [errorMessage, setErrorMessage] = useState(""); // 🔥 Stocăm mesajul de eroare
   const analysisRef = useRef(null); // 🔥 Referință pentru analiză
+  const { language } = useContext(LanguageContext); // 🔥 Obținem limba curentă
 
   let lastRequestTime = 0;
 
@@ -128,9 +130,9 @@ const SelectedFoodList = ({ selectedFoods, removeFood, resetSelections }) => {
     <div className="container mt-3">
       <div className="selected-foods-container">
         <div className="d-flex justify-content-between align-items-center">
-          <h5 className="diet-info-title">Alimente Selectate</h5>
+          <h5 className="diet-info-title">{language === "ro" ? "Alimente Selectate" : "Selected Foods"}</h5>
           <Button variant="info" id="analyze-btn" size="sm" onClick={generateAnalysis}>
-            Analiza AI
+          {language === "ro" ? "Analiza AI" : "AI Analisys"}
           </Button>
         </div>
 
@@ -146,13 +148,13 @@ const SelectedFoodList = ({ selectedFoods, removeFood, resetSelections }) => {
                   size="sm"
                   onClick={() => removeFood(index)}
                 >
-                  Șterge
+                  {language === "ro" ? "Sterge" : "Delete"}
                 </Button>
               </div>
             ))}
           </div>
         ) : (
-          <p className="text-white">Nu ai selectat niciun aliment.</p>
+          <p className="text-white">{language === "ro" ? "Nu ai selectat nici un aliment" : "There is no food selected"}</p>
         )}
       </div>
       {errorMessage && (
@@ -166,7 +168,7 @@ const SelectedFoodList = ({ selectedFoods, removeFood, resetSelections }) => {
 
       {analysis && (
         <div ref={analysisRef} className="analysis-container mt-3 p-3 bg-dark text-white rounded">
-          <h5>🔍 Analiza AI:</h5>
+          <h5>🔍 {language === "ro" ? "Analiza AI:" : "AI analisys:"}</h5>
           <p>{analysis}</p>
         </div>
       )}

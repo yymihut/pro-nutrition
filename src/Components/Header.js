@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Form, Button, Badge, ListGroup } from "react-bootstrap";
+import { LanguageContext } from "../LanguageContext";
 
 const Header = ({
   headerRef,
@@ -18,8 +19,9 @@ const Header = ({
   proteinPercentage,
   carbsPercentage,
   fatPercentage,
-  resetSelections
+  resetSelections,
 }) => {
+  const { language, toggleLanguage } = useContext(LanguageContext);
   const [filteredFoods, setFilteredFoods] = useState([]);
   const searchContainerRef = useRef(null); // 🔹 Referință pentru zona de căutare
 
@@ -60,7 +62,24 @@ const Header = ({
 
   return (
     <header ref={headerRef} className="header">
-      <h1 className="header-title">Calculator Nutrițional</h1>
+      <div className="header-title-container">
+        <h1 className="header-title">Calculator Nutrițional</h1>
+        <div className="language-switcher">
+          <button
+            className={language === "ro" ? "active" : ""}
+            onClick={() => toggleLanguage("ro")}
+          >
+            🇷🇴 RO
+          </button>
+          <button
+            className={language === "en" ? "active" : ""}
+            onClick={() => toggleLanguage("en")}
+          >
+            🇬🇧 EN
+          </button>
+        </div>
+      </div>
+
       <p className="header-subtitle">- norme UE, surse EFSA</p>
       <div className="header-controls">
         {/* Căutare aliment */}
@@ -122,7 +141,7 @@ const Header = ({
             }
           }}
           className="form-control"
-          style={{ width: "60px" , fontSize: "14px" }}
+          style={{ width: "60px", fontSize: "14px" }}
         />
 
         {/* Buton „Adaugă” și Tipul dietei */}

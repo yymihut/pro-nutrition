@@ -6,6 +6,7 @@ import CategoryDropdown from "./Components/CategoryDropdown";
 import foodsData from "./Data/foods.json";
 import DietInfo from "./Components/DietInfo";
 import Footer from "./Components/Footer";
+import { LanguageProvider } from "./LanguageContext";
 import "./App.css";
 
 const LOCAL_STORAGE_KEY = "selectedFoods";
@@ -193,6 +194,7 @@ const App = () => {
   const dietType = determineDietType();
 
   return (
+    <LanguageProvider>
     <div>
       <BackgroundChanger />
       <div className="app-container">
@@ -259,6 +261,7 @@ const App = () => {
         </div>
       </div>
     </div>
+    </LanguageProvider>
   );
 };
 

@@ -123,6 +123,44 @@ body, html {
   margin: 0 auto;
 }
 
+.language-switcher {
+  display: flex;
+  gap: 10px;
+  margin-left: auto;
+  margin-right: 15px;
+   
+   align-content: center;
+}
+
+.language-switcher button {
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.7s ease;
+  height: 30px;
+  text-align: center;
+}
+
+.language-switcher button:hover {
+  background: white;
+  color: black;
+}
+
+.language-switcher button.active {
+  background: #FFC109;
+  color: black;
+  font-weight: bold;
+}
+.header-title-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 /* 🔹 Inputuri */
 .header-controls input {
   flex-grow: 0.2;

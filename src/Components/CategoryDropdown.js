@@ -1,10 +1,16 @@
-import React, { useState } from "react";
-import {  Form, Button, Container } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Form, Button, Container } from "react-bootstrap";
 
-const CategoryDropdown = ({ foods, addFood }) => {
+const CategoryDropdown = ({ foods, addFood, resetSelections }) => {
   const categories = [...new Set(foods.map((food) => food.categorie))];
   const [selectedFoods, setSelectedFoods] = useState({});
   const [quantities, setQuantities] = useState({});
+
+  // 🔹 Detectăm resetarea și curățăm câmpurile
+  useEffect(() => {
+    setSelectedFoods({});
+    setQuantities({});
+  }, [resetSelections]); // Se reactivează de fiecare dată când `resetSelections` este apelat
 
   const handleSelect = (category, foodName) => {
     setSelectedFoods((prev) => ({ ...prev, [category]: foodName }));

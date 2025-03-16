@@ -1,13 +1,40 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "react-bootstrap";
 import MineralsTable from "./MineralsTable"; // Importăm tabelul de minerale
 
 const OPENAI_API_KEY = process.env.REACT_APP_OPENAI_API_KEY;
 
-const SelectedFoodList = ({ selectedFoods, removeFood }) => {
+const SelectedFoodList = ({ selectedFoods, removeFood, resetSelections }) => {
   const [analysis, setAnalysis] = useState(""); // 🔥 Stocăm rezultatul analizei
   const [errorMessage, setErrorMessage] = useState(""); // 🔥 Stocăm mesajul de eroare
+  const analysisRef = useRef(null); // 🔥 Referință pentru analiză
+
   let lastRequestTime = 0;
+
+  // 🔹 Detectăm clicul în afara analizei și o ascundem
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        analysisRef.current &&
+        !analysisRef.current.contains(event.target) &&
+        event.target.id !== "analyze-btn" // 🔥 Evităm să ascundem când dăm clic pe butonul "Analiza AI"
+      ) {
+        setAnalysis(""); // 🔥 Ascunde analiza AI
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (selectedFoods.length === 0) {
+      setErrorMessage(""); // 🔥 Șterge eroarea când lista se golește
+      setAnalysis(""); // 🔥 Șterge analiza AI când lista se golește
+    }
+  }, [selectedFoods]);
 
   const generateAnalysis = async () => {
     setErrorMessage(""); // Resetăm eroarea la fiecare request
@@ -102,7 +129,7 @@ const SelectedFoodList = ({ selectedFoods, removeFood }) => {
       <div className="selected-foods-container">
         <div className="d-flex justify-content-between align-items-center">
           <h5 className="diet-info-title">Alimente Selectate</h5>
-          <Button variant="info" size="sm" onClick={generateAnalysis}>
+          <Button variant="info" id="analyze-btn" size="sm" onClick={generateAnalysis}>
             Analiza AI
           </Button>
         </div>
@@ -138,7 +165,7 @@ const SelectedFoodList = ({ selectedFoods, removeFood }) => {
       )}
 
       {analysis && (
-        <div className="analysis-container mt-3 p-3 bg-dark text-white rounded">
+        <div ref={analysisRef} className="analysis-container mt-3 p-3 bg-dark text-white rounded">
           <h5>🔍 Analiza AI:</h5>
           <p>{analysis}</p>
         </div>

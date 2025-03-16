@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Form, Button, Badge, ListGroup } from "react-bootstrap";
 
-
 const Header = ({
   headerRef,
   foods,
@@ -19,6 +18,7 @@ const Header = ({
   proteinPercentage,
   carbsPercentage,
   fatPercentage,
+  resetSelections
 }) => {
   const [filteredFoods, setFilteredFoods] = useState([]);
   const searchContainerRef = useRef(null); // 🔹 Referință pentru zona de căutare
@@ -43,26 +43,23 @@ const Header = ({
     setFilteredFoods([]);
   };
 
-    // 🔹 Închidem lista când utilizatorul face click în afara inputului
-    useEffect(() => {
-      const handleClickOutside = (event) => {
-        if (
-          searchContainerRef.current &&
-          !searchContainerRef.current.contains(event.target)
-        ) {
-          setFilteredFoods([]); // ✅ Ascundem lista
-        }
-      };
-  
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
+  // 🔹 Închidem lista când utilizatorul face click în afara inputului
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        searchContainerRef.current &&
+        !searchContainerRef.current.contains(event.target)
+      ) {
+        setFilteredFoods([]); // ✅ Ascundem lista
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
-    <header
-      ref={headerRef}
-      className="header"
-    >
+    <header ref={headerRef} className="header">
       <h1 className="header-title">Calculator Nutrițional</h1>
       <p className="header-subtitle">- norme UE, surse EFSA</p>
       <div className="header-controls">
@@ -78,17 +75,17 @@ const Header = ({
           />
           {filteredFoods.length > 0 && (
             <ListGroup
-            className="position-absolute search-suggestions shadow rounded"
-            style={{
-              zIndex: 1000,
-              top: "100%", // ✅ Lista este plasată corect sub input
-              left: 0,
-              minWidth: "250px", // ✅ Asigură spațiu pentru text
-              maxWidth: "500px", // ✅ Evită ca lista să fie prea lată
-              border: "1px solid #ddd",
-              whiteSpace: "normal", // ✅ Permite textului să se afișeze pe mai multe linii
-              overflowWrap: "break-word", // ✅ Previne tăierea textului
-            }}
+              className="position-absolute search-suggestions shadow rounded"
+              style={{
+                zIndex: 1000,
+                top: "100%", // ✅ Lista este plasată corect sub input
+                left: 0,
+                minWidth: "250px", // ✅ Asigură spațiu pentru text
+                maxWidth: "500px", // ✅ Evită ca lista să fie prea lată
+                border: "1px solid #ddd",
+                whiteSpace: "normal", // ✅ Permite textului să se afișeze pe mai multe linii
+                overflowWrap: "break-word", // ✅ Previne tăierea textului
+              }}
             >
               {filteredFoods.map((food, index) => (
                 <ListGroup.Item
@@ -115,7 +112,6 @@ const Header = ({
         <Form.Control
           type="number"
           placeholder="Cant (g/ml)"
-          
           value={quantity}
           onChange={(e) => {
             const value = parseInt(e.target.value, 10);
@@ -155,6 +151,9 @@ const Header = ({
           >
             {dietType}
           </span>
+          <Button className="reset-button" onClick={resetSelections}>
+            🔄 Resetează
+          </Button>
         </div>
       </div>
 

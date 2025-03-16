@@ -27,6 +27,14 @@ body, html {
   min-height: 30%;
 }
 
+#footer {
+  background: rgba(0, 0, 0, 0.8) !important;
+  color: white;
+  text-align: center;
+  padding: 6px !important;
+  margin-top: auto;
+}
+
 /* 🔹 Lista de sugestii optimizată */
 .search-suggestions {
   position: absolute;
@@ -66,7 +74,7 @@ body, html {
 /* 🔹 Stil pentru header cu fundal semitransparent */
 .header {
   background-color: rgba(0, 0, 0, 0.7); /* ✅ Negru cu transparență 70% */
-  padding: 20px;
+  padding: 7px;
   text-align: center;
   position: sticky;
   top: 0;
@@ -110,14 +118,27 @@ body, html {
   font-size: 14px;
 }
 
+#analyze-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  margin-left: 8px;
+  height: 45px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
 /* 🔹 Butonul „Adaugă” */
 .header-controls button {
   color: white;
-  background: rgba(3, 184, 12, 0.911); /* Fundal gri semitransparent */
+  background: rgba(136, 4, 4, 0.911); /* Fundal gri semitransparent */
   white-space: pre-wrap;
+  margin-left: 8px;
   padding: 8px 12px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   font-size: 14px;
   cursor: pointer;
   width: auto; /* ✅ Ajustează dimensiunea automată */
@@ -406,6 +427,12 @@ body, html {
     .diet-info-title {
     font-size: 20px;
     padding: 8px;
+  }
+
+  #analyze-btn {
+    height: 35px;
+    font-size: 14px;
+    padding: 8px 12px;
   }
 
   .minerals-table.table-dark  {

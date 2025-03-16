@@ -8,13 +8,19 @@ import DietInfo from "./Components/DietInfo";
 import Footer from "./Components/Footer";
 import "./App.css";
 
-
 const LOCAL_STORAGE_KEY = "selectedFoods";
 
 const App = () => {
   const [search, setSearch] = useState("");
   const [quantity, setQuantity] = useState("");
   const [selectedFoods, setSelectedFoods] = useState([]);
+
+  // ✅ Funcție pentru resetarea selecțiilor
+  const resetSelections = () => {
+    setSelectedFoods([]); // 🔥 Șterge toate alimentele selectate
+    setSearch(""); // 🔥 Resetează căutarea alimentelor
+    setQuantity(""); // 🔥 Resetează câmpul de cantitate
+  };
 
   // Încarcă alimentele din localStorage la montare
   useEffect(() => {
@@ -226,6 +232,7 @@ const App = () => {
           fatPercentage={fatPercentage} // ✅ Adăugat
           headerRef={headerRef}
           dietType={dietType} // 🔹 Adaugă această linie pentru a transmite dietType
+          resetSelections={resetSelections} // ✅ se reseteaza selectiile
         />
 
         {/* CONȚINUTUL paginii – se asigură că nu este acoperit de header */}
@@ -234,10 +241,15 @@ const App = () => {
           <SelectedFoodList
             selectedFoods={selectedFoods}
             removeFood={removeFood}
+            resetSelections={resetSelections} // ✅ Adăugat
           />
 
           {/* Dropdown-urile pe categorii – folosește layout-ul "row row-cols-*" */}
-          <CategoryDropdown foods={foodsData} addFood={addFood} />
+          <CategoryDropdown
+            foods={foodsData}
+            addFood={addFood}
+            resetSelections={resetSelections}
+          />
           <div className="App">
             {/* Alte componente */}
             <DietInfo />{" "}

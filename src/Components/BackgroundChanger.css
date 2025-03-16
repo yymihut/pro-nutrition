@@ -6,9 +6,10 @@
     height: 100vh;
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
+    background-repeat: space;
     background-attachment: fixed;
-    transition: background-image 4s ease-in-out;
+    transition: background-image 4s ease-in;
+    transition: background-image 4s ease-out;
     z-index: -1;
 } 
 

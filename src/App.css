@@ -27,6 +27,11 @@ body, html {
   min-height: 30%;
 }
 
+footer {
+  font-size: medium;
+  background: rgba(0, 0, 0, 0.8) !important;
+}
+
 #footer {
   background: rgba(0, 0, 0, 0.8) !important;
   color: white;
@@ -500,6 +505,18 @@ body, html {
   .nutrition-info .col {
     width: 100%;
     max-width: 300px;
+  }
+
+  .footer {
+    font-size: small;
+  }
+
+  h5 {
+    font-size: 14px;
+  }
+
+  p {
+    font-size: 14px;
   }
 
   .nutrition-item {

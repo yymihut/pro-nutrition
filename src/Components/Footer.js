@@ -6,35 +6,43 @@ const Footer = () => {
     <footer id="footer" className="bg-dark text-white text-center py-3">
       <Container>
         <Row>
-          <Col md={4}>
-            <h5>📍 Link-uri rapide</h5>
+          <Col className="footer" md={4}>
+            <h5>📍 Contact: </h5>
             <ul className="list-unstyled">
-              <li><a href="https://mail.google.com/" className="text-white">Contact: pronutritionaiteam@gmail.com</a></li>
+              <li>
+                <a href="https://mail.google.com/" className="text-white">
+                   pronutritionaiteam@gmail.com
+                </a>
+              </li>
             </ul>
           </Col>
 
-          <Col md={4}>
+          <Col className="footer" md={4}>
             <h5>📌 Urmărește-ne</h5>
-            <a href="#" className="text-white mx-2">TikTok</a>
+            <a href="#" className="text-white mx-2">
+              TikTok
+            </a>
           </Col>
-          <Col md={4}>
-  <h5>ℹ️ Despre Noi</h5>
-  <p>
-    Suntem o echipă pasionată de nutriție și sănătate, oferind un calculator nutrițional bazat pe normele UE.
-  </p>
-</Col>
+          <Col className="footer" md={4}>
+            <h5>ℹ️ Despre Noi</h5>
+            <p>
+              Suntem o echipă pasionată de nutriție și sănătate, oferind un
+              calculator nutrițional bazat pe normele UE.
+            </p>
+          </Col>
         </Row>
 
         <hr className="bg-light" />
-        <p>© 2025 by Pro-Nutrition-AI-Team | Date nutriționale preluate conform normelor UE - EFSA</p>
+        <p>
+          © 2025 by Pro-Nutrition-AI-Team | Date nutriționale preluate conform
+          normelor UE - EFSA
+        </p>
       </Container>
     </footer>
   );
 };
 
 export default Footer;
-
-
 
 /* import React from "react";
 

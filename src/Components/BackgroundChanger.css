@@ -1,4 +1,4 @@
-.background-container {
+ .background-container {
     position: fixed;
     top: 0;
     left: 0;
@@ -8,9 +8,9 @@
     background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    transition: background-image 1s ease-in-out;
+    transition: background-image 4s ease-in-out;
     z-index: -1;
-}
+} 
 
 .background-container::after {
     content: "";

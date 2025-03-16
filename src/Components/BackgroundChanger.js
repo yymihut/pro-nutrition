@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './BackgroundChanger.css';
 
-import picture1 from '../assets/picture1.jpg';
-import picture2 from '../assets/picture2.jpg';
-import picture3 from '../assets/picture3.jpg';
-import picture4 from '../assets/picture4.jpg';
-import picture5 from '../assets/picture5.jpg';
-import picture6 from '../assets/picture6.jpg';
+import picture1 from '../assets/picture1.webp';
+import picture2 from '../assets/picture2.webp';
+import picture3 from '../assets/picture3.webp';
+import picture4 from '../assets/picture4.webp';
+import picture5 from '../assets/picture5.webp';
+import picture6 from '../assets/picture6.webp';
 
 const images = [picture1, picture2, picture3, picture4, picture5, picture6];
 

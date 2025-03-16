@@ -4,9 +4,9 @@ import { Container, Row, Col } from "react-bootstrap";
 const Footer = () => {
   return (
     <footer id="footer" className="bg-dark text-white text-center py-3">
-      <Container>
-        <Row>
-          <Col className="footer" md={4}>
+      <Container  >
+        <Row className="row-footer">
+          <Col className="footer-col" md={4}>
             <h5>📍 Contact: </h5>
             <ul className="list-unstyled">
               <li>
@@ -17,13 +17,13 @@ const Footer = () => {
             </ul>
           </Col>
 
-          <Col className="footer" md={4}>
+          <Col className="footer-col" md={4}>
             <h5>📌 Urmărește-ne</h5>
-            <a href="#" className="text-white mx-2">
+            <a href="https://www.tiktok.com" className="text-white mx-2">
               TikTok
             </a>
           </Col>
-          <Col className="footer" md={4}>
+          <Col className="footer-col" md={4}>
             <h5>ℹ️ Despre Noi</h5>
             <p>
               Suntem o echipă pasionată de nutriție și sănătate, oferind un

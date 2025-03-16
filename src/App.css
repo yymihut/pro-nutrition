@@ -27,8 +27,17 @@ body, html {
   min-height: 30%;
 }
 
-footer {
+.footer-col {
   font-size: medium;
+  background: rgba(0, 0, 0, 0.4) !important;
+  backdrop-filter: blur(5px); /* Efect de blur pentru un aspect modern */
+}
+
+.bg-dark {
+  --bs-bg-opacity: 0.8;
+}
+
+.row .row-footer  {
   background: rgba(0, 0, 0, 0.8) !important;
 }
 

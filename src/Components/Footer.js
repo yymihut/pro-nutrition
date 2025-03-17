@@ -1,6 +1,9 @@
 import React, { useContext } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { LanguageContext } from "../LanguageContext";
+import customIconAboutUs from "../assets/About-us.ico";
+import tiktokLogo from "../assets/tiktok_logo.svg";
+import emailIcon from "../assets/gmail_icon.ico";
 
 const Footer = () => {
   const { language } = useContext(LanguageContext); // 🔥 Obținem limba curentă
@@ -10,7 +13,14 @@ const Footer = () => {
       <Container>
         <Row className="row-footer">
           <Col className="footer-col" md={4}>
-            <h5>📍 Contact: </h5>
+            <h5>
+              <img
+                src={emailIcon}
+                alt="Info"
+                style={{ width: "30px", height: "30px", marginRight: "5px" }}
+              />{" "}
+              Contact:{" "}
+            </h5>
             <ul className="list-unstyled">
               <li>
                 <a href="https://mail.google.com/" className="text-white">
@@ -21,13 +31,29 @@ const Footer = () => {
           </Col>
 
           <Col className="footer-col" md={4}>
-            <h5>📌 {language === "ro" ? "Urmărește-ne" : "Follow us"}</h5>
+            <h5>
+              <img
+                src={tiktokLogo}
+                alt="Info"
+                width="30"
+                height="30"
+                style={{ marginRight: "5px" }}
+              />{" "}
+              {language === "ro" ? "Urmărește-ne" : "Follow us"}
+            </h5>
             <a href="https://www.tiktok.com" className="text-white mx-2">
               TikTok
             </a>
           </Col>
           <Col className="footer-col" md={4}>
-            <h5>ℹ️ {language === "ro" ? "Despre noi" : "About us"}</h5>
+            <h5>
+              <img
+                src={customIconAboutUs}
+                alt="Info"
+                style={{ width: "30px", height: "30px", marginRight: "5px" }}
+              />{" "}
+              {language === "ro" ? "Despre noi" : "About us"}
+            </h5>
             <p>
               {language === "ro"
                 ? "Suntem o echipă pasionată de nutriție și sănătate, oferind un calculator nutrițional bazat pe normele UE."
@@ -38,7 +64,10 @@ const Footer = () => {
 
         <hr className="bg-light" />
         <p>
-        © 2025 by Pro-Nutrition-AI-Team | {language === "ro" ? "Date nutriționale preluate conform normelor UE - EFSA" : "Nutritional data taken according to EU rules - EFSA"}
+          © 2025 by Pro-Nutrition-AI-Team | {" "}
+          {language === "ro"
+            ? "Date nutriționale preluate conform normelor UE - EFSA"
+            : "Nutritional data taken according to EU rules - EFSA"}
         </p>
       </Container>
     </footer>
@@ -47,17 +76,3 @@ const Footer = () => {
 
 export default Footer;
 
-/* import React from "react";
-
-const Footer = () => {
-  return (
-    <footer className="footer">
-      <div className="container-fluid text-center py-2 text-light">
-        © 2025 by Mihut Marius
-      </div>
-    </footer>
-  );
-};
-
-export default Footer;
- */

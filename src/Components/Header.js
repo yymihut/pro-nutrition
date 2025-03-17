@@ -63,30 +63,42 @@ const Header = ({
   return (
     <header ref={headerRef} className="header">
       <div className="header-title-container">
-        <h1 className="header-title">{language === "ro" ? "Calculator Nutrițional AI" : "AI Nutritional Calculator"}</h1>
+        <p className="header-subtitle">
+          {language === "ro"
+            ? "surse EFSA, baza de date cu peste 2000 de alimente"
+            : "EFSA sources, database with over 2000 foods"}{" "}
+        </p>
+        <h1 className="header-title">
+          {language === "ro"
+            ? "Calculator Nutrițional AI"
+            : "AI Nutritional Calculator"}
+        </h1>
         <div className="language-switcher">
+          <span className="language-label">
+            {language === "ro" ? "RO" : "EN"}
+          </span>
           <button
-            className={language === "ro" ? "active" : ""}
+            className={`language-button ro ${
+              language === "ro" ? "active" : ""
+            }`}
             onClick={() => toggleLanguage("ro")}
-          >
-            🇷🇴 RO
-          </button>
+          ></button>
           <button
-            className={language === "en" ? "active" : ""}
+            className={`language-button en ${
+              language === "en" ? "active" : ""
+            }`}
             onClick={() => toggleLanguage("en")}
-          >
-            🇬🇧 EN
-          </button>
+          ></button>
         </div>
       </div>
-
-      <p className="header-subtitle">{language === "ro" ? "- norme UE, surse EFSA" : "- EU norms, EFSA sources"} </p>
       <div className="header-controls">
         {/* Căutare aliment */}
         <div className="position-relative" ref={searchContainerRef}>
           <Form.Control
             type="text"
-            placeholder= {language === "ro" ? "Caută aliment..." : "Food search..."}
+            placeholder={
+              language === "ro" ? "Caută aliment..." : "Food search..."
+            }
             value={search}
             onChange={handleSearchChange}
             className="form-control-sm"
@@ -171,7 +183,7 @@ const Header = ({
             {dietType}
           </span>
           <Button className="reset-button" onClick={resetSelections}>
-          {language === "ro" ? "🔄 Resetează" : "🔄 Reset"} 
+            {language === "ro" ? "🔄 Resetează" : "🔄 Reset"}
           </Button>
         </div>
       </div>

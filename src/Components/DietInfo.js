@@ -123,9 +123,8 @@ const DietInfo = () => {
   const { language } = useContext(LanguageContext); // 🔥 Obținem limba curentă
   return (
     <div className="container mt-4">
-      <h2 className="diet-info-title">Informații despre diete</h2>
+      <h2 className="diet-info-title">{language === "ro" ? "Informații despre diete" : "Information about diets"}</h2>
       <div className="row justify-content-center">
-        `$
         {language === "ro"
           ? dietsRomanian.map((diet, index) => (
               <div key={index} className="col-md-6 col-lg-4 mb-3">
@@ -154,16 +153,16 @@ const DietInfo = () => {
                   <div className="card-body">
                     <h5 className="card-title">{diet.name}</h5>
                     <p className="mb-1">
-                      <strong>Proteine:</strong> {diet.protein}
+                      <strong>Proteins:</strong> {diet.protein}
                     </p>
                     <p className="mb-1">
-                      <strong>Carbohidrați:</strong> {diet.carbs}
+                      <strong>Carbohydrates:</strong> {diet.carbs}
                     </p>
                     <p className="mb-1">
-                      <strong>Grăsimi:</strong> {diet.fat}
+                      <strong>Fats:</strong> {diet.fat}
                     </p>
                     <p className="mb-1">
-                      <strong>Fibre:</strong> {diet.fiber}
+                      <strong>Fibers:</strong> {diet.fiber}
                     </p>
                   </div>
                 </div>

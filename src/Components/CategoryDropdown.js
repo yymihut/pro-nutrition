@@ -47,7 +47,9 @@ const CategoryDropdown = ({ foods, addFood, resetSelections }) => {
               onChange={(e) => handleSelect(category, e.target.value)}
               className="form-select"
             >
-              <option value="">`${language === "ro" ? "Alege un aliment" : "Choose a food"}`</option>
+              <option value="">
+                {language === "ro" ? "Alege un aliment" : "Choose a food"}
+              </option>
               {foods
                 .filter((food) => food.categorie === category)
                 .map((food) => (
@@ -74,7 +76,7 @@ const CategoryDropdown = ({ foods, addFood, resetSelections }) => {
               disabled={!selectedFoods[category] || !quantities[category]}
               onClick={() => handleAddFood(category)}
             >
-              `${language === "ro" ? "Adaugă" : "Add"}`
+              {language === "ro" ? "Adaugă" : "Add"}
             </Button>
           </div>
         </div>

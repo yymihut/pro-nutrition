@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Form, Button, Container } from "react-bootstrap";
+import { LanguageContext } from "../LanguageContext";
 
 const CategoryDropdown = ({ foods, addFood, resetSelections }) => {
   const categories = [...new Set(foods.map((food) => food.categorie))];
   const [selectedFoods, setSelectedFoods] = useState({});
   const [quantities, setQuantities] = useState({});
+  const { language } = useContext(LanguageContext); // 🔥 Obținem limba curentă
 
   // 🔹 Detectăm resetarea și curățăm câmpurile
   useEffect(() => {
@@ -45,7 +47,7 @@ const CategoryDropdown = ({ foods, addFood, resetSelections }) => {
               onChange={(e) => handleSelect(category, e.target.value)}
               className="form-select"
             >
-              <option value="">Alege un aliment</option>
+              <option value="">`${language === "ro" ? "Alege un aliment" : "Choose a food"}`</option>
               {foods
                 .filter((food) => food.categorie === category)
                 .map((food) => (
@@ -72,7 +74,7 @@ const CategoryDropdown = ({ foods, addFood, resetSelections }) => {
               disabled={!selectedFoods[category] || !quantities[category]}
               onClick={() => handleAddFood(category)}
             >
-              Adaugă
+              `${language === "ro" ? "Adaugă" : "Add"}`
             </Button>
           </div>
         </div>

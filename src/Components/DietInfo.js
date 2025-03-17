@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useContext } from "react";
+import { LanguageContext } from "../LanguageContext";
 
-const diets = [
+const dietsRomanian = [
   {
     name: "Dieta Echilibrată (Clasică)",
     protein: "15-25%",
@@ -59,24 +60,116 @@ const diets = [
   },
 ];
 
+const dietsEnglish = [
+  {
+    name: "Balanced Diet (Classic)",
+    protein: "15-25%",
+    carbs: "45-55%",
+    fat: "25-35%",
+    fiber: "25-30g/day",
+  },
+  {
+    name: "Ketogenic Diet (LCHF)",
+    protein: "15-25%",
+    carbs: "5-10%",
+    fat: "65-80%",
+    fiber: "20-30g/day",
+  },
+  {
+    name: "Low-Carb Diet",
+    protein: "20-30%",
+    carbs: "10-30%",
+    fat: "40-60%",
+    fiber: "20-35g/day",
+  },
+  {
+    name: "High-Protein Diet",
+    protein: "30-50%",
+    carbs: "20-40%",
+    fat: "20-30%",
+    fiber: "30-40g/day",
+  },
+  {
+    name: "Low-Fat Diet",
+    protein: "15-25%",
+    carbs: "55-70%",
+    fat: "10-20%",
+    fiber: "30-40g/day",
+  },
+  {
+    name: "Mediteranean Diet",
+    protein: "15-20%",
+    carbs: "40-50%",
+    fat: "30-40%",
+    fiber: "35-45g/day",
+  },
+  {
+    name: "Vegetarian/Vegan Diet",
+    protein: "10-20%",
+    carbs: "50-65%",
+    fat: "20-30%",
+    fiber: "40-50g/day",
+  },
+  {
+    name: "Paleo Diet",
+    protein: "20-35%",
+    carbs: "25-40%",
+    fat: "30-50%",
+    fiber: "35-50g/day",
+  },
+];
+
 const DietInfo = () => {
+  const { language } = useContext(LanguageContext); // 🔥 Obținem limba curentă
   return (
     <div className="container mt-4">
       <h2 className="diet-info-title">Informații despre diete</h2>
       <div className="row justify-content-center">
-        {diets.map((diet, index) => (
-          <div key={index} className="col-md-6 col-lg-4 mb-3">
-            <div className="card h-100 shadow-sm">
-              <div className="card-body">
-                <h5 className="card-title">{diet.name}</h5>
-                <p className="mb-1"><strong>Proteine:</strong> {diet.protein}</p>
-                <p className="mb-1"><strong>Carbohidrați:</strong> {diet.carbs}</p>
-                <p className="mb-1"><strong>Grăsimi:</strong> {diet.fat}</p>
-                <p className="mb-1"><strong>Fibre:</strong> {diet.fiber}</p>
+        `$
+        {language === "ro"
+          ? dietsRomanian.map((diet, index) => (
+              <div key={index} className="col-md-6 col-lg-4 mb-3">
+                <div className="card h-100 shadow-sm">
+                  <div className="card-body">
+                    <h5 className="card-title">{diet.name}</h5>
+                    <p className="mb-1">
+                      <strong>Proteine:</strong> {diet.protein}
+                    </p>
+                    <p className="mb-1">
+                      <strong>Carbohidrați:</strong> {diet.carbs}
+                    </p>
+                    <p className="mb-1">
+                      <strong>Grăsimi:</strong> {diet.fat}
+                    </p>
+                    <p className="mb-1">
+                      <strong>Fibre:</strong> {diet.fiber}
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
-        ))}
+            ))
+          : dietsEnglish.map((diet, index) => (
+              <div key={index} className="col-md-6 col-lg-4 mb-3">
+                <div className="card h-100 shadow-sm">
+                  <div className="card-body">
+                    <h5 className="card-title">{diet.name}</h5>
+                    <p className="mb-1">
+                      <strong>Proteine:</strong> {diet.protein}
+                    </p>
+                    <p className="mb-1">
+                      <strong>Carbohidrați:</strong> {diet.carbs}
+                    </p>
+                    <p className="mb-1">
+                      <strong>Grăsimi:</strong> {diet.fat}
+                    </p>
+                    <p className="mb-1">
+                      <strong>Fibre:</strong> {diet.fiber}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+        `
       </div>
     </div>
   );

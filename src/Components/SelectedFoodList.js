@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext  } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Button } from "react-bootstrap";
 import MineralsTable from "./MineralsTable"; // Importăm tabelul de minerale
 import { LanguageContext } from "../LanguageContext";
@@ -41,7 +41,13 @@ const SelectedFoodList = ({ selectedFoods, removeFood, resetSelections }) => {
   const generateAnalysis = async () => {
     setErrorMessage(""); // Resetăm eroarea la fiecare request
     if (!selectedFoods || selectedFoods.length === 0) {
-      setAnalysis("❌ Nu ai selectat alimente pentru analiză.");
+      setAnalysis(
+        `${
+          language === "ro"
+            ? "❌ Nu ai selectat alimente pentru analiză."
+            : " You have not selected any foods for analysis."
+        }`
+      );
       return;
     }
 
@@ -58,12 +64,31 @@ const SelectedFoodList = ({ selectedFoods, removeFood, resetSelections }) => {
       }),
       { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 }
     );
-    
+
+    const { userRomanian } = `Am consumat o masă cu următoarele valori:
+    - Calorii: ${totalNutrients.calories.toFixed(1)} kcal
+    - Proteine: ${totalNutrients.protein.toFixed(1)} g
+    - Carbohidrați: ${totalNutrients.carbs.toFixed(1)} g
+    - Grăsimi: ${totalNutrients.fat.toFixed(1)} g
+    - Fibre: ${totalNutrients.fiber.toFixed(1)} g            
+    Poți analiza impactul acestei mese asupra glicemiei, metabolismului și sănătății generale?`;
+    const { userEnglish } = `I ate a meal with the following values:
+    - Calories: ${totalNutrients.calories.toFixed(1)} kcal
+    - Proteins: ${totalNutrients.protein.toFixed(1)} g
+    - Carbohydrates: ${totalNutrients.carbs.toFixed(1)} g
+    - Fats: ${totalNutrients.fat.toFixed(1)} g
+    - Fibres: ${totalNutrients.fiber.toFixed(1)} g            
+    Can you analyze the impact of this meal on blood sugar, metabolism, and overall health?`;
+
     const now = Date.now();
     if (now - lastRequestTime < 3000) {
       // 🔥 Așteaptă 3 secunde între request-uri
       setAnalysis(
-        "⚠️ Te rog așteaptă câteva secunde înainte de a încerca din nou."
+        `${
+          language === "ro"
+            ? "⚠️ Te rog așteaptă câteva secunde înainte de a încerca din nou."
+            : "⚠️Please wait a few seconds before trying again."
+        }`
       );
       return;
     }
@@ -81,19 +106,15 @@ const SelectedFoodList = ({ selectedFoods, removeFood, resetSelections }) => {
           messages: [
             {
               role: "system",
-              content:
-                "Ești un expert în nutriție. Analizează aceste date nutriționale și oferă o evaluare a impactului asupra sănătății.",
+              content: `${
+                language === "ro"
+                  ? "Ești un expert în nutriție. Analizează aceste date nutriționale și oferă o evaluare a impactului asupra sănătății."
+                  : "You are a nutrition expert. Analyze this nutritional data and provide a health impact assessment."
+              }`,
             },
             {
               role: "user",
-              content: `Am consumat o masă cu următoarele valori:
-            - Calorii: ${totalNutrients.calories.toFixed(1)} kcal
-            - Proteine: ${totalNutrients.protein.toFixed(1)} g
-            - Carbohidrați: ${totalNutrients.carbs.toFixed(1)} g
-            - Grăsimi: ${totalNutrients.fat.toFixed(1)} g
-            - Fibre: ${totalNutrients.fiber.toFixed(1)} g
-            
-            Poți analiza impactul acestei mese asupra glicemiei, metabolismului și sănătății generale?`,
+              content: `${language === "ro" ? userRomanian : userEnglish}`,
             },
           ],
           temperature: 0.7,
@@ -104,11 +125,14 @@ const SelectedFoodList = ({ selectedFoods, removeFood, resetSelections }) => {
       if (!response.ok) {
         const errorData = await response.json();
         setErrorMessage(
-          `❌ Eroare API: ${response.status} - ${
-            errorData.error?.message || "Răspuns necunoscut"
+          `${language === "ro" ? "❌ Eroare API" : "❌ API Error"}: ${
+            response.status
+          } - ${
+            errorData.error?.message || language === "ro"
+              ? "Răspuns necunoscut"
+              : "Unknown response"
           }`
         );
-        console.log("🚨 Mesaj eroare API:", errorMessage); // 🔥 Debugging
         return;
       }
 
@@ -116,23 +140,37 @@ const SelectedFoodList = ({ selectedFoods, removeFood, resetSelections }) => {
 
       // Verificăm dacă API-ul a returnat un răspuns valid
       if (!result.choices || result.choices.length === 0) {
-        setErrorMessage("❌ Eroare: Răspuns invalid de la API.");
+        setErrorMessage(
+          language === "ro"
+            ? "❌ Eroare: Răspuns invalid de la API."
+            : "❌ API invalid response"
+        );
         return;
       }
 
       setAnalysis(result.choices[0].message.content);
     } catch (error) {
-      setErrorMessage("❌ Eroare: Nu s-a putut conecta la OpenAI.");
-      console.error("🚨 Eroare OpenAI:", error);
+      setErrorMessage(
+        language === "ro"
+          ? "❌ Eroare: Nu s-a putut conecta server AI."
+          : "❌ AI Server Error"
+      );
     }
   };
   return (
     <div className="container mt-3">
       <div className="selected-foods-container">
         <div className="d-flex justify-content-between align-items-center">
-          <h5 className="diet-info-title">{language === "ro" ? "Alimente Selectate" : "Selected Foods"}</h5>
-          <Button variant="info" id="analyze-btn" size="sm" onClick={generateAnalysis}>
-          {language === "ro" ? "Analiza AI" : "AI Analisys"}
+          <h5 className="diet-info-title">
+            {language === "ro" ? "Alimente Selectate" : "Selected Foods"}
+          </h5>
+          <Button
+            variant="info"
+            id="analyze-btn"
+            size="sm"
+            onClick={generateAnalysis}
+          >
+            {language === "ro" ? "Analiza AI" : "AI Analisys"}
           </Button>
         </div>
 
@@ -154,7 +192,11 @@ const SelectedFoodList = ({ selectedFoods, removeFood, resetSelections }) => {
             ))}
           </div>
         ) : (
-          <p className="text-white">{language === "ro" ? "Nu ai selectat nici un aliment" : "There is no food selected"}</p>
+          <p className="text-white">
+            {language === "ro"
+              ? "Nu ai selectat nici un aliment"
+              : "There is no food selected"}
+          </p>
         )}
       </div>
       {errorMessage && (
@@ -167,7 +209,10 @@ const SelectedFoodList = ({ selectedFoods, removeFood, resetSelections }) => {
       )}
 
       {analysis && (
-        <div ref={analysisRef} className="analysis-container mt-3 p-3 bg-dark text-white rounded">
+        <div
+          ref={analysisRef}
+          className="analysis-container mt-3 p-3 bg-dark text-white rounded"
+        >
           <h5>🔍 {language === "ro" ? "Analiza AI:" : "AI analisys:"}</h5>
           <p>{analysis}</p>
         </div>

@@ -58,7 +58,7 @@ const SelectedFoodList = ({ selectedFoods, removeFood, resetSelections }) => {
       }),
       { calories: 0, protein: 0, carbs: 0, fat: 0, fiber: 0 }
     );
-    console.log("🔍 Nutrienți calculați:", totalNutrients);
+    
     const now = Date.now();
     if (now - lastRequestTime < 3000) {
       // 🔥 Așteaptă 3 secunde între request-uri

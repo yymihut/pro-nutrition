@@ -24,7 +24,7 @@ const Header = ({
   const { language, toggleLanguage } = useContext(LanguageContext);
   const [filteredFoods, setFilteredFoods] = useState([]);
   const searchContainerRef = useRef(null); // 🔹 Referință pentru zona de căutare
-
+  
   const handleSearchChange = (e) => {
     const query = e.target.value;
     if (/^[a-zA-ZăâîșțĂÂÎȘȚ ]*$/.test(query) || query === "") {
@@ -63,7 +63,7 @@ const Header = ({
   return (
     <header ref={headerRef} className="header">
       <div className="header-title-container">
-        <h1 className="header-title">Calculator Nutrițional</h1>
+        <h1 className="header-title">{language === "ro" ? "Calculator Nutrițional AI" : "AI Nutritional Calculator"}</h1>
         <div className="language-switcher">
           <button
             className={language === "ro" ? "active" : ""}
@@ -80,13 +80,13 @@ const Header = ({
         </div>
       </div>
 
-      <p className="header-subtitle">- norme UE, surse EFSA</p>
+      <p className="header-subtitle">{language === "ro" ? "- norme UE, surse EFSA" : "- EU norms, EFSA sources"} </p>
       <div className="header-controls">
         {/* Căutare aliment */}
         <div className="position-relative" ref={searchContainerRef}>
           <Form.Control
             type="text"
-            placeholder="Caută aliment..."
+            placeholder= {language === "ro" ? "Caută aliment..." : "Food search..."}
             value={search}
             onChange={handleSearchChange}
             className="form-control-sm"
@@ -161,7 +161,7 @@ const Header = ({
               }
             }}
           >
-            Adaugă
+            {language === "ro" ? "Adaugă" : "Add Food"} 🍽️
           </Button>
 
           <span
@@ -171,14 +171,14 @@ const Header = ({
             {dietType}
           </span>
           <Button className="reset-button" onClick={resetSelections}>
-            🔄 Resetează
+          {language === "ro" ? "🔄 Resetează" : "🔄 Reset"} 
           </Button>
         </div>
       </div>
 
       <div className="nutrition-info">
         <div className="col">
-          Proteine:{" "}
+          {language === "ro" ? "Proteine" : "Proteins"} :{" "}
           <Badge bg="light" text="dark">
             {!isNaN(Number(totalProtein))
               ? Number(totalProtein).toFixed(1)
@@ -191,7 +191,7 @@ const Header = ({
           </Badge>
         </div>
         <div className="col">
-          Carbohidrați:{" "}
+          {language === "ro" ? "Carbohidrați" : "Carbohydrates"}:{" "}
           <Badge bg="light" text="dark">
             {!isNaN(Number(totalCarbs)) ? Number(totalCarbs).toFixed(1) : "0.0"}{" "}
             g
@@ -199,14 +199,14 @@ const Header = ({
           </Badge>
         </div>
         <div className="col">
-          Grăsimi:{" "}
+          {language === "ro" ? "Grăsimi" : "Fats"}:{" "}
           <Badge bg="light" text="dark">
             {!isNaN(Number(totalFat)) ? Number(totalFat).toFixed(1) : "0.0"} g
             <span className="text-muted"> ({fatPercentage.toFixed(1)}%)</span>
           </Badge>
         </div>
         <div className="col">
-          Fibre:{" "}
+          {language === "ro" ? "Fibre" : "Fiber"}:{" "}
           <Badge bg="light" text="dark">
             {!isNaN(Number(totalFiber)) ? Number(totalFiber).toFixed(1) : "0.0"}{" "}
             g

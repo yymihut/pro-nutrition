@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import BackgroundChanger from "./Components/BackgroundChanger";
 import Header from "./Components/Header";
 import SelectedFoodList from "./Components/SelectedFoodList";
@@ -6,7 +6,7 @@ import CategoryDropdown from "./Components/CategoryDropdown";
 import foodsData from "./Data/foods.json";
 import DietInfo from "./Components/DietInfo";
 import Footer from "./Components/Footer";
-import { LanguageProvider } from "./LanguageContext";
+import { LanguageContext } from "./LanguageContext";
 import "./App.css";
 
 const LOCAL_STORAGE_KEY = "selectedFoods";
@@ -15,6 +15,7 @@ const App = () => {
   const [search, setSearch] = useState("");
   const [quantity, setQuantity] = useState("");
   const [selectedFoods, setSelectedFoods] = useState([]);
+  const { language } = useContext(LanguageContext); // 🔥 Obținem limba curentă
 
   // ✅ Funcție pentru resetarea selecțiilor
   const resetSelections = () => {
@@ -102,7 +103,7 @@ const App = () => {
 
   const determineDietType = () => {
     const total = totalProtein + totalCarbs + totalFat;
-    if (total === 0) return "Nicio dietă";
+    if (total === 0) return  language === "ro" ? "Dieta necunoscuta" : "Unknown Diet";
 
     const proteinRatio = (totalProtein / total) * 100;
     const carbRatio = (totalCarbs / total) * 100;
@@ -116,7 +117,7 @@ const App = () => {
       fatRatio >= 25 &&
       fatRatio <= 35
     )
-      return "Dieta Echilibrată";
+      return language === "ro" ? "Dieta Echilibrată" : "Balanced Diet";
 
     if (
       proteinRatio >= 15 &&
@@ -126,7 +127,7 @@ const App = () => {
       fatRatio >= 65 &&
       fatRatio <= 80
     )
-      return "Dieta Ketogenică";
+      return language === "ro" ? "Dieta Ketogenică" : "Ketogenic Diet"; 
 
     if (
       proteinRatio >= 20 &&
@@ -136,7 +137,7 @@ const App = () => {
       fatRatio >= 40 &&
       fatRatio <= 60
     )
-      return "Dieta Low-Carb";
+      return language === "ro" ? "Dieta Low-Carb" : "Low-Carb Diet" ;
 
     if (
       proteinRatio >= 30 &&
@@ -146,7 +147,7 @@ const App = () => {
       fatRatio >= 20 &&
       fatRatio <= 30
     )
-      return "Dieta High-Protein";
+      return language === "ro" ? "Dieta High-Protein" : "High-Protein Diet";
 
     if (
       proteinRatio >= 15 &&
@@ -156,7 +157,7 @@ const App = () => {
       fatRatio >= 10 &&
       fatRatio <= 20
     )
-      return "Dieta Low-Fat";
+      return language === "ro" ? "Dieta Low-Fat" : "Low-Fat Diet" ;
 
     if (
       proteinRatio >= 15 &&
@@ -166,7 +167,7 @@ const App = () => {
       fatRatio >= 30 &&
       fatRatio <= 40
     )
-      return "Dieta Mediteraneană";
+      return language === "ro" ? "Dieta Mediteraneană" : "Mediteranean Diet"  ;
 
     if (
       proteinRatio >= 10 &&
@@ -176,7 +177,7 @@ const App = () => {
       fatRatio >= 20 &&
       fatRatio <= 30
     )
-      return "Dieta Vegetariană/Vegană";
+      return language === "ro" ? "Dieta Vegetariană/Vegană" : "Vegan Diet" ;
 
     if (
       proteinRatio >= 20 &&
@@ -186,15 +187,15 @@ const App = () => {
       fatRatio >= 30 &&
       fatRatio <= 50
     )
-      return "Dieta Paleo";
+      return language === "ro" ? "Dieta Paleo" : "Paleo Diet" ;
 
-    return "Dietă Neclasificată";
+    return language === "ro" ? "Dietă Neclasificată" : "Unclasified Diet";
   };
 
   const dietType = determineDietType();
 
   return (
-    <LanguageProvider>
+    
     <div>
       <BackgroundChanger />
       <div className="app-container">
@@ -261,7 +262,7 @@ const App = () => {
         </div>
       </div>
     </div>
-    </LanguageProvider>
+    
   );
 };
 

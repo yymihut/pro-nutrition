@@ -1,9 +1,11 @@
-import React from "react";
+import React, {useContext} from "react";
 import { Table, Container } from "react-bootstrap";
 import nutrientsDailyIntake from "../Data/nutrients_daily_intake.json";
+import { LanguageContext } from "../LanguageContext";
 
 const MineralsTable = ({ selectedFoods }) => {
   const mineralKeys = Object.keys(nutrientsDailyIntake);
+  const { language } = useContext(LanguageContext);
 
   // Calculăm totalul fiecărui mineral
   const mineralTotals = mineralKeys.reduce((totals, mineral) => {
@@ -15,13 +17,13 @@ const MineralsTable = ({ selectedFoods }) => {
 /* */
   return (
     <Container className="mt-4 text-center">
-      <h5 className="diet-info-title">Total minerale & vitamine</h5>
+      <h5 className="diet-info-title">{language === "ro" ? "Total minerale & vitamine" : "Total minerals & vitamins"}</h5>
       <Table striped bordered hover className="minerals-table table-sm table-dark" responsive>
         <thead>
           <tr>
-            <th>Mineral</th>
-            <th>Cantitate</th>
-            <th>% DZR</th>
+            <th>{language === "ro" ? "Descriere" : "Description"}</th>
+            <th>{language === "ro" ? "Cantitate" : "Amount"}</th>
+            <th>{language === "ro" ? "% DZR" : "% RDA"}</th>
           </tr>
         </thead>
         <tbody>

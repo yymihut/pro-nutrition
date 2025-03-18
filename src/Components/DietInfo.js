@@ -128,7 +128,7 @@ const DietInfo = () => {
         {language === "ro"
           ? dietsRomanian.map((diet, index) => (
               <div key={index} className="col-md-6 col-lg-4 mb-3">
-                <div className="card h-100 shadow-sm">
+                <div className="card h-100">
                   <div className="card-body">
                     <h5 className="card-title">{diet.name}</h5>
                     <p className="mb-1">

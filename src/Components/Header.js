@@ -65,13 +65,13 @@ const Header = ({
       <div className="header-title-container">
         <p className="header-subtitle">
           {language === "ro"
-            ? "surse EFSA, baza de date cu peste 2000 de alimente"
-            : "EFSA sources, database with over 2000 foods"}{" "}
+            ? "Anses. 2020. Tabel de compoziție a alimentelor Ciqual"
+            : "Anses. 2020. Ciqual food composition table"}{" "}
         </p>
         <h1 className="header-title">
           {language === "ro"
-            ? "Calculator Nutrițional AI"
-            : "AI Nutritional Calculator"}
+            ? "Calculator Nutrițional"
+            : "Nutritional Calculator"}
         </h1>
         <div className="language-switcher">
           <span className="language-label">

@@ -65,8 +65,8 @@ const Header = ({
       <div className="header-title-container">
         <p className="header-subtitle">
           {language === "ro"
-            ? "Anses. 2020. Tabel de compoziție a alimentelor Ciqual"
-            : "Anses. 2020. Ciqual food composition table"}{" "}
+            ? "Baza de date pentru alimente USDA"
+            : "Composition of foods, database USDA"}{" "}
         </p>
         <h1 className="header-title">
           {language === "ro"

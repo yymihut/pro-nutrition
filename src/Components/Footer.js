@@ -64,10 +64,15 @@ const Footer = () => {
 
         <hr className="bg-light" />
         <p>
-          © 2025 by Pro-Nutrition-AI-Team | {" "}
+          © 2025 by ProNutritionTeam |{" "}
           {language === "ro"
-            ? "Date nutriționale preluate conform normelor UE - EFSA"
-            : "Nutritional data taken according to EU rules - EFSA"}
+            ? "„Datele nutriționale sunt furnizate de USDA FoodData Central”"
+            : "„Nutritional data provided by USDA FoodData Central”"}{" "}
+          |{" "}
+          {language === "ro"
+            ? "Date nutriționale conform USDA & CoFID"
+            : "Contains public sector information licensed under the Open Government Licence v3.0. | McCance and Widdowson’s 'composition of foods integrated dataset' & USDA"}
+          <a href="https://www.usda.gov/about-food/food-safety"></a>
         </p>
       </Container>
     </footer>
@@ -75,4 +80,3 @@ const Footer = () => {
 };
 
 export default Footer;
-

@@ -1,83 +1,107 @@
 {
-    "Cholesterol [mg]": {
-        "daily_recommended_intake": "None"
-    },
-    "Sodiu [mg]": {
-        "daily_recommended_intake": 1500
-    },
-    "Potassiu [mg]": {
-        "daily_recommended_intake": 3200
-    },
-    "Calciu [mg]": {
-        "daily_recommended_intake": 1000
-    },
-    "Phosphor [mg]": {
-        "daily_recommended_intake": 700
-    },
-    "Magnesiu [mg]": {
-        "daily_recommended_intake": 420
-    },
-    "Iron [mg]": {
-        "daily_recommended_intake": 14
-    },
-    "Cupru [mg]": {
-        "daily_recommended_intake": 1
-    },
-    "Seleniu [mcg]": {
-        "daily_recommended_intake": 55
-    },
-    "Zinc [mg]": {
-        "daily_recommended_intake": 10
-    },
-    "Iod [mcg]": {
-        "daily_recommended_intake": 150
-    },
-    "Retinol  Vit-A [mcg]": {
-        "daily_recommended_intake": 900
-    },
-    "Beta-carotene Vit-A [mcg]": {
-        "daily_recommended_intake": "None"
-    },
-    "Alfa-carotene Vit-A [mcg]": {
-        "daily_recommended_intake": "None"
-    },
-    "Luteina Vit-A [mcg]": {
-        "daily_recommended_intake": "None"
-    },
-    "Zeaxanthin Vit-A [mcg]": {
-        "daily_recommended_intake": "None"
-    },
-    "Beta-cryptox. Vit-A [mcg]": {
-        "daily_recommended_intake": "None"
-    },
-    "Lycopen Vit-A [mcg]": {
-        "daily_recommended_intake": "None"
-    },
-    "VitaminaD [mcg]": {
-        "daily_recommended_intake": 15
-    },
-    "VitaminaE [mg]": {
-        "daily_recommended_intake": 15
-    },
-    "VitaminaB1 [mg]": {
-        "daily_recommended_intake": 1.2
-    },
-    "VitaminaB2 [mg]": {
-        "daily_recommended_intake": 1.4
-    },
-    "VitaminaB6 [mg]": {
-        "daily_recommended_intake": 1.6
-    },
-    "VitaminaB12 [mcg]": {
-        "daily_recommended_intake": 2.5
-    },
-    "VitaminaB3 [mg]": {
-        "daily_recommended_intake": 16
-    },
-    "VitaminaB9 [mcg]": {
-        "daily_recommended_intake": 400
-    },
-    "VitaminaC [mg]": {
-        "daily_recommended_intake": 90
-    }
+  "Sodium (mg)": {
+    "daily_recommended_intake": 1500
+  },
+  "Potassium (mg)": {
+    "daily_recommended_intake": 3200
+  },
+  "Calcium (mg)": {
+    "daily_recommended_intake": 1000
+  },
+  "Phosphorus (mg)": {
+    "daily_recommended_intake": 700
+  },
+  "Magnesium (mg)": {
+    "daily_recommended_intake": 420
+  },
+  "Folic acid (µg)": {
+    "daily_recommended_intake": 400
+  },
+  "Iron (Fier) (mg)": {
+    "daily_recommended_intake": 14
+  },
+  "Copper - Cupru (mg)": {
+    "daily_recommended_intake": 1
+  },
+  "Selenium (µg)": {
+    "daily_recommended_intake": 55
+  },
+  "Zinc (mg)": {
+    "daily_recommended_intake": 10
+  },
+  "Vitamin K (µg)": {
+    "daily_recommended_intake": 115
+  },
+  "Vitamin A - Retinol (µg)": {
+    "daily_recommended_intake": 900
+  },
+  "Carotene, alpha (µg)": {
+    "daily_recommended_intake": "None"
+  },
+  "Betacarotene (µg)": {
+    "daily_recommended_intake": "None"
+  },
+  "Lutein + zeaxanthin (µg)": {
+    "daily_recommended_intake": 12
+  },
+  "Lycopene (µg)": {
+    "daily_recommended_intake": "None"
+  },
+  "Choline (mg)": {
+    "daily_recommended_intake": 510
+  },
+  "Vitamin D (µg)": {
+    "daily_recommended_intake": 15
+  },
+  "Vitamin E (mg)": {
+    "daily_recommended_intake": 15
+  },
+  "Vitamin B1 or Thiamin (mg)": {
+    "daily_recommended_intake": 1.2
+  },
+  "Vitamin B2 or Riboflavin (mg)": {
+    "daily_recommended_intake": 1.4
+  },
+  "Vitamin B3 or Niacin (mg)": {
+    "daily_recommended_intake": 16
+  },
+  "Vitamin B6 (mg)": {
+    "daily_recommended_intake": 1.6
+  },
+  "Vitamin B9 or Folate (µg)": {
+    "daily_recommended_intake": 400
+  },
+  "Vitamin B12 (µg)": {
+    "daily_recommended_intake": 2.5
+  },
+  "Vitamin C (mg)": {
+    "daily_recommended_intake": 90
+  },
+  "Cholesterol (mg)": {
+    "daily_recommended_intake": "None"
+  },
+  "EPA (g)": {
+    "daily_recommended_intake": 0.7
+  },
+  "DHA (g)": {
+    "daily_recommended_intake": 1.4
+  },
+  "DPA (g)": {
+    "daily_recommended_intake": 0.45
+  },
+  "Fatty acids, total monounsaturated (g)": {
+    "daily_recommended_intake": 38
+  },
+  "Fatty acids, total polyunsaturated (g)": {
+    "daily_recommended_intake": 15
+  },
+  "Fatty acids, total saturated (g)": {
+    "daily_recommended_intake": 13
+  },
+  "Theobromine (mg)": {
+    "daily_recommended_intake": 450
+  },
+  "Caffeine (mg)": {
+    "daily_recommended_intake": "None"
+  }
 }

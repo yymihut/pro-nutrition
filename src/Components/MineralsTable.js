@@ -34,7 +34,7 @@ const MineralsTable = ({ selectedFoods }) => {
 
             return (
               <tr key={mineral}>
-                <td>{mineral}</td>
+                <td>{mineral}xxzzzzzzz</td>
                 <td>{total.toFixed(2)}</td>
                 <td>{percent}</td>
               </tr>

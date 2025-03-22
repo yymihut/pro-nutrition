@@ -17,9 +17,40 @@ html {
   background-color: rgb(255, 193, 9) !important;
   color: black !important;
   font-weight: bold;
-  height: 36px !important;
-  text-align: center !important;
-  align-content: center !important;
+  height: 32px;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-controls button {
+  display: flex;
+  align-items: center;       /* ✅ aliniază vertical centrul conținutului */
+  justify-content: center;   /* ✅ centrat orizontal */
+  color: white;
+  background: rgba(136, 4, 4, 0.911);
+  margin-left: 8px;
+  border: none;
+  height: 32px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  padding: 0 12px;
+  min-width: 90px;
+  max-width: 200px;
+  font-weight: bold;
+}
+
+.header-controls button .reset-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  margin-left: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 22px;
+  
 }
 
 .content {
@@ -212,20 +243,7 @@ html {
 }
 
 /* 🔹 Butonul „Adaugă” */
-.header-controls button {
-  color: white;
-  background: rgba(136, 4, 4, 0.911); /* Fundal gri semitransparent */
-  white-space: pre-wrap;
-  margin-left: 8px;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 8px;
-  font-size: 14px;
-  cursor: pointer;
-  width: auto; /* ✅ Ajustează dimensiunea automată */
-  min-width: 120px;
-  max-width: 200px;
-}
+
 
 .header-controls button:hover {
   background-color: #23612e;
@@ -627,9 +645,7 @@ html {
     width: 100%;
   }
 
-  .header-controls button {
-    width: 100%; /* ✅ Dimensiune mai mică pe rezoluții medii */
-  }
+  
   .nutrition-info {
     flex-direction: row;
     align-items: center;
@@ -681,7 +697,7 @@ html {
 
 @media (max-width: 480px) {
   .food-item {
-    font-size: 12px;
+    font-size: 14px;
     padding: 4px;
     margin: 3px;
   }

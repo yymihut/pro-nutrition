@@ -175,8 +175,8 @@ const Header = ({
             }}
           >
            {t("add_food_button")} 🍽️
+           {/* // reset buton */}
           </Button>
-
           <span
             className="badge p-2 ms-2 custom-badge-diet"
             style={{ fontSize: "14px" }}

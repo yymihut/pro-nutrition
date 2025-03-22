@@ -25,10 +25,10 @@ export const translations = {
     de: "Menge",
   },
   add_food_button: {
-    ro: "Adaugă aliment",
-    en: "Add food",
-    fr: "Ajouter un aliment",
-    de: "Lebensmittel hinzufügen",
+    ro: "Adaugă",
+    en: "Add",
+    fr: "Ajouter",
+    de: "Hinzufügen",
   },
   language_label: {
     ro: "RO",

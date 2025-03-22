@@ -430,9 +430,15 @@ html {
   color: black;
 }
 
-.card-body {
+.card {
+  background-color: rgba(0, 0, 0, 0.6); /* fundal negru translucid */
+  color: #fff;
+}
+
+
+.card .card-body {
   flex: 1 1 auto;
-  color: white;
+  color: #fff; /* Sau #f0f0f0 dacă vrei mai soft */
 }
 
 .h-100 {

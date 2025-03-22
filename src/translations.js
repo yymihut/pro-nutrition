@@ -139,14 +139,10 @@ export const translations = {
     de: "Über uns",
   },
   despre_noi_p: {
-    ro:
-      "Suntem o echipă pasionată de nutriție și sănătate, oferind un calculator nutrițional performant folosind date USDA exacte despre produsele alimentare.",
-    en:
-      "We are a team passionate about nutrition and health, offering a powerful nutritional calculator using accurate USDA data on food products.",
-    fr:
-      "Nous sommes une équipe passionnée de nutrition et de santé, offrant un puissant calculateur nutritionnel utilisant des données précises de l'USDA sur les produits alimentaires.",
-    de:
-      "Wir sind ein Team, das sich leidenschaftlich für Ernährung und Gesundheit einsetzt und einen leistungsstarken Nährwertrechner anbietet, der genaue USDA-Daten zu Lebensmitteln verwendet.",
+    ro: "Suntem o echipă pasionată de nutriție și sănătate, oferind un calculator nutrițional performant folosind date USDA exacte despre produsele alimentare.",
+    en: "We are a team passionate about nutrition and health, offering a powerful nutritional calculator using accurate USDA data on food products.",
+    fr: "Nous sommes une équipe passionnée de nutrition et de santé, offrant un puissant calculateur nutritionnel utilisant des données précises de l'USDA sur les produits alimentaires.",
+    de: "Wir sind ein Team, das sich leidenschaftlich für Ernährung und Gesundheit einsetzt und einen leistungsstarken Nährwertrechner anbietet, der genaue USDA-Daten zu Lebensmitteln verwendet.",
   },
   proNutritionTeam: {
     ro: "© 2025 de ProNutritionAiTeam",
@@ -161,15 +157,15 @@ export const translations = {
     de: "Alle Rechte vorbehalten |",
   },
   proNutritionTeam_info_1: {
-    ro: "Datele nutriționale sunt furnizate de USDA FoodData Central",
-    en: "Nutritional data is provided by USDA FoodData Central",
-    fr: "Les données nutritionnelles sont fournies par l'USDA FoodData Central",
-    de: "Nährwertdaten werden von USDA FoodData Central bereitgestellt",    
+    ro: "Datele nutriționale sunt furnizate de USDA FoodData Central. Acest produs nu este aprobat sau susținut de USDA. Datele sunt oferite ca atare, fără garanții. Pentru sfaturi medicale sau nutriționale, consultați un specialist. ",
+    en: "Nutritional data is provided by USDA FoodData Central. This product is not approved or endorsed by USDA. Data is provided as is, without warranties. For medical or nutritional advice, consult a specialist.",
+    fr: "Les données nutritionnelles sont fournies par USDA FoodData Central. Ce produit n'est pas approuvé ou soutenu par l'USDA. Les données sont fournies telles quelles, sans garantie. Pour des conseils médicaux ou nutritionnels, consultez un spécialiste.",
+    de: "Nährwertdaten werden von USDA FoodData Central bereitgestellt. Dieses Produkt ist nicht von der USDA zugelassen oder unterstützt. Daten werden ohne Garantie bereitgestellt. Für medizinische oder ernährungswissenschaftliche Beratung konsultieren Sie einen Spezialisten.",
   },
   proNutritionTeam_info_2: {
-    ro: "Conține informații licențiate sub Open Licence.",
-    en: "Contains information licensed under the Open Licence.",
-    fr: "Contient des informations sous licence ouverte.",
-    de: "Enthält Informationen unter der Open Licence lizenziert.",
+    ro: "„Licență: Open Licence”",
+    en: "“License: Open Licence”",
+    fr: "“Licence: Open Licence”",
+    de: "„Lizenz: Open Licence”",
   },
 };

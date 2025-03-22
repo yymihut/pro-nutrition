@@ -2,50 +2,55 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { Button } from "react-bootstrap";
 import MineralsTable from "./MineralsTable";
 import { LanguageContext } from "../LanguageContext";
-//import axios from "axios";
+import { translations } from "../translations";
 
-//const DEEPSEEK_API_KEY = process.env.REACT_APP_DEEPSEEK_API_KEY;
-
-const SelectedFoodList = ({ selectedFoods, removeFood }) => {
-  const [analysis, setAnalysis] = useState("");
+// import { translations } from "../translations";
+// const t = (key) => translations[key]?.[language] || translations[key]?.["en"];
+// {t("total_calories")}
+const SelectedFoodList = ({
+  selectedFoods,
+  removeFood,
+  resetSelections,
+  foodsData,
+  setTotalNutrients,
+}) => {
+  const t = (key) => translations[key]?.[language] || translations[key]?.["en"];
+  const { language } = useContext(LanguageContext);
+  // const [analysis, setAnalysis] = useState(""); // 🔹 Analiza AI - cand o sa fie gratis
   const [errorMessage, setErrorMessage] = useState("");
   const analysisRef = useRef(null);
-  const { language } = useContext(LanguageContext);
 
-  //let lastRequestTime = 0;
+  // 🔍 Obține informații aliment pe baza id-ului
+  const getFoodById = (id) => foodsData.find((food) => food.id === id);
+  const getLocalizedName = (food) =>
+    food[`name_${language.toUpperCase()}`] || food.name;
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        analysisRef.current &&
-        !analysisRef.current.contains(event.target) &&
-        event.target.id !== "analyze-btn"
-      ) {
-        setAnalysis("");
+      if (analysisRef.current && !analysisRef.current.contains(event.target)) {
+       // setAnalysis(""); // 🔹 Analiza AI - cand o sa fie gratis
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   useEffect(() => {
     if (selectedFoods.length === 0) {
       setErrorMessage("");
-      setAnalysis("");
+     // setAnalysis(""); // 🔹 Analiza AI - cand o sa fie gratis
     }
   }, [selectedFoods]);
+ 
 
-// CAND O SA FIE GRATIS api-ul, o sa folosesc functia de mai jos
+  // CAND O SA FIE GRATIS api-ul, o sa folosesc functia de mai jos
 
  /*  const generateAnalysis = async () => {
     setErrorMessage("");
     if (!selectedFoods || selectedFoods.length === 0) {
       setAnalysis(
         language === "ro"
-          ? "❌ Nu ai selectat alimente pentru analiză."
+        /  ? "❌ Nu ai selectat alimente pentru analiză."
           : "❌ You have not selected any foods for analysis."
       );
       return;
@@ -83,7 +88,7 @@ const SelectedFoodList = ({ selectedFoods, removeFood }) => {
     if (now - lastRequestTime < 3000) {
       setAnalysis(
         language === "ro"
-          ? "⚠️ Te rog așteaptă câteva secunde înainte de a încerca din nou."
+         / ? "⚠️ Te rog așteaptă câteva secunde înainte de a încerca din nou."
           : "⚠️ Please wait a few seconds before trying again."
       );
       return;
@@ -100,7 +105,7 @@ const SelectedFoodList = ({ selectedFoods, removeFood }) => {
           role: "user",
           content:
             language === "ro"
-              ? "Ești un expert în nutriție. Analizează aceste date nutriționale și oferă o evaluare a impactului asupra sănătății."
+             / ? "Ești un expert în nutriție. Analizează aceste date nutriționale și oferă o evaluare a impactului asupra sănătății."
               : "You are a nutrition expert. Analyze this nutritional data and provide a health impact assessment.",
         },
       ],
@@ -143,7 +148,7 @@ const SelectedFoodList = ({ selectedFoods, removeFood }) => {
         console.log(error);
         setErrorMessage(
           language === "ro"
-            ? `❌ Eroare: Răspuns invalid de la API. ${error.message}`
+           / ? `❌ Eroare: Răspuns invalid de la API. ${error.message}`
             : `❌ API invalid response ${error.message}`
         );
       });
@@ -154,7 +159,7 @@ const SelectedFoodList = ({ selectedFoods, removeFood }) => {
       <div className="selected-foods-container">
         <div className="d-flex justify-content-between align-items-center">
           <h5 className="diet-info-title">
-            {language === "ro" ? "Alimente Selectate" : "Selected Foods"}
+          {t("diet_info_title")}
           </h5>
           {/* CAND O SA FIE GRATIS API-UL O SA FOLOSESC BUTONUL DE MAI JOS */}
           {/* <Button
@@ -168,48 +173,50 @@ const SelectedFoodList = ({ selectedFoods, removeFood }) => {
         </div>
 
         {selectedFoods.length > 0 ? (
-          <div id="selected-list" className="row justify-content-center">
-            {selectedFoods.map((item, index) => (
-              <div key={index} className="col-12 food-item">
-                <div className="food-name">
-                  {item.name} - {item.quantity} g/ml
+          <div className="row justify-content-center">
+            {selectedFoods.map((item, index) => {
+              const food = getFoodById(item.id);
+              if (!food) return null;
+              return (
+                <div key={index} className="col-12 food-item">
+                  <div className="food-name">
+                    {getLocalizedName(food)} - {item.quantity} g
+                  </div>
+                  <Button
+                    className="delete-button"
+                    size="sm"
+                    onClick={() => removeFood(index)}
+                  >
+                    {t("delete_button")}
+                  </Button>
                 </div>
-                <Button
-                  className="delete-button"
-                  size="sm"
-                  onClick={() => removeFood(index)}
-                >
-                  {language === "ro" ? "Șterge" : "Delete"}
-                </Button>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
-          <p className="text-white">
-            {language === "ro"
-              ? "Nu ai selectat nici un aliment"
-              : "There is no food selected"}
-          </p>
+          <p>{t("nu_ai_selectat_aliment")}</p>
         )}
       </div>
+
       {errorMessage && (
         <div className="error-container mt-2 p-2 bg-danger text-white rounded">
           {errorMessage}
         </div>
       )}
-      {selectedFoods.length > 0 && (
-        <MineralsTable selectedFoods={selectedFoods} />
-      )}
 
-      {analysis && (
+      {selectedFoods.length > 0 && (
+        <MineralsTable selectedFoods={selectedFoods} foodsData={foodsData} />
+      )}
+       {/* cand o sa fie free analiza AI */}
+      {/* {analysis && (
         <div
           ref={analysisRef}
           className="analysis-container mt-3 p-3 bg-dark text-white rounded"
         >
-          <h5>🔍 {language === "ro" ? "Analiza AI:" : "AI Analysis:"}</h5>
+          <h5>🔍 Analiza AI:</h5>
           <p>{analysis}</p>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

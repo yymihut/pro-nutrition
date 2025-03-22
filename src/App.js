@@ -2,12 +2,75 @@ import React, { useState, useEffect, useContext } from "react";
 import BackgroundChanger from "./Components/BackgroundChanger";
 import Header from "./Components/Header";
 import SelectedFoodList from "./Components/SelectedFoodList";
-import CategoryDropdown from "./Components/CategoryDropdown";
 import foodsData from "./Data/foods.json";
 import DietInfo from "./Components/DietInfo";
 import Footer from "./Components/Footer";
 import { LanguageContext } from "./LanguageContext";
 import "./App.css";
+
+const dietLabels = {
+  unknown: {
+    ro: "Dietă Necunoscută",
+    en: "Unknown Diet",
+    fr: "Régime Inconnu",
+    de: "Unbekannte Diät",
+  },
+  balanced: {
+    ro: "Dieta Echilibrată",
+    en: "Balanced Diet",
+    fr: "Régime Équilibré",
+    de: "Ausgewogene Ernährung",
+  },
+  keto: {
+    ro: "Dieta Ketogenică",
+    en: "Ketogenic Diet",
+    fr: "Régime Cétogène",
+    de: "Ketogene Diät",
+  },
+  lowCarb: {
+    ro: "Dieta Low-Carb",
+    en: "Low-Carb Diet",
+    fr: "Régime Low-Carb",
+    de: "Low-Carb-Diät",
+  },
+  highProtein: {
+    ro: "Dieta High-Protein",
+    en: "High-Protein Diet",
+    fr: "Régime Hyperprotéiné",
+    de: "High-Protein-Diät",
+  },
+  lowFat: {
+    ro: "Dieta Low-Fat",
+    en: "Low-Fat Diet",
+    fr: "Régime Pauvre en Graisses",
+    de: "Low-Fat-Diät",
+  },
+  mediterranean: {
+    ro: "Dieta Mediteraneană",
+    en: "Mediterranean Diet",
+    fr: "Régime Méditerranéen",
+    de: "Mittelmeer-Diät",
+  },
+  vegan: {
+    ro: "Dieta Vegetariană/Vegană",
+    en: "Vegan Diet",
+    fr: "Régime Végétarien/Végétalien",
+    de: "Vegetarische/Vegane Diät",
+  },
+  paleo: {
+    ro: "Dieta Paleo",
+    en: "Paleo Diet",
+    fr: "Régime Paléo",
+    de: "Paleo-Diät",
+  },
+  unclassified: {
+    ro: "Dietă Neclasificată",
+    en: "Unclassified Diet",
+    fr: "Régime Non Classé",
+    de: "Nicht Klassifizierte Diät",
+  },
+};
+
 
 const LOCAL_STORAGE_KEY = "selectedFoods";
 
@@ -16,6 +79,9 @@ const App = () => {
   const [quantity, setQuantity] = useState("");
   const [selectedFoods, setSelectedFoods] = useState([]);
   const { language } = useContext(LanguageContext); // 🔥 Obținem limba curentă
+
+  // ✅ Use computed name in rendering (if needed)
+ // const getLocalizedName = (food) => food[`name_${language.toUpperCase()}`];
 
   // ✅ Funcție pentru resetarea selecțiilor
   const resetSelections = () => {
@@ -35,28 +101,44 @@ const App = () => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(selectedFoods));
   }, [selectedFoods]);
 
+  // ✅ Funcție pentru a verifica dacă cantitatea este validă
+  const isValidQuantity = (qty) => {
+    const value = parseFloat(qty);
+    return !isNaN(value) && value > 0;
+  };
+
+  // ✅ Funcție pentru a adăuga alimente
   const addFood = (food, qty) => {
-    if (!food || !qty) return;
+    if (!food || !isValidQuantity(qty)) {
+      alert(language === "ro" 
+        ? "❌ Introdu o cantitate validă (> 0)!" 
+        : "❌ Please enter a valid quantity (> 0)!");
+      return;
+    }
+
+    const newFood = {
+      id: food.id,
+      quantity: parseInt(qty),
+      calories: parseFloat(food.calories) || 0,
+      protein: parseFloat(food.protein) || 0,
+      carbs: parseFloat(food.carbs) || 0,
+      fat: parseFloat(food.fat) || 0,
+      fiber: parseFloat(food.fiber) || 0,
+    };
 
     setSelectedFoods((prevFoods) => {
-      const existingFoodIndex = prevFoods.findIndex(
-        (f) => f.name === food.name
-      );
-
+      const existingFoodIndex = prevFoods.findIndex((f) => f.id === newFood.id);
       if (existingFoodIndex !== -1) {
-        // Dacă alimentul există, actualizăm cantitatea
         return prevFoods.map((item, index) =>
           index === existingFoodIndex
-            ? { ...item, quantity: item.quantity + parseInt(qty) }
+            ? { ...item, quantity: item.quantity + newFood.quantity }
             : item
         );
       } else {
-        // Dacă alimentul este nou, îl adăugăm
-        return [...prevFoods, { ...food, quantity: parseInt(qty) }];
+        return [...prevFoods, newFood];
       }
     });
 
-    // Resetează câmpurile după adăugare
     setSearch("");
     setQuantity("");
   };
@@ -103,12 +185,12 @@ const App = () => {
 
   const determineDietType = () => {
     const total = totalProtein + totalCarbs + totalFat;
-    if (total === 0) return  language === "ro" ? "Dieta necunoscuta" : "Unknown Diet";
-
+    if (total === 0) return dietLabels.unknown[language] || dietLabels.unknown.en;
+  
     const proteinRatio = (totalProtein / total) * 100;
     const carbRatio = (totalCarbs / total) * 100;
     const fatRatio = (totalFat / total) * 100;
-
+  
     if (
       proteinRatio >= 15 &&
       proteinRatio <= 25 &&
@@ -116,9 +198,8 @@ const App = () => {
       carbRatio <= 55 &&
       fatRatio >= 25 &&
       fatRatio <= 35
-    )
-      return language === "ro" ? "Dieta Echilibrată" : "Balanced Diet";
-
+    ) return dietLabels.balanced[language];
+  
     if (
       proteinRatio >= 15 &&
       proteinRatio <= 25 &&
@@ -126,9 +207,8 @@ const App = () => {
       carbRatio <= 10 &&
       fatRatio >= 65 &&
       fatRatio <= 80
-    )
-      return language === "ro" ? "Dieta Ketogenică" : "Ketogenic Diet"; 
-
+    ) return dietLabels.keto[language];
+  
     if (
       proteinRatio >= 20 &&
       proteinRatio <= 30 &&
@@ -136,9 +216,8 @@ const App = () => {
       carbRatio <= 30 &&
       fatRatio >= 40 &&
       fatRatio <= 60
-    )
-      return language === "ro" ? "Dieta Low-Carb" : "Low-Carb Diet" ;
-
+    ) return dietLabels.lowCarb[language];
+  
     if (
       proteinRatio >= 30 &&
       proteinRatio <= 50 &&
@@ -146,9 +225,8 @@ const App = () => {
       carbRatio <= 40 &&
       fatRatio >= 20 &&
       fatRatio <= 30
-    )
-      return language === "ro" ? "Dieta High-Protein" : "High-Protein Diet";
-
+    ) return dietLabels.highProtein[language];
+  
     if (
       proteinRatio >= 15 &&
       proteinRatio <= 25 &&
@@ -156,9 +234,8 @@ const App = () => {
       carbRatio <= 70 &&
       fatRatio >= 10 &&
       fatRatio <= 20
-    )
-      return language === "ro" ? "Dieta Low-Fat" : "Low-Fat Diet" ;
-
+    ) return dietLabels.lowFat[language];
+  
     if (
       proteinRatio >= 15 &&
       proteinRatio <= 20 &&
@@ -166,9 +243,8 @@ const App = () => {
       carbRatio <= 50 &&
       fatRatio >= 30 &&
       fatRatio <= 40
-    )
-      return language === "ro" ? "Dieta Mediteraneană" : "Mediteranean Diet"  ;
-
+    ) return dietLabels.mediterranean[language];
+  
     if (
       proteinRatio >= 10 &&
       proteinRatio <= 20 &&
@@ -176,9 +252,8 @@ const App = () => {
       carbRatio <= 65 &&
       fatRatio >= 20 &&
       fatRatio <= 30
-    )
-      return language === "ro" ? "Dieta Vegetariană/Vegană" : "Vegan Diet" ;
-
+    ) return dietLabels.vegan[language];
+  
     if (
       proteinRatio >= 20 &&
       proteinRatio <= 35 &&
@@ -186,16 +261,31 @@ const App = () => {
       carbRatio <= 40 &&
       fatRatio >= 30 &&
       fatRatio <= 50
-    )
-      return language === "ro" ? "Dieta Paleo" : "Paleo Diet" ;
-
-    return language === "ro" ? "Dietă Neclasificată" : "Unclasified Diet";
-  };
+    ) return dietLabels.paleo[language];
+  
+    return dietLabels.unclassified[language] || dietLabels.unclassified.en;
+  };  
 
   const dietType = determineDietType();
 
+  // ✅ Funcție pentru a gestiona evenimentul de căutare
+  const handleSearchInteractionEnd = () => {
+    // Doar dacă nu s-a selectat aliment și cantitate
+    if (!search && !quantity) return;  
+    const foundFood = foodsData.find(
+      (food) =>
+        food[`name_${language.toUpperCase()}`]?.toLowerCase() ===
+        search?.toLowerCase()
+    );  
+    // Dacă NU există aliment valid, resetăm
+    if (!foundFood) {
+      setSearch("");
+      setQuantity("");
+    }
+  };
+  
+
   return (
-    
     <div>
       <BackgroundChanger />
       <div className="app-container">
@@ -207,6 +297,7 @@ const App = () => {
           quantity={quantity}
           setQuantity={setQuantity}
           addFood={addFood}
+          onSearchInteractionEnd={handleSearchInteractionEnd}
           totalCalories={
             isNaN(parseFloat(totalCalories))
               ? 0.0
@@ -245,13 +336,7 @@ const App = () => {
             selectedFoods={selectedFoods}
             removeFood={removeFood}
             resetSelections={resetSelections} // ✅ Adăugat
-          />
-
-          {/* Dropdown-urile pe categorii – folosește layout-ul "row row-cols-*" */}
-          <CategoryDropdown
-            foods={foodsData}
-            addFood={addFood}
-            resetSelections={resetSelections}
+            foodsData={foodsData}
           />
           <div className="App">
             {/* Alte componente */}
@@ -262,7 +347,6 @@ const App = () => {
         </div>
       </div>
     </div>
-    
   );
 };
 

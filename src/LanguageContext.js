@@ -6,7 +6,9 @@ export const LanguageProvider = ({ children }) => {
   const [language, setLanguage] = useState("ro"); // Setăm limba inițială ca Română
 
   const toggleLanguage = (lang) => {
-    setLanguage(lang);
+    if (["ro", "en", "fr", "de"].includes(lang)) {
+      setLanguage(lang);
+    }
   };
 
   return (

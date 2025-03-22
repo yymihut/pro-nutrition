@@ -4,9 +4,15 @@ import { LanguageContext } from "../LanguageContext";
 import customIconAboutUs from "../assets/About-us.ico";
 import tiktokLogo from "../assets/tiktok_logo.svg";
 import emailIcon from "../assets/gmail_icon.ico";
+import { translations } from "../translations";
+
+// import { translations } from "../translations";
+// const t = (key) => translations[key]?.[language] || translations[key]?.["en"];
+// {t("total_calories")}
 
 const Footer = () => {
   const { language } = useContext(LanguageContext); // 🔥 Obținem limba curentă
+  const t = (key) => translations[key]?.[language] || translations[key]?.["en"]; // 🔥 Funcția de traducere
 
   return (
     <footer id="footer" className="bg-dark text-white text-center py-3">
@@ -19,7 +25,7 @@ const Footer = () => {
                 alt="Info"
                 style={{ width: "30px", height: "30px", marginRight: "5px" }}
               />{" "}
-              Contact:{" "}
+              {t("contact")}{" "}
             </h5>
             <ul className="list-unstyled">
               <li>
@@ -52,27 +58,17 @@ const Footer = () => {
                 alt="Info"
                 style={{ width: "30px", height: "30px", marginRight: "5px" }}
               />{" "}
-              {language === "ro" ? "Despre noi" : "About us"}
+              {t("about_us")}
             </h5>
-            <p>
-              {language === "ro"
-                ? "Suntem o echipă pasionată de nutriție și sănătate, oferind un calculator nutrițional bazat pe normele UE."
-                : "We are a team passionate about nutrition and health, offering a nutritional calculator based on EU norms."}
-            </p>
+            <p>{t("despre_noi_p")}</p>
           </Col>
         </Row>
 
         <hr className="bg-light" />
         <p>
-          © 2025 by ProNutritionTeam |{" "}
-          {language === "ro"
-            ? "„Datele nutriționale sunt furnizate de USDA FoodData Central”"
-            : "„Nutritional data provided by USDA FoodData Central”"}{" "}
-          |{" "}
-          {language === "ro"
-            ? "Date nutriționale conform USDA & CoFID"
-            : "Contains public sector information licensed under the Open Government Licence v3.0. | McCance and Widdowson’s 'composition of foods integrated dataset' & USDA"}
-          <a href="https://www.usda.gov/about-food/food-safety"></a>
+          {t("proNutritionTeam")} | {t("proNutritionTeam_info_text")} {" "}
+          {t("proNutritionTeam_info_1")}{" "}| {t("proNutritionTeam_info_2")}{" "}
+          <a href="https://www.usda.gov/about-food/food-safety">USDA</a>
         </p>
       </Container>
     </footer>

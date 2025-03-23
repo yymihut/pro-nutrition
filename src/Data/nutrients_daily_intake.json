@@ -15,25 +15,25 @@
     "daily_recommended_intake": 420
   },
   "Folic acid (µg)": {
-    "daily_recommended_intake": 400
+    "daily_recommended_intake": 200
   },
   "Iron (Fier) (mg)": {
-    "daily_recommended_intake": 25
+    "daily_recommended_intake": 10
   },
   "Copper - Cupru (mg)": {
     "daily_recommended_intake": 1
   },
   "Selenium (µg)": {
-    "daily_recommended_intake": 55
+    "daily_recommended_intake": 125
   },
   "Zinc (mg)": {
-    "daily_recommended_intake": 20
+    "daily_recommended_intake": 11
   },
   "Vitamin K (µg)": {
-    "daily_recommended_intake": 115
+    "daily_recommended_intake": 80
   },
   "Vitamin A - Retinol (µg)": {
-    "daily_recommended_intake": 900
+    "daily_recommended_intake": 1000
   },
   "Carotene, alpha (µg)": {
     "daily_recommended_intake": "None"
@@ -51,28 +51,28 @@
     "daily_recommended_intake": 510
   },
   "Vitamin D (µg)": {
-    "daily_recommended_intake": 13
+    "daily_recommended_intake": 5
   },
   "Vitamin E (mg)": {
-    "daily_recommended_intake": 4
+    "daily_recommended_intake": 10
   },
   "Vitamin B1 or Thiamin (mg)": {
-    "daily_recommended_intake": 1.2
+    "daily_recommended_intake": 1.5
   },
   "Vitamin B2 or Riboflavin (mg)": {
-    "daily_recommended_intake": 1.3
+    "daily_recommended_intake": 1.7
   },
   "Vitamin B3 or Niacin (mg)": {
-    "daily_recommended_intake": 16
+    "daily_recommended_intake": 19
   },
   "Vitamin B6 (mg)": {
-    "daily_recommended_intake": 1.6
+    "daily_recommended_intake": 2
   },
   "Vitamin B9 or Folate (µg)": {
     "daily_recommended_intake": 400
   },
   "Vitamin B12 (µg)": {
-    "daily_recommended_intake": 2.5
+    "daily_recommended_intake": 2
   },
   "Vitamin C (mg)": {
     "daily_recommended_intake": 90

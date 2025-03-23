@@ -120,7 +120,7 @@ const Header = ({
               {filteredFoods.map((food, index) => (
                 <div
                   key={index}
-                  action
+                  
                   onClick={() => handleSelectFood(food)}
                   className="search-item"
                   /* className="text-dark px-3 py-1" */

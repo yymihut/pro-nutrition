@@ -258,14 +258,6 @@ html {
   font-size: 14px;
 }
 
-.col {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-}
-
 /* 🔹 Container pentru alimentele selectate */
 .selected-foods-container {
   background: rgba(0, 0, 0, 0.7); /* Fundal negru semitransparent */
@@ -419,11 +411,21 @@ html {
 /* 🔹 Container pentru valorile nutriționale */
 .nutrition-info {
   display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2px;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 3x;
+  padding: 3px 0;
+}
+
+.col {
+  flex: 1;
+  min-width: 90px;
+  display: flex;
+  flex-direction: column;
+  align-self: end;
   text-align: center;
-  margin-top: 3px;
+  padding: 0 2px;
 }
 
 /* 🔹 Stil pentru fiecare coloană nutrițională */
@@ -441,6 +443,7 @@ html {
 .nutrition-info .badge {
   font-size: 14px;
   padding: 6px 10px;
+  margin-top: 2px;
 }
 
 /* 🔹 Fix pentru badge-urile „light” */
@@ -606,20 +609,43 @@ html {
   margin: auto;
 }
 
-/* 🔹 Responsivitate pentru 913px - Fixăm problema */
-@media (max-width: 1024px) {
-  .category-container {
-    grid-template-columns: repeat(
-      2,
-      minmax(250px, 1fr)
-    ); /* 2 coloane pe tabletă */
+
+@media (max-width: 480px) {
+  .food-item {
+    font-size: 14px;
+    padding: 4px;
+    margin: 3px;
   }
+
   .minerals-table {
-    max-width: 400px;
-    font-size: 11px;
+    font-size: 9px;
+  }
+
+  .minerals-title {
+    font-size: 12px;
+  }
+
+  .custom-button {
+    font-size: 12px;
+    padding: 5px;
   }
 }
 
+
+@media (max-width: 600px) {
+  body {
+    font-size: 90%;
+  }
+
+  .nutrition-info {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .minerals-table td {
+    font-size: 14px;
+  }
+}
 /* Pe telefoane, fiecare card ocupă toată lățimea */
 @media (max-width: 768px) {
   .category-container {
@@ -760,6 +786,27 @@ html {
   }
 }
 
+@media (max-width: 992px) {
+  /* Reducem numărul de coloane pe tabletă */
+  .category-card {
+    max-width: 350px;
+  }
+}
+
+/* 🔹 Responsivitate pentru 913px - Fixăm problema */
+@media (max-width: 1024px) {
+  .category-container {
+    grid-template-columns: repeat(
+      2,
+      minmax(250px, 1fr)
+    ); /* 2 coloane pe tabletă */
+  }
+  .minerals-table {
+    max-width: 400px;
+    font-size: 11px;
+  }
+}
+
 /* 🔹 Layout optimizat pentru categorii */
 @media (max-width: 1200px) {
   .category-card {
@@ -773,30 +820,4 @@ html {
   }
 }
 
-@media (max-width: 992px) {
-  /* Reducem numărul de coloane pe tabletă */
-  .category-card {
-    max-width: 350px;
-  }
-}
 
-@media (max-width: 480px) {
-  .food-item {
-    font-size: 14px;
-    padding: 4px;
-    margin: 3px;
-  }
-
-  .minerals-table {
-    font-size: 9px;
-  }
-
-  .minerals-title {
-    font-size: 12px;
-  }
-
-  .custom-button {
-    font-size: 12px;
-    padding: 5px;
-  }
-}

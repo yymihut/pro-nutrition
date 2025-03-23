@@ -101,12 +101,12 @@ const Header = ({
             value={search}
             onChange={handleSearchChange}
             className="form-control-sm"
-           style={{ width: "300px", fontSize: "16px" }} 
+            style={{ width: "300px", fontSize: "16px" }}
           />
           {filteredFoods.length > 0 && (
             <ListGroup
               className="position-absolute search-suggestions shadow rounded"
-          /*     style={{
+              /*     style={{
                 zIndex: 1000,
                 top: "100%", // ✅ Lista este plasată corect sub input
                 left: 0,
@@ -120,11 +120,10 @@ const Header = ({
               {filteredFoods.map((food, index) => (
                 <div
                   key={index}
-                  
                   onClick={() => handleSelectFood(food)}
                   className="search-item"
                   /* className="text-dark px-3 py-1" */
-                /*   style={{
+                  /*   style={{
                     fontSize: "16px",
                     whiteSpace: "normal", // ✅ Elimină tăierea textului
                     overflow: "visible", // ✅ Permite afișarea completă
@@ -185,7 +184,7 @@ const Header = ({
 
       <div className="nutrition-info">
         <div className="col">
-          {t("total_proteins")} :{" "}
+          <span>{t("total_proteins")}: </span>
           <Badge bg="light" text="dark">
             {!isNaN(Number(totalProtein))
               ? Number(totalProtein).toFixed(1)
@@ -198,7 +197,7 @@ const Header = ({
           </Badge>
         </div>
         <div className="col">
-          {t("total_carbs")}:{" "}
+          <span>{t("total_carbs")}: </span>
           <Badge bg="light" text="dark">
             {!isNaN(Number(totalCarbs)) ? Number(totalCarbs).toFixed(1) : "0.0"}{" "}
             g
@@ -206,21 +205,21 @@ const Header = ({
           </Badge>
         </div>
         <div className="col">
-          {t("total_fats")}:{" "}
+          <span>{t("total_fats")}: </span>
           <Badge bg="light" text="dark">
             {!isNaN(Number(totalFat)) ? Number(totalFat).toFixed(1) : "0.0"} g
             <span className="text-muted"> ({fatPercentage.toFixed(1)}%)</span>
           </Badge>
         </div>
         <div className="col">
-          {t("total_fiber")}:{" "}
+          <span>{t("total_fiber")}: </span>
           <Badge bg="light" text="dark">
             {!isNaN(Number(totalFiber)) ? Number(totalFiber).toFixed(1) : "0.0"}{" "}
             g
           </Badge>
         </div>
         <div className="col font-weight-bold">
-          {t("total_calories")}:{" "}
+          <span>{t("total_calories")}: </span>
           <Badge bg="warning" text="dark">
             {!isNaN(Number(totalCalories))
               ? Number(totalCalories).toFixed(1)

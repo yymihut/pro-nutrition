@@ -135,7 +135,6 @@ html {
   padding: 0;
 }
 
-
 .search-item {
   background: transparent;
   color: white;
@@ -154,8 +153,6 @@ html {
 .search-item:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
-
-
 
 /* 🔹 Efect hover pentru sugestii */
 .search-suggestions .list-group-item:hover {
@@ -346,14 +343,75 @@ html {
   cursor: pointer;
 }
 
+/* Rânduri marcate în tabel pentru depășiri periculoase */
+.row-warning {
+  background-color: rgba(255, 0, 0, 0.45) !important; /* roșu semitransparent */
+  font-weight: bold;
+  color: #fff;
+  animation: pulseGlow 2s infinite;
+}
+
+/* Efect pulse */
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.9);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 0, 0, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+  }
+}
+
+/* Icon galben înainte de numele nutrientului */
+.nutrient-warning-label::before {
+  content: "⚠️ ";
+  margin-right: 6px;
+  color: yellow;
+  font-size: 1.1em;
+}
+
+/* Avertisment vizual deasupra tabelului */
+.nutrient-warning-banner {
+  background-color: rgba(255, 0, 0, 0.5); /* roșu semi-transparent */
+  color: white;
+  padding: 3px 12px; /* padding compact */
+  border-radius: 8px;
+  display: inline-block; /* 🔥 doar cât conținutul */
+  font-weight: bold;
+  font-size: 16px;
+  margin: 5px auto;
+  text-align: center;
+}
+
+/* Detalii de avertisment sub tabel */
+.nutrient-warning-detail {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #ffffff;
+  padding: 10px 14px;
+  margin-top: 12px;
+  border-radius: 8px;
+  font-size: 17px;
+}
+
+.nutrient-warning-detail li {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3); /* Linie albă semitransparentă */
+  padding: 6px 0;
+}
+
+.nutrient-warning-detail li:last-child {
+  border-bottom: none;
+}
+
 .minerals-table.table-dark {
   font-size: 17px;
   width: 100%;
   max-width: 750px;
   margin: 0 auto;
   border-radius: 19px;
-  --bs-table-bg: rgba(0, 0, 0, 0.6);
-  --bs-table-striped-bg: #2c303470;
+  --bs-table-bg: rgba(0, 0, 0, 0.733);
+  --bs-table-striped-bg: #00000070;
   color: white !important;
 }
 
@@ -580,6 +638,10 @@ html {
     justify-content: center;
     flex-direction: column;
   }
+  .nutrient-warning-detail li {
+    margin-bottom: 8px !important;
+    font-size: 13px;
+  }
 
   .header-title-container {
     display: flex;
@@ -594,6 +656,10 @@ html {
     justify-content: space-between;
     align-items: stretch;
     width: 100%;
+  }
+
+  .nutrient-warning-banner {
+    font-size: 14px;
   }
 
   .language-switcher button {

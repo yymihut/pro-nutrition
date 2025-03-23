@@ -95,7 +95,7 @@ const MineralsTable = ({ selectedFoods, foodsData }) => {
           <ul
             style={{
               listStyleType: "none",
-              paddingLeft: "18px",
+              paddingLeft: "4px",
               marginBottom: 0,
             }}
           >

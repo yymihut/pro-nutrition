@@ -139,8 +139,8 @@ html {
 .search-item {
   background: transparent;
   color: white;
-  padding: 12px 16px;
-  font-size: 14px;
+  padding: 8px 12px;
+  font-size: 16px;
   line-height: 1.5;
   white-space: normal;
   word-break: break-word;
@@ -664,6 +664,10 @@ html {
     width: 100%;
     max-width: 300px;
     font-size: 12px;
+  }
+
+  .search-item {
+    font-size: 13px;
   }
 
   .nutrition-info .badge {

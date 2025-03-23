@@ -101,12 +101,12 @@ const Header = ({
             value={search}
             onChange={handleSearchChange}
             className="form-control-sm"
-            style={{ width: "300px", fontSize: "14px" }}
+           style={{ width: "300px", fontSize: "16px" }} 
           />
           {filteredFoods.length > 0 && (
             <ListGroup
               className="position-absolute search-suggestions shadow rounded"
-              style={{
+          /*     style={{
                 zIndex: 1000,
                 top: "100%", // ✅ Lista este plasată corect sub input
                 left: 0,
@@ -115,24 +115,25 @@ const Header = ({
                 border: "1px solid #ddd",
                 whiteSpace: "normal", // ✅ Permite textului să se afișeze pe mai multe linii
                 overflowWrap: "break-word", // ✅ Previne tăierea textului
-              }}
+              }} */
             >
               {filteredFoods.map((food, index) => (
-                <ListGroup.Item
+                <div
                   key={index}
                   action
                   onClick={() => handleSelectFood(food)}
-                  className="text-dark px-3 py-1"
-                  style={{
+                  className="search-item"
+                  /* className="text-dark px-3 py-1" */
+                /*   style={{
                     fontSize: "16px",
                     whiteSpace: "normal", // ✅ Elimină tăierea textului
                     overflow: "visible", // ✅ Permite afișarea completă
                     textOverflow: "unset", // ✅ Evită ascunderea textului
                     display: "block", // ✅ Forțează wrap pe text
-                  }}
+                  }} */
                 >
                   {food[`name_${language.toUpperCase()}`]}
-                </ListGroup.Item>
+                </div>
               ))}
             </ListGroup>
           )}

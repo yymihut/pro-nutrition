@@ -10,7 +10,7 @@ import { translations } from "../translations";
 const SelectedFoodList = ({
   selectedFoods,
   removeFood,
-  resetSelections,
+  dietType,
   foodsData,
   setTotalNutrients,
 }) => {
@@ -28,7 +28,7 @@ const SelectedFoodList = ({
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (analysisRef.current && !analysisRef.current.contains(event.target)) {
-       // setAnalysis(""); // 🔹 Analiza AI - cand o sa fie gratis
+        // setAnalysis(""); // 🔹 Analiza AI - cand o sa fie gratis
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -38,14 +38,13 @@ const SelectedFoodList = ({
   useEffect(() => {
     if (selectedFoods.length === 0) {
       setErrorMessage("");
-     // setAnalysis(""); // 🔹 Analiza AI - cand o sa fie gratis
+      // setAnalysis(""); // 🔹 Analiza AI - cand o sa fie gratis
     }
   }, [selectedFoods]);
- 
 
   // CAND O SA FIE GRATIS api-ul, o sa folosesc functia de mai jos
 
- /*  const generateAnalysis = async () => {
+  /*  const generateAnalysis = async () => {
     setErrorMessage("");
     if (!selectedFoods || selectedFoods.length === 0) {
       setAnalysis(
@@ -157,10 +156,15 @@ const SelectedFoodList = ({
   return (
     <div className="container mt-3">
       <div className="selected-foods-container">
-        <div className="d-flex justify-content-between align-items-center">
-          <h5 className="diet-info-title">
-          {t("diet_info_title")}
-          </h5>
+        <div className="d-flex justify-content-between align-items-center flex-direction-column title-and-info-diet">
+          <h5 className="diet-info-title">{t("diet_info_title")}</h5>
+          {/* // diet Type */}
+          <span
+            className="badge p-2 ms-2 custom-badge-diet"
+            style={{ fontSize: "14px" }}
+          >
+            {dietType}
+          </span>
           {/* CAND O SA FIE GRATIS API-UL O SA FOLOSESC BUTONUL DE MAI JOS */}
           {/* <Button
             variant="info"
@@ -207,7 +211,7 @@ const SelectedFoodList = ({
       {selectedFoods.length > 0 && (
         <MineralsTable selectedFoods={selectedFoods} foodsData={foodsData} />
       )}
-       {/* cand o sa fie free analiza AI */}
+      {/* cand o sa fie free analiza AI */}
       {/* {analysis && (
         <div
           ref={analysisRef}

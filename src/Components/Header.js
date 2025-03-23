@@ -30,7 +30,7 @@ const Header = ({
   //const [foodSelected, setFoodSelected] = useState(false);
   // 🔹 Traduceri pentru textele din interfață
   const t = (key) => translations[key]?.[language] || translations[key]?.["en"];
-  
+
   // 🔹 Închidem lista când utilizatorul face click în afara inputului
   useClickOutside(searchContainerRef, () => {
     setFilteredFoods([]);
@@ -43,7 +43,7 @@ const Header = ({
     const rawQuery = e.target.value;
     const query = rawQuery.replace(/\s+/g, " "); // normalizează spațiile multiple
 
-   // setFoodSelected(false); // ⚠️ resetăm starea de aliment selectat
+    // setFoodSelected(false); // ⚠️ resetăm starea de aliment selectat
 
     if (/^[a-zA-ZăâîșțĂÂÎȘȚ ,.'-]*$/.test(query) || query === "") {
       setSearch(query);
@@ -72,28 +72,26 @@ const Header = ({
   return (
     <header ref={headerRef} className="header">
       <div className="header-title-container">
-        <p className="header-subtitle">
-          {t("subtitle_header")}{" "}
-        </p>
-        <h1 className="header-title">
-        {t("title_header")}{" "}
-        </h1>
-        <div className="language-switcher">
-          {["ro", "en", "fr", "de"].map((lang) => (
-            <button
-              key={lang}
-              className={`language-button ${lang} ${
-                language === lang ? "active" : ""
-              }`}
-              onClick={() => toggleLanguage(lang)}
-              aria-label={`Selectează limba ${lang.toUpperCase()}`}
-            ></button>
-          ))}
-          <span className="language-label">
-          {t("language_label")}
-          </span>
-        </div>  
+        <h1 className="header-title">{t("title_header")} </h1>
+        <div className="language-subtitle">
+          <p className="header-subtitle">{t("subtitle_header")} </p>
+
+          <div className="language-switcher">
+            {["ro", "en", "fr", "de"].map((lang) => (
+              <button
+                key={lang}
+                className={`language-button ${lang} ${
+                  language === lang ? "active" : ""
+                }`}
+                onClick={() => toggleLanguage(lang)}
+                aria-label={`Selectează limba ${lang.toUpperCase()}`}
+              ></button>
+            ))}
+            <span className="language-label">{t("language_label")}</span>
+          </div>
+        </div>
       </div>
+
       <div className="header-controls">
         {/* Căutare aliment */}
         <div className="position-relative" ref={searchContainerRef}>
@@ -152,11 +150,11 @@ const Header = ({
             }
           }}
           className="form-control"
-          style={{ width: "60px", fontSize: "14px" }}
+          style={{ width: "60px", fontSize: "14px", height: "38px" }}
         />
 
         {/* Buton „Adaugă” și Tipul dietei */}
-        <div className="d-flex align-items-center">
+        <div className="d-flex align-items-center flex-direction-row">
           <Button
             variant="success"
             size="sm"
@@ -174,24 +172,19 @@ const Header = ({
               }
             }}
           >
-           {t("add_food_button")} 🍽️
-           {/* // reset buton */}
+            {t("add_food_button")} 🍽️
           </Button>
-          <span
-            className="badge p-2 ms-2 custom-badge-diet"
-            style={{ fontSize: "14px" }}
-          >
-            {dietType}
-          </span>
+
+          {/* // reset buton */}
           <Button className="reset-button" onClick={resetSelections}>
-          {t("reset_button")}
+            {t("reset_button")}
           </Button>
         </div>
       </div>
 
       <div className="nutrition-info">
         <div className="col">
-        {t("total_proteins")} :{" "}
+          {t("total_proteins")} :{" "}
           <Badge bg="light" text="dark">
             {!isNaN(Number(totalProtein))
               ? Number(totalProtein).toFixed(1)
@@ -204,7 +197,7 @@ const Header = ({
           </Badge>
         </div>
         <div className="col">
-        {t("total_carbs")}:{" "}
+          {t("total_carbs")}:{" "}
           <Badge bg="light" text="dark">
             {!isNaN(Number(totalCarbs)) ? Number(totalCarbs).toFixed(1) : "0.0"}{" "}
             g
@@ -212,21 +205,21 @@ const Header = ({
           </Badge>
         </div>
         <div className="col">
-        {t("total_fats")}:{" "}
+          {t("total_fats")}:{" "}
           <Badge bg="light" text="dark">
             {!isNaN(Number(totalFat)) ? Number(totalFat).toFixed(1) : "0.0"} g
             <span className="text-muted"> ({fatPercentage.toFixed(1)}%)</span>
           </Badge>
         </div>
         <div className="col">
-        {t("total_fiber")}:{" "}
+          {t("total_fiber")}:{" "}
           <Badge bg="light" text="dark">
             {!isNaN(Number(totalFiber)) ? Number(totalFiber).toFixed(1) : "0.0"}{" "}
             g
           </Badge>
         </div>
         <div className="col font-weight-bold">
-        {t("total_calories")}:{" "}
+          {t("total_calories")}:{" "}
           <Badge bg="warning" text="dark">
             {!isNaN(Number(totalCalories))
               ? Number(totalCalories).toFixed(1)
@@ -239,7 +232,6 @@ const Header = ({
 };
 
 export default Header;
-
 
 // {t("total_calories")}
 // import { translations } from "../translations";

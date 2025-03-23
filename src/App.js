@@ -325,7 +325,6 @@ const App = () => {
           carbsPercentage={carbsPercentage} // ✅ Adăugat
           fatPercentage={fatPercentage} // ✅ Adăugat
           headerRef={headerRef}
-          dietType={dietType} // 🔹 Adaugă această linie pentru a transmite dietType
           resetSelections={resetSelections} // ✅ se reseteaza selectiile
         />
 
@@ -337,6 +336,7 @@ const App = () => {
             removeFood={removeFood}
             resetSelections={resetSelections} // ✅ Adăugat
             foodsData={foodsData}
+            dietType={dietType} // 🔹 transmite dietType la componenta foodList
           />
           <div className="App">
             {/* Alte componente */}

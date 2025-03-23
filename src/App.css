@@ -18,7 +18,7 @@ html {
   color: black !important;
   font-weight: bold;
   height: 32px;
-  
+  margin-bottom: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -26,8 +26,8 @@ html {
 
 .header-controls button {
   display: flex;
-  align-items: center;       /* ✅ aliniază vertical centrul conținutului */
-  justify-content: center;   /* ✅ centrat orizontal */
+  align-items: center; /* ✅ aliniază vertical centrul conținutului */
+  justify-content: center; /* ✅ centrat orizontal */
   color: white;
   background: rgba(136, 4, 4, 0.911);
   margin-left: 8px;
@@ -42,6 +42,13 @@ html {
   font-weight: bold;
 }
 
+.title-and-info-diet {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .header-controls button .reset-button {
   background-color: #007bff;
   color: white;
@@ -50,7 +57,6 @@ html {
   border-radius: 8px;
   cursor: pointer;
   font-size: 22px;
-  
 }
 
 .content {
@@ -215,13 +221,6 @@ html {
   background-image: url("./assets/flags/de.ico");
 }
 
-.header-title-container {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
 /* 🔹 Inputuri */
 .header-controls input {
   flex-grow: 0.2;
@@ -243,7 +242,6 @@ html {
 }
 
 /* 🔹 Butonul „Adaugă” */
-
 
 .header-controls button:hover {
   background-color: #23612e;
@@ -453,10 +451,16 @@ html {
   color: #fff;
 }
 
-
 .card .card-body {
   flex: 1 1 auto;
   color: #fff; /* Sau #f0f0f0 dacă vrei mai soft */
+}
+
+.language-subtitle{
+  display: flex ;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch;
 }
 
 .h-100 {
@@ -516,10 +520,10 @@ html {
   font-weight: bold;
   color: white;
   background: rgba(0, 0, 0, 0.5); /* Fundal gri semitransparent */
-  padding: 10px;
   border-radius: 8px;
   width: fit-content;
-  margin: 20px auto; /* Centrează elementul pe orizontală */
+  margin: 10px auto; /* Centrează elementul pe orizontală */
+  margin-bottom: 5px;
 }
 
 /* 🔹 Cardurile categoriilor */
@@ -571,9 +575,17 @@ html {
 
   .header-title-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
+  }
+
+  .language-subtitle{
+    display: flex ;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    width: 100%;
   }
 
   .language-switcher button {
@@ -645,7 +657,6 @@ html {
     width: 100%;
   }
 
-  
   .nutrition-info {
     flex-direction: row;
     align-items: center;

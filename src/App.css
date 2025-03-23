@@ -398,6 +398,7 @@ html {
 .nutrient-warning-detail li {
   border-bottom: 1px solid rgba(255, 255, 255, 0.3); /* Linie albă semitransparentă */
   padding: 6px 0;
+  text-align: justify;
 }
 
 .nutrient-warning-detail li:last-child {

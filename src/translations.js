@@ -1,10 +1,10 @@
 // src/translations.js
 export const translations = {
   subtitle_header: {
-    ro: "Baza de date pentru alimente USDA",
-    en: "Composition of foods, database USDA",
-    fr: "Base de données des aliments USDA",
-    de: "USDA Lebensmitteldatenbank",
+    ro: "Compoziția alimentelor, baza de date USDA-FNDDS Nutrient Values",
+    en: "Composition of foods, database USDA-FNDDS Nutrient Values",
+    fr: "Composition des aliments, base de données USDA-FNDDS Valeurs nutritives",
+    de: "Zusammensetzung von Lebensmitteln, Datenbank USDA-FNDDS Nährwerte",
   },
   title_header: {
     ro: "Calculator Nutrițional",
@@ -443,10 +443,10 @@ export const translations = {
     },
   },
   nutrient_warning_banner: {
-    ro: "Avertisment: Unele vitamine/minerale depășesc doza recomandată! Informatii sub tabelul de mai jos",
-    en: "Warning: Some vitamins/minerals exceed the recommended dose! Information under the table below",
-    fr: "Attention : Certaines vitamines/minéraux dépassent la dose recommandée ! Informations sous le tableau ci-dessous",
-    de: "Achtung: Einige Vitamine/Mineralien überschreiten die empfohlene Dosis! Informationen finden Sie in der Tabelle unten",
+    ro: "Avertisment: Unele vitamine/minerale depășesc doza maxima zilnica! Informatii sub tabelul de mai jos",
+    en: "Warning: Some vitamins/minerals exceed the maximum daily dose! Information under the table below",
+    fr: "Attention : certaines vitamines/minéraux dépassent la dose journalière maximale ! Informations sous le tableau ci-dessous",
+    de: "Achtung: Einige Vitamine/Mineralien überschreiten die maximale Tagesdosis! Informationen finden Sie in der Tabelle unten",
   },
   overdose_title: {
     ro: "Detalii despre supradozaj ",

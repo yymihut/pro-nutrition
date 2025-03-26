@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { Table, Container } from "react-bootstrap";
 import nutrientsDailyIntake from "../Data/nutrients_daily_intake.json";
+import nutrientsMaxiumIntake from "../Data/risky_nutrients.json";
 import { LanguageContext } from "../LanguageContext";
 import { translations } from "../translations";
 
@@ -27,7 +28,7 @@ const MineralsTable = ({ selectedFoods, foodsData }) => {
   }, {});
 
   const overLimit = Object.entries(mineralTotals).filter(([key, value]) => {
-    const dzr = nutrientsDailyIntake[key]?.daily_recommended_intake;
+    const dzr = nutrientsMaxiumIntake[key]?.daily_maximum_intake;
     return dzr !== "None" && dzr && value > dzr && translations.risky_nutrients[key];
   });
 
@@ -58,14 +59,15 @@ const MineralsTable = ({ selectedFoods, foodsData }) => {
           {mineralKeys.map((mineral) => {
             const total = mineralTotals[mineral] || 0;
             const dzr = nutrientsDailyIntake[mineral]?.daily_recommended_intake;
+            const max = nutrientsMaxiumIntake[mineral]?.daily_maximum_intake;
             const percent =
               dzr && dzr !== "None"
                 ? ((total / dzr) * 100).toFixed(1) + "%"
                 : "N/A";
             const isDanger =
               translations.risky_nutrients?.[mineral]?.[language] &&
-              dzr &&
-              total > dzr;
+              max &&
+              total > max;
             const translatedName =
               translations.nutrientTranslations?.[mineral]?.[language] ||
               mineral;
@@ -100,9 +102,10 @@ const MineralsTable = ({ selectedFoods, foodsData }) => {
             }}
           >
             {overLimit.map(([nutrient]) => (
+              
               <li key={nutrient} style={{ marginBottom: "16px" }}>
                 <strong>
-                {translations.nutrientTranslations?.[nutrient]?.[language] || nutrient}:
+                {translations.nutrientTranslations?.[nutrient]?.[language] || nutrient}  {nutrientsMaxiumIntake[nutrient]?.daily_maximum_intake} max :
                 </strong>{" "}
                 {translations.risky_nutrients?.[nutrient]?.[language] || "-"}
               </li>

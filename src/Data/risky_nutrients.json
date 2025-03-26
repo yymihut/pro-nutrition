@@ -1,0 +1,32 @@
+{
+  "Sodium (mg)": {
+    "daily_maximum_intake": 2300
+  },
+  "Calcium (mg)": {
+    "daily_maximum_intake": 2500
+  },
+  "Phosphorus (mg)": {
+    "daily_maximum_intake": 3000
+  },
+  "Iron (Fier) (mg)": {
+    "daily_maximum_intake": 45
+  },
+  "Zinc (mg)": {
+    "daily_maximum_intake": 40
+  },
+  "Selenium (µg)": {
+    "daily_maximum_intake": 400
+  },
+  "Vitamin A - Retinol (µg)": {
+    "daily_maximum_intake": 3000
+  },
+  "Vitamin D (µg)": {
+    "daily_maximum_intake": 100
+  },
+  "Vitamin E (mg)": {
+    "daily_maximum_intake": 300
+  },
+  "Vitamin B3 or Niacin (mg)": {
+    "daily_maximum_intake": 35
+  }
+}

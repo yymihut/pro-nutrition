@@ -1,6 +1,6 @@
 {
   "Sodium (mg)": {
-    "daily_recommended_intake": 2300
+    "daily_recommended_intake": 2000
   },
   "Potassium (mg)": {
     "daily_recommended_intake": 3200
@@ -18,16 +18,16 @@
     "daily_recommended_intake": 200
   },
   "Iron (Fier) (mg)": {
-    "daily_recommended_intake": 10
+    "daily_recommended_intake": 11
   },
   "Copper - Cupru (mg)": {
     "daily_recommended_intake": 1
   },
   "Selenium (µg)": {
-    "daily_recommended_intake": 125
+    "daily_recommended_intake": 55
   },
   "Zinc (mg)": {
-    "daily_recommended_intake": 11
+    "daily_recommended_intake": 15
   },
   "Vitamin K (µg)": {
     "daily_recommended_intake": 80
@@ -51,10 +51,10 @@
     "daily_recommended_intake": 510
   },
   "Vitamin D (µg)": {
-    "daily_recommended_intake": 5
+    "daily_recommended_intake": 20
   },
   "Vitamin E (mg)": {
-    "daily_recommended_intake": 10
+    "daily_recommended_intake": 15
   },
   "Vitamin B1 or Thiamin (mg)": {
     "daily_recommended_intake": 1.5

@@ -71,7 +71,6 @@ const dietLabels = {
   },
 };
 
-
 const LOCAL_STORAGE_KEY = "selectedFoods";
 
 const App = () => {
@@ -79,15 +78,18 @@ const App = () => {
   const [quantity, setQuantity] = useState("");
   const [selectedFoods, setSelectedFoods] = useState([]);
   const { language } = useContext(LanguageContext); // 🔥 Obținem limba curentă
+  const [selectedCategory, setSelectedCategory] = useState("");
+
 
   // ✅ Use computed name in rendering (if needed)
- // const getLocalizedName = (food) => food[`name_${language.toUpperCase()}`];
+  // const getLocalizedName = (food) => food[`name_${language.toUpperCase()}`];
 
   // ✅ Funcție pentru resetarea selecțiilor
   const resetSelections = () => {
     setSelectedFoods([]); // 🔥 Șterge toate alimentele selectate
     setSearch(""); // 🔥 Resetează căutarea alimentelor
     setQuantity(""); // 🔥 Resetează câmpul de cantitate
+    setSelectedCategory(""); // 🔁 Resetează categoria la toate
   };
 
   // Încarcă alimentele din localStorage la montare
@@ -110,9 +112,11 @@ const App = () => {
   // ✅ Funcție pentru a adăuga alimente
   const addFood = (food, qty) => {
     if (!food || !isValidQuantity(qty)) {
-      alert(language === "ro" 
-        ? "❌ Introdu o cantitate validă (> 0)!" 
-        : "❌ Please enter a valid quantity (> 0)!");
+      alert(
+        language === "ro"
+          ? "❌ Introdu o cantitate validă (> 0)!"
+          : "❌ Please enter a valid quantity (> 0)!"
+      );
       return;
     }
 
@@ -185,12 +189,13 @@ const App = () => {
 
   const determineDietType = () => {
     const total = totalProtein + totalCarbs + totalFat;
-    if (total === 0) return dietLabels.unknown[language] || dietLabels.unknown.en;
-  
+    if (total === 0)
+      return dietLabels.unknown[language] || dietLabels.unknown.en;
+
     const proteinRatio = (totalProtein / total) * 100;
     const carbRatio = (totalCarbs / total) * 100;
     const fatRatio = (totalFat / total) * 100;
-  
+
     if (
       proteinRatio >= 15 &&
       proteinRatio <= 25 &&
@@ -198,8 +203,9 @@ const App = () => {
       carbRatio <= 55 &&
       fatRatio >= 25 &&
       fatRatio <= 35
-    ) return dietLabels.balanced[language];
-  
+    )
+      return dietLabels.balanced[language];
+
     if (
       proteinRatio >= 15 &&
       proteinRatio <= 25 &&
@@ -207,8 +213,9 @@ const App = () => {
       carbRatio <= 10 &&
       fatRatio >= 65 &&
       fatRatio <= 80
-    ) return dietLabels.keto[language];
-  
+    )
+      return dietLabels.keto[language];
+
     if (
       proteinRatio >= 20 &&
       proteinRatio <= 30 &&
@@ -216,8 +223,9 @@ const App = () => {
       carbRatio <= 30 &&
       fatRatio >= 40 &&
       fatRatio <= 60
-    ) return dietLabels.lowCarb[language];
-  
+    )
+      return dietLabels.lowCarb[language];
+
     if (
       proteinRatio >= 30 &&
       proteinRatio <= 50 &&
@@ -225,8 +233,9 @@ const App = () => {
       carbRatio <= 40 &&
       fatRatio >= 20 &&
       fatRatio <= 30
-    ) return dietLabels.highProtein[language];
-  
+    )
+      return dietLabels.highProtein[language];
+
     if (
       proteinRatio >= 15 &&
       proteinRatio <= 25 &&
@@ -234,8 +243,9 @@ const App = () => {
       carbRatio <= 70 &&
       fatRatio >= 10 &&
       fatRatio <= 20
-    ) return dietLabels.lowFat[language];
-  
+    )
+      return dietLabels.lowFat[language];
+
     if (
       proteinRatio >= 15 &&
       proteinRatio <= 20 &&
@@ -243,8 +253,9 @@ const App = () => {
       carbRatio <= 50 &&
       fatRatio >= 30 &&
       fatRatio <= 40
-    ) return dietLabels.mediterranean[language];
-  
+    )
+      return dietLabels.mediterranean[language];
+
     if (
       proteinRatio >= 10 &&
       proteinRatio <= 20 &&
@@ -252,8 +263,9 @@ const App = () => {
       carbRatio <= 65 &&
       fatRatio >= 20 &&
       fatRatio <= 30
-    ) return dietLabels.vegan[language];
-  
+    )
+      return dietLabels.vegan[language];
+
     if (
       proteinRatio >= 20 &&
       proteinRatio <= 35 &&
@@ -261,29 +273,29 @@ const App = () => {
       carbRatio <= 40 &&
       fatRatio >= 30 &&
       fatRatio <= 50
-    ) return dietLabels.paleo[language];
-  
+    )
+      return dietLabels.paleo[language];
+
     return dietLabels.unclassified[language] || dietLabels.unclassified.en;
-  };  
+  };
 
   const dietType = determineDietType();
 
   // ✅ Funcție pentru a gestiona evenimentul de căutare
   const handleSearchInteractionEnd = () => {
     // Doar dacă nu s-a selectat aliment și cantitate
-    if (!search && !quantity) return;  
+    if (!search && !quantity) return;
     const foundFood = foodsData.find(
       (food) =>
         food[`name_${language.toUpperCase()}`]?.toLowerCase() ===
         search?.toLowerCase()
-    );  
+    );
     // Dacă NU există aliment valid, resetăm
     if (!foundFood) {
       setSearch("");
       setQuantity("");
     }
   };
-  
 
   return (
     <div>
@@ -326,6 +338,8 @@ const App = () => {
           fatPercentage={fatPercentage} // ✅ Adăugat
           headerRef={headerRef}
           resetSelections={resetSelections} // ✅ se reseteaza selectiile
+          selectedCategory={selectedCategory}
+          setSelectedCategory={setSelectedCategory}
         />
 
         {/* CONȚINUTUL paginii – se asigură că nu este acoperit de header */}

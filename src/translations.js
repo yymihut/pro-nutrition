@@ -454,4 +454,10 @@ export const translations = {
     fr: "Détails du surdosage ",
     de: "Einzelheiten zur Überdosierung ",
   },
+  all_categories: {
+    ro: "Toate categoriile",
+    en: "All Categories",
+    fr: "Toutes les catégories",
+    de: "Alle Kategorien",
+  }  
 };

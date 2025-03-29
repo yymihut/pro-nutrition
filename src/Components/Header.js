@@ -23,6 +23,8 @@ const Header = ({
   fatPercentage,
   resetSelections,
   onSearchInteractionEnd,
+  selectedCategory,
+  setSelectedCategory,
 }) => {
   const { language, toggleLanguage } = useContext(LanguageContext);
   const [filteredFoods, setFilteredFoods] = useState([]);
@@ -30,6 +32,11 @@ const Header = ({
   //const [foodSelected, setFoodSelected] = useState(false);
   // 🔹 Traduceri pentru textele din interfață
   const t = (key) => translations[key]?.[language] || translations[key]?.["en"];
+
+  const categoryKey = `category_${language.toUpperCase()}`;
+  const categories = Array.from(
+    new Set(foods.map((food) => food[categoryKey]).filter(Boolean))
+  );
 
   // 🔹 Închidem lista când utilizatorul face click în afara inputului
   useClickOutside(searchContainerRef, () => {
@@ -48,12 +55,15 @@ const Header = ({
     if (/^[a-zA-ZăâîșțĂÂÎȘȚ ,.'-]*$/.test(query) || query === "") {
       setSearch(query);
 
-      if (query.trim().length > 1) {
+      if (query.trim().length > 1 || selectedCategory !== "") {
         const languageKey = `name_${language?.toUpperCase() || "EN"}`;
-
         const results = foods.filter((food) => {
-          if (!food || !food[languageKey]) return false;
-          return food[languageKey].toLowerCase().includes(query.toLowerCase());
+          const name = food[languageKey]?.toLowerCase() || "";
+          const category = food[categoryKey];
+          const nameMatch = name.includes(query.toLowerCase());
+          const categoryMatch =
+            !selectedCategory || category === selectedCategory;
+          return nameMatch && categoryMatch;
         });
 
         setFilteredFoods(results);
@@ -93,6 +103,21 @@ const Header = ({
       </div>
 
       <div className="header-controls">
+        <Form.Select
+          size="sm"
+          className="mb-2"
+          value={selectedCategory}
+          onChange={(e) => setSelectedCategory(e.target.value)}
+          style={{ maxWidth: "300px", fontSize: "14px", height:"32px" }}
+        >
+          <option value="">{t("all_categories")}</option>
+          {categories.map((cat, idx) => (
+            <option key={idx} value={cat}>
+              {cat}
+            </option>
+          ))}
+        </Form.Select>
+
         {/* Căutare aliment */}
         <div className="position-relative" ref={searchContainerRef}>
           <Form.Control
@@ -101,35 +126,15 @@ const Header = ({
             value={search}
             onChange={handleSearchChange}
             className="form-control-sm"
-            style={{ width: "300px", fontSize: "16px" }}
+            style={{ width: "300px", fontSize: "14px", height:"32px" }}
           />
           {filteredFoods.length > 0 && (
-            <ListGroup
-              className="position-absolute search-suggestions shadow rounded"
-              /*     style={{
-                zIndex: 1000,
-                top: "100%", // ✅ Lista este plasată corect sub input
-                left: 0,
-                minWidth: "250px", // ✅ Asigură spațiu pentru text
-                maxWidth: "500px", // ✅ Evită ca lista să fie prea lată
-                border: "1px solid #ddd",
-                whiteSpace: "normal", // ✅ Permite textului să se afișeze pe mai multe linii
-                overflowWrap: "break-word", // ✅ Previne tăierea textului
-              }} */
-            >
+            <ListGroup className="position-absolute search-suggestions shadow rounded">
               {filteredFoods.map((food, index) => (
                 <div
                   key={index}
                   onClick={() => handleSelectFood(food)}
                   className="search-item"
-                  /* className="text-dark px-3 py-1" */
-                  /*   style={{
-                    fontSize: "16px",
-                    whiteSpace: "normal", // ✅ Elimină tăierea textului
-                    overflow: "visible", // ✅ Permite afișarea completă
-                    textOverflow: "unset", // ✅ Evită ascunderea textului
-                    display: "block", // ✅ Forțează wrap pe text
-                  }} */
                 >
                   {food[`name_${language.toUpperCase()}`]}
                 </div>
@@ -150,7 +155,7 @@ const Header = ({
             }
           }}
           className="form-control"
-          style={{ width: "60px", fontSize: "14px", height: "38px" }}
+          style={{ width: "60px", fontSize: "14px", height:"32px"}}
         />
 
         {/* Buton „Adaugă” și Tipul dietei */}

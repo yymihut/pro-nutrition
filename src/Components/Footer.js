@@ -66,9 +66,9 @@ const Footer = () => {
 
         <hr className="bg-light" />
         <p>
-          {t("proNutritionTeam")} | {t("proNutritionTeam_info_text")} {" "}
+          {t("proNutritionTeam")} NovaNutriCalc™ | {t("proNutritionTeam_info_text")} {" "}
           {t("proNutritionTeam_info_1")}{" "}| {t("proNutritionTeam_info_2")}{" "}
-          <a href="https://www.usda.gov/about-food/food-safety">USDA</a>
+          <a href="https://www.usda.gov/about-food/food-safety">USDA </a>
         </p>
       </Container>
     </footer>

@@ -1,4 +1,4 @@
-package com.pronutritionaiteam.NutriNova;
+package com.pronutritionaiteam.NovaNutriCalc;
 
 import com.getcapacitor.BridgeActivity;
 

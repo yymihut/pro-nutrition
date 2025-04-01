@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">NutriNova</string>
-    <string name="title_activity_main">NutriNova</string>
-    <string name="package_name">com.pronutritionaiteam.NutriNova</string>
-    <string name="custom_url_scheme">com.pronutritionaiteam.NutriNova</string>
+    <string name="app_name">NovaNutriCalc</string>
+    <string name="title_activity_main">NovaNutriCalc</string>
+    <string name="package_name">com.pronutritionaiteam.NovaNutriCalc</string>
+    <string name="custom_url_scheme">com.pronutritionaiteam.NovaNutriCalc</string>
 </resources>

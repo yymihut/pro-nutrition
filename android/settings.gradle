@@ -1,5 +1,8 @@
 include ':app'
 include ':capacitor-cordova-android-plugins'
-project(':capacitor-cordova-android-plugins').projectDir = new File('./capacitor-cordova-android-plugins/')
+
+
+include ':lvl_library'
+project(':lvl_library').projectDir = new File(rootDir, 'lvl_library')
 
 apply from: 'capacitor.settings.gradle'

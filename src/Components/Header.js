@@ -36,7 +36,7 @@ const Header = ({
   const categoryKey = `category_${language.toUpperCase()}`;
   const categories = Array.from(
     new Set(foods.map((food) => food[categoryKey]).filter(Boolean))
-  );
+  ).sort((a, b) => a.localeCompare(b, language));
 
   // 🔹 Închidem lista când utilizatorul face click în afara inputului
   useClickOutside(searchContainerRef, () => {
@@ -64,7 +64,11 @@ const Header = ({
           const categoryMatch =
             !selectedCategory || category === selectedCategory;
           return nameMatch && categoryMatch;
-        });
+        }).sort((a, b) => {
+          const nameA = a[languageKey] || "";
+          const nameB = b[languageKey] || "";
+          return nameA.localeCompare(nameB, language);
+        });;
 
         setFilteredFoods(results);
       } else {
@@ -108,7 +112,7 @@ const Header = ({
           className="mb-2"
           value={selectedCategory}
           onChange={(e) => setSelectedCategory(e.target.value)}
-          style={{ maxWidth: "300px", fontSize: "14px", height:"32px" }}
+          style={{ maxWidth: "300px", fontSize: "14px", height: "32px" }}
         >
           <option value="">{t("all_categories")}</option>
           {categories.map((cat, idx) => (
@@ -126,7 +130,7 @@ const Header = ({
             value={search}
             onChange={handleSearchChange}
             className="form-control-sm"
-            style={{ width: "300px", fontSize: "14px", height:"32px" }}
+            style={{ width: "300px", fontSize: "14px", height: "32px" }}
           />
           {filteredFoods.length > 0 && (
             <ListGroup className="position-absolute search-suggestions shadow rounded">
@@ -155,7 +159,7 @@ const Header = ({
             }
           }}
           className="form-control"
-          style={{ width: "60px", fontSize: "14px", height:"32px"}}
+          style={{ width: "60px", fontSize: "14px", height: "32px" }}
         />
 
         {/* Buton „Adaugă” și Tipul dietei */}

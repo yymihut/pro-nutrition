@@ -19,7 +19,9 @@ android {
     buildTypes {
         release {
              minifyEnabled false  // ✅ setează true doar când vrei ofuscarea
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+             //shrinkResources true // ✅ setează false doar când vrei să elimini resursele neutilizate
+             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+           // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }

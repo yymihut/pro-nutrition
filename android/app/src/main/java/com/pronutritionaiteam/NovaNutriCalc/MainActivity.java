@@ -2,7 +2,9 @@ package com.pronutritionaiteam.NovaNutriCalc;
 
 import android.os.Bundle;
 import com.getcapacitor.BridgeActivity;
-import com.pronutritionaiteam.NovaNutriCalc.licensing.*;
+import com.pronutritionaiteam.NovaNutriCalc.licensing.LicenseCheckerUtil;
+import com.pronutritionaiteam.NovaNutriCalc.licensing.MyLicenseCheckerCallback;
+
 
 public class MainActivity extends BridgeActivity {
     private LicenseCheckerUtil licenseCheckerUtil;
@@ -10,8 +12,10 @@ public class MainActivity extends BridgeActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Se transmite contextul curent către MyLicenseCheckerCallback
+        // Inițiem verificarea licenței la pornirea aplicației
+        
         licenseCheckerUtil = new LicenseCheckerUtil(this, new MyLicenseCheckerCallback(this));
+        
     }
 
  @Override

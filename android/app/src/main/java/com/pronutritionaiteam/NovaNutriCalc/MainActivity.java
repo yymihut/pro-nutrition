@@ -1,29 +1,50 @@
 package com.pronutritionaiteam.NovaNutriCalc;
 
 import android.os.Bundle;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.util.Log;
 import com.getcapacitor.BridgeActivity;
-import com.pronutritionaiteam.NovaNutriCalc.licensing.LicenseCheckerUtil;
-import com.pronutritionaiteam.NovaNutriCalc.licensing.MyLicenseCheckerCallback;
-
+import com.pronutritionaiteam.NovaNutriCalc.integrity.IntegrityCheckerUtil;
+import com.pronutritionaiteam.NovaNutriCalc.integrity.IntegrityCheckerCallback;
 
 public class MainActivity extends BridgeActivity {
-    private LicenseCheckerUtil licenseCheckerUtil;
+
+    private IntegrityCheckerUtil integrityCheckerUtil;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Important: apelul către super.onCreate trebuie efectuat pentru a inițializa corect Capacitor
         super.onCreate(savedInstanceState);
-        // Inițiem verificarea licenței la pornirea aplicației
-        
-        licenseCheckerUtil = new LicenseCheckerUtil(this, new MyLicenseCheckerCallback(this));
-        
+
+        // Inițiază apelul către Play Integrity API
+        requestIntegrityToken();
     }
 
- @Override
-    public void onDestroy() {
-        if (licenseCheckerUtil != null) {
-            licenseCheckerUtil.destroy();
-        }
-        super.onDestroy();
+    private void requestIntegrityToken() {
+        integrityCheckerUtil = new IntegrityCheckerUtil(this, new IntegrityCheckerCallback() {
+            @Override
+            public void onIntegritySuccess(String token) {
+                Log.d("Integrity", "Token primit: " + token);
+                // Poți prelucra token-ul (de ex. trimiterea pe server pentru validare)
+            }
+
+            @Override
+            public void onIntegrityFailure(Exception e) {
+                Log.e("Integrity", "Eroare la cererea token-ului de integritate", e);
+                showErrorAndClose("Verificarea integrității a eșuat. Aplicația se va închide.");
+            }
+        });
     }
 
+    private void showErrorAndClose(String message) {
+        runOnUiThread(() -> {
+            new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Eroare de integritate")
+                .setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton("OK", (dialog, which) -> finish())
+                .show();
+        });
+    }
 }

@@ -25,14 +25,14 @@ public class MainActivity extends BridgeActivity {
         integrityCheckerUtil = new IntegrityCheckerUtil(this, new IntegrityCheckerCallback() {
             @Override
             public void onIntegritySuccess(String token) {
-                Log.d("Integrity", "Token primit: " + token);
+                Log.d("Integrity", "Token Received: " + token);
                 // Poți prelucra token-ul (de ex. trimiterea pe server pentru validare)
             }
 
             @Override
             public void onIntegrityFailure(Exception e) {
-                Log.e("Integrity", "Eroare la cererea token-ului de integritate", e);
-                showErrorAndClose("Verificarea integrității a eșuat. Aplicația se va închide.");
+                Log.e("Integrity", "Error requesting integrity token", e);
+                showErrorAndClose("Integrity check failed. The application will close.");
             }
         });
     }
@@ -40,7 +40,7 @@ public class MainActivity extends BridgeActivity {
     private void showErrorAndClose(String message) {
         runOnUiThread(() -> {
             new AlertDialog.Builder(MainActivity.this)
-                .setTitle("Eroare de integritate")
+                .setTitle("Integrity error")
                 .setMessage(message)
                 .setCancelable(false)
                 .setPositiveButton("OK", (dialog, which) -> finish())

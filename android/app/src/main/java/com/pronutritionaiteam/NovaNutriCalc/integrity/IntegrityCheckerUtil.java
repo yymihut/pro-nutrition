@@ -41,7 +41,7 @@ public class IntegrityCheckerUtil {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(Exception e) {
-                Log.e("Integrity", "Cererea pentru token a eșuat", e);
+                Log.e("Integrity", "Token request failed", e);
                 callback.onIntegrityFailure(e);
             }
         });

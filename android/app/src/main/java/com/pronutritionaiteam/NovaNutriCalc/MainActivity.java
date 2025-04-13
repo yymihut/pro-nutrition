@@ -22,7 +22,7 @@ public class MainActivity extends BridgeActivity {
 
     private IntegrityCheckerUtil integrityCheckerUtil;
     // URL-ul endpoint-ului backend
-    private static final String BACKEND_URL = "https://europe-west1-novanutricalc.cloudfunctions.net/verifyIntegrityToken";
+    private static final String BACKEND_URL = "https://verifyintegritytoken-jki3iqjjdq-ew.a.run.app";
 
 
     @Override

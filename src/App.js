@@ -6,6 +6,7 @@ import foodsData from "./Data/foods.json";
 import DietInfo from "./Components/DietInfo";
 import Footer from "./Components/Footer";
 import { LanguageContext } from "./LanguageContext";
+import { checkIntegrityAndBlockIfInvalid } from './services/playIntegrity.service.ts';
 import "./App.css";
 
 const dietLabels = {
@@ -91,6 +92,12 @@ const App = () => {
     setQuantity(""); // 🔥 Resetează câmpul de cantitate
     setSelectedCategory(""); // 🔁 Resetează categoria la toate
   };
+  // ✅ Funcție pentru a verifica integritatea datelor din localStorage
+  useEffect(() => {
+    (async () => {
+      await checkIntegrityAndBlockIfInvalid();
+    })();
+  }, []);
 
   // Încarcă alimentele din localStorage la montare
   useEffect(() => {

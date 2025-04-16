@@ -6,7 +6,9 @@ import foodsData from "./Data/foods.json";
 import DietInfo from "./Components/DietInfo";
 import Footer from "./Components/Footer";
 import { LanguageContext } from "./LanguageContext";
-import { checkIntegrityAndBlockIfInvalid } from './services/playIntegrity.service.ts';
+import { checkIntegrityAndBlockIfInvalid } from "./services/playIntegrity.service.ts";
+import { Capacitor } from "@capacitor/core";
+import { App as CapacitorApp } from "@capacitor/app";
 import "./App.css";
 
 const dietLabels = {
@@ -81,7 +83,6 @@ const App = () => {
   const { language } = useContext(LanguageContext); // 🔥 Obținem limba curentă
   const [selectedCategory, setSelectedCategory] = useState("");
 
-
   // ✅ Use computed name in rendering (if needed)
   // const getLocalizedName = (food) => food[`name_${language.toUpperCase()}`];
 
@@ -92,11 +93,28 @@ const App = () => {
     setQuantity(""); // 🔥 Resetează câmpul de cantitate
     setSelectedCategory(""); // 🔁 Resetează categoria la toate
   };
-  // ✅ Funcție pentru a verifica integritatea datelor din localStorage
+
   useEffect(() => {
-    (async () => {
-      await checkIntegrityAndBlockIfInvalid();
-    })();
+    // Funcția de rulare a verificării integrității
+    const runIntegrityCheck = async () => {
+      if (Capacitor.isNativePlatform()) {
+        try {
+          // Poți adăuga un delay dacă este necesar pentru ca aplicația să se încarce corect.
+          await new Promise((resolve) => setTimeout(resolve, 3000));
+          checkIntegrityAndBlockIfInvalid();
+        } catch (err) {
+          console.error("[App] Eroare în verificarea integrității:", err);
+        }
+      }
+    };
+
+    // Ascultăm evenimentul de schimbare a stării aplicației (la revenire din background)
+    CapacitorApp.addListener("appStateChange", ({ isActive }) => {
+      if (isActive) runIntegrityCheck();
+    });
+
+    // Rulăm verificarea integrității la pornire
+    runIntegrityCheck();
   }, []);
 
   // Încarcă alimentele din localStorage la montare

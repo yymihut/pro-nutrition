@@ -4,6 +4,9 @@ const config: CapacitorConfig = {
   appId: 'com.pronutritionaiteam.NovaNutriCalc',
   appName: 'NovaNutriCalc',
   webDir: 'build',
+  android: {
+    path: 'android',
+  },
   plugins: {
     SplashScreen: {
       launchAutoHide: true,

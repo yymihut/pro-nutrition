@@ -6,55 +6,46 @@
 //npx cap sync
 import { PlayIntegrity } from '@capacitor-community/play-integrity';
 import { App } from '@capacitor/app';
+import axios from 'axios';
+
+const BACKEND = 'https://playintegrity-jki3iqjjdq-ew.a.run.app';
+
 
 /**
  * Apelează Play Integrity și iese din aplicație dacă verdictul e invalid.
  */
-export async function checkIntegrityAndBlockIfInvalid() {
+export async function checkIntegrityAndBlockIfInvalid(): Promise<void> {
   try {
-    // 1) Obținem nonce-ul de la server
-    const nonceResponse = await fetch('https://playintegrity-jki3iqjjdq-ew.a.run.app/getNonce');
-    if (!nonceResponse.ok) {
-      throw new Error('Eroare la obținerea nonce-ului de pe server');
-    }
-    const { nonce } = await nonceResponse.json();
+    const { data: { nonce } } = await axios.get(`${BACKEND}/getNonce`);
+    console.log('[FE] Nonce:', nonce);
 
-    // 2) Obținem tokenul de integritate de la pluginul Play Integrity
-    const result = await PlayIntegrity.requestIntegrityToken({
-      nonce: nonce,
-      googleCloudProjectNumber: 1060811050620, // Înlocuiește cu ID-ul tău GCP dacă e nevoie
+    const { token } = await PlayIntegrity.requestIntegrityToken({
+      nonce,
+      googleCloudProjectNumber: 1060811050620
     });
+    console.log('[FE] Token:', token);
 
-    // 3) Trimitem token-ul la server pentru validare
-    const verifyResponse = await fetch('https://playintegrity-jki3iqjjdq-ew.a.run.app/verifyIntegrity', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ token: result.token }),
-    });
-
-    if (!verifyResponse.ok) {
-      // Dacă serverul nu răspunde cu 200, tratăm ca eșec
-      throw new Error('Eroare la verificarea token-ului pe server');
+    const { data } = await axios.post(`${BACKEND}/verifyIntegrity`, { token, nonce });
+    if (!data.isValid) {
+      console.error('[FE] Verificare invalidă:', data.error);
+      blockApp();
+    } else {
+      console.log('[FE] Verificare validă');
     }
-
-    // 4) Interpretăm răspunsul de la server
-    const verificationData = await verifyResponse.json();
-    if (!verificationData.isValid) {
-      // Blocăm accesul: ieșim din aplicație
-      console.log('Play Integrity INVALID - blocăm accesul și închidem aplicația');
-      alert('Aplicația a detectat un mediu neconform. Se va închide.');
-      // Închidere aplicație
-      await App.exitApp();
-      return;
-    }
-
-    // Dacă totul e OK
-    console.log('Play Integrity check PASSED');
   } catch (err) {
-    console.error('Eroare Play Integrity:', err);
-    alert('Nu s-a putut verifica integritatea aplicației. Se va închide.');
-    // Poți decide să închizi aplicația sau să lași utilizatorul să continue.
-    // Aici, de exemplu, o închidem:
-    await App.exitApp();
+    // dacă e AxiosError, îi extragem răspunsul
+    if (axios.isAxiosError(err)) {
+      // afișăm răspunsul JSON complet din backend, dacă există
+    console.error('[FE] AxiosError: ', JSON.stringify(err.response?.data, null, 2));
+    } else {
+      console.error('[FE] Error:', err);
+    }
+    blockApp();
   }
+}
+
+function blockApp() {
+  alert('Eroare critică de integritate. Aplicația va fi închisă.');
+  navigator['app']?.exitApp?.(); // sau altă metodă de blocare
+  App.exitApp();
 }

@@ -12,7 +12,8 @@ const config: CapacitorConfig = {
       splashFullScreen: false,
       splashImmersive: false,
     },
-    // alte plugin-uri...
+    AdMob: {},
+    InAppPurchases: {}
   },
 };
 

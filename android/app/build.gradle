@@ -7,8 +7,8 @@ android {
         applicationId "com.pronutritionaiteam.NovaNutriCalc"
         minSdkVersion 23
         targetSdkVersion 35
-        versionCode 12
-        versionName "12.0"
+        versionCode 28
+        versionName "28.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -34,7 +34,7 @@ repositories {
 }
 
 dependencies {
-   // implementation project(":lvl_library")
+    implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.google.android.material:material:1.12.0"
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -48,6 +48,8 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation project(':capacitor-cordova-android-plugins')
     implementation 'com.google.android.play:integrity:1.4.0'
+    implementation "com.android.billingclient:billing-ktx:7.1.1"
+    implementation 'com.google.android.gms:play-services-ads:23.6.0'
 
 }
 

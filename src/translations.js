@@ -459,5 +459,11 @@ export const translations = {
     en: "All Categories",
     fr: "Toutes les catégories",
     de: "Alle Kategorien",
-  }  
+  },
+  fara_reclame:{
+    ro: "Fără reclame, 2€",
+    en: "No ads, 2€",
+    fr: "Pas de publicités, 2€",
+    de: "Keine Werbung, 2€",
+  },   
 };

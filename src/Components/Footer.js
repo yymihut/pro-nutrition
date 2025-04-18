@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import { LanguageContext } from "../LanguageContext";
 import customIconAboutUs from "../assets/About-us.ico";
 import tiktokLogo from "../assets/tiktok_logo.svg";
 import emailIcon from "../assets/gmail_icon.ico";
 import { translations } from "../translations";
+import { LanguageContext } from "../LanguageContext";
 
 // import { translations } from "../translations";
 // const t = (key) => translations[key]?.[language] || translations[key]?.["en"];

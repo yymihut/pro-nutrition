@@ -3,6 +3,7 @@ package="com.pronutritionaiteam.NovaNutriCalc">
 
     <!-- Permissions must be declared FIRST -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="com.android.vending.BILLING"/>
 
     <application
         android:allowBackup="true"
@@ -32,9 +33,13 @@ package="com.pronutritionaiteam.NovaNutriCalc">
             android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
+            
         </provider>
+        <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        <meta-data
+                android:name="com.google.android.gms.ads.APPLICATION_ID"
+                android:value="ca-app-pub-2237771628996448~9520933658"/>
     </application>
 </manifest>

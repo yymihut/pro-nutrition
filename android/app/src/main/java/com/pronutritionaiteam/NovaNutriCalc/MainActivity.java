@@ -18,10 +18,10 @@ public class MainActivity extends BridgeActivity {
         super.onCreate(savedInstanceState);
 
         // Inițiază apelul către Play Integrity API
-        requestIntegrityToken();
+        //requestIntegrityToken();
     }
 
-    private void requestIntegrityToken() {
+ /*    private void requestIntegrityToken() {
         integrityCheckerUtil = new IntegrityCheckerUtil(this, new IntegrityCheckerCallback() {
             @Override
             public void onIntegritySuccess(String token) {
@@ -35,9 +35,9 @@ public class MainActivity extends BridgeActivity {
                 showErrorAndClose("Integrity check failed. The application will close.");
             }
         });
-    }
+    } */
 
-    private void showErrorAndClose(String message) {
+/*     private void showErrorAndClose(String message) {
         runOnUiThread(() -> {
             new AlertDialog.Builder(MainActivity.this)
                 .setTitle("Integrity error")
@@ -46,5 +46,5 @@ public class MainActivity extends BridgeActivity {
                 .setPositiveButton("OK", (dialog, which) -> finish())
                 .show();
         });
-    }
+    } */
 }

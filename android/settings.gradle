@@ -1,8 +1,14 @@
+rootProject.name = "NovaNutriCalc"
 include ':app'
+// 1) Capacitor core Android runtime
+include ':capacitor-android'
+project(':capacitor-android').projectDir = file("../node_modules/@capacitor/android/android")
+// Capacitor core
+//include ':capacitor-android'
+//project(':capacitor-android').projectDir = new File(rootProject.projectDir, '../node_modules/@capacitor/android/android')
+    // AdMob plugin
+include ':capacitor-community-admob'
+project(':capacitor-community-admob').projectDir = new File(rootProject.projectDir, '../node_modules/@capacitor-community/admob/android')
+// Cordova‐plugin shim (needed even if you’re only using Capacitor plugins)
 include ':capacitor-cordova-android-plugins'
-
-
-include ':lvl_library'
-project(':lvl_library').projectDir = new File(rootDir, 'lvl_library')
-
-apply from: 'capacitor.settings.gradle'
+project(':capacitor-cordova-android-plugins').projectDir = new File(rootProject.projectDir, 'capacitor-cordova-android-plugins')

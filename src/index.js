@@ -18,4 +18,4 @@ root.render(
 );
 
 // Înregistrează service worker-ul
-serviceWorkerRegistration.register();
+serviceWorkerRegistration.unregister();

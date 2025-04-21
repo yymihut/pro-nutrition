@@ -4,4 +4,10 @@
     <string name="title_activity_main">NovaNutriCalc™</string>
     <string name="package_name">com.pronutritionaiteam.NovaNutriCalc</string>
     <string name="custom_url_scheme">com.pronutritionaiteam.NovaNutriCalc</string>
+      <!-- Adaugă acestea: -->
+    <string name="splash_activity_image_text">Logo NovaNutriCalc™</string>
+    <string name="splash_activity_text">Bine ai venit în NovaNutriCalc™</string>
+    <string name="more_menu">Mai multe</string>
+    <string name="ad_inspector">Inspector reclame</string>
+    <string name="privacy_settings">Setări confidențialitate</string>
 </resources>

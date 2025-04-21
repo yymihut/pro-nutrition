@@ -20,7 +20,7 @@
         <!-- AdMob App ID (schimbă cu ID‑ul tău real) -->
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-2237771628996448~9520933658"/>
+            android:value="ca-app-pub-2237771628996448~1297201965"/>
 
         <!-- SplashActivity (dacă o mai foloseşti) -->
         <activity

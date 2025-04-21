@@ -1,3 +1,4 @@
+// SplashActivity.java
 package com.pronutritionaiteam.NovaNutriCalc;
 
 import android.annotation.SuppressLint;
@@ -10,131 +11,76 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
-import com.pronutritionaiteam.NovaNutriCalc.MyApplication.OnShowAdCompleteListener;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/** Splash Activity that inflates splash activity xml. */
 public class SplashActivity extends AppCompatActivity {
 
-  private static final String LOG_TAG = "SplashActivity";
-  private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
-  private final AtomicBoolean gatherConsentFinished = new AtomicBoolean(false);
-  private GoogleMobileAdsConsentManager googleMobileAdsConsentManager;
+    private static final String LOG_TAG = "SplashActivity";
+    private static final long COUNTER_TIME_MILLISECONDS = 8000;
 
-  /**
-   * Number of milliseconds to count down before showing the app open ad. This simulates the time
-   * needed to load the app.
-   */
-  private static final long COUNTER_TIME_MILLISECONDS = 8000;
+    private AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
+    private AtomicBoolean gatherConsentFinished = new AtomicBoolean(false);
+    private GoogleMobileAdsConsentManager googleMobileAdsConsentManager;
+    private long secondsRemaining;
 
-  private long secondsRemaining;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash);
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_splash);
+        createTimer();
 
-    // Create a timer so the SplashActivity will be displayed for a fixed amount of time.
-    createTimer();
+        googleMobileAdsConsentManager =
+                GoogleMobileAdsConsentManager.getInstance(getApplicationContext());
+        googleMobileAdsConsentManager.gatherConsent(
+                this,
+                consentError -> {
+                    if (consentError != null) {
+                        Log.w(LOG_TAG, consentError.getMessage());
+                    }
+                    gatherConsentFinished.set(true);
+                    if (googleMobileAdsConsentManager.canRequestAds()) {
+                        initializeMobileAdsSdk();
+                    }
+                    if (secondsRemaining <= 0) {
+                        startMainActivity();
+                    }
+                });
 
-    googleMobileAdsConsentManager =
-        GoogleMobileAdsConsentManager.getInstance(getApplicationContext());
-    googleMobileAdsConsentManager.gatherConsent(
-        this,
-        consentError -> {
-          if (consentError != null) {
-            // Consent not obtained in current session.
-            Log.w(
-                LOG_TAG,
-                String.format("%s: %s", consentError.getErrorCode(), consentError.getMessage()));
-          }
-
-          gatherConsentFinished.set(true);
-
-          if (googleMobileAdsConsentManager.canRequestAds()) {
+        if (googleMobileAdsConsentManager.canRequestAds()) {
             initializeMobileAdsSdk();
-          }
-
-          if (secondsRemaining <= 0) {
-            startMainActivity();
-          }
-        });
-
-    // This sample attempts to load ads using consent obtained in the previous session.
-    if (googleMobileAdsConsentManager.canRequestAds()) {
-      initializeMobileAdsSdk();
+        }
     }
-  }
 
-  /** Create the countdown timer, which counts down to zero and show the app open ad. */
-  private void createTimer() {
-    final TextView counterTextView = findViewById(R.id.timer);
-
-    CountDownTimer countDownTimer =
+    private void createTimer() {
+        TextView counterTextView = findViewById(R.id.timer);
         new CountDownTimer(COUNTER_TIME_MILLISECONDS, 1000) {
-          @SuppressLint("SetTextI18n")
-          @Override
-          public void onTick(long millisUntilFinished) {
-            secondsRemaining = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) + 1;
-            counterTextView.setText("App is done loading in: " + secondsRemaining);
-          }
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onTick(long millisUntilFinished) {
+                secondsRemaining = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) + 1;
+                counterTextView.setText("App is done loading in: " + secondsRemaining);
+            }
 
-          @SuppressLint("SetTextI18n")
-          @Override
-          public void onFinish() {
-            secondsRemaining = 0;
-            counterTextView.setText("Done.");
-
-            Application application = getApplication();
-            ((MyApplication) application)
-                .showAdIfAvailable(
-                    SplashActivity.this,
-                    new OnShowAdCompleteListener() {
-                      @Override
-                      public void onShowAdComplete() {
-                        // Check if the consent form is currently on screen before moving to the
-                        // main activity.
-                        if (gatherConsentFinished.get()) {
-                          startMainActivity();
-                        }
-                      }
-                    });
-          }
-        };
-    countDownTimer.start();
-  }
-
-  private void initializeMobileAdsSdk() {
-    if (isMobileAdsInitializeCalled.getAndSet(true)) {
-      return;
+            @Override
+            public void onFinish() {
+                secondsRemaining = 0;
+                counterTextView.setText("Done.");
+                ((MyApplication) getApplication())
+                        .showAdIfAvailable(SplashActivity.this, SplashActivity.this::startMainActivity);
+            }
+        }.start();
     }
 
-    // Set your test devices.
-    MobileAds.setRequestConfiguration(
-        new RequestConfiguration.Builder()
-            .setTestDeviceIds(Arrays.asList(MyApplication.TEST_DEVICE_HASHED_ID))
-            .build());
+    private void initializeMobileAdsSdk() {
+        if (isMobileAdsInitializeCalled.getAndSet(true)) return;
+    }
 
-    new Thread(
-            () -> {
-              // Initialize the Google Mobile Ads SDK on a background thread.
-              MobileAds.initialize(this, initializationStatus -> {});
-
-              // Load an ad on the main thread.
-              runOnUiThread(
-                  () -> {
-                    Application application = getApplication();
-                    ((MyApplication) application).loadAd(this);
-                  });
-            })
-        .start();
-  }
-
-  /** Start the MainActivity. */
-  public void startMainActivity() {
-    Intent intent = new Intent(this, MainActivity.class);
-    this.startActivity(intent);
-  }
+    private void startMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

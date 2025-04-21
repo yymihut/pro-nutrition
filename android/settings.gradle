@@ -1,8 +1,11 @@
+rootProject.name = 'NovaNutriCalc'
+
 include ':app'
-include ':capacitor-cordova-android-plugins'
-
-
-include ':lvl_library'
-project(':lvl_library').projectDir = new File(rootDir, 'lvl_library')
+include ':capacitor-android'
+// 1) Include plugin‑ul AdMob
+include ':@capacitor-community-admob'
+project(':capacitor-android').projectDir = new File(rootDir, '../node_modules/@capacitor/android')
+// 2) Arată unde se găseşte codul nativ al plugin‑ului
+project(':@capacitor-community-admob').projectDir = new File(rootDir, '../node_modules/@capacitor-community/admob/android')
 
 apply from: 'capacitor.settings.gradle'

@@ -23,6 +23,12 @@ allprojects {
         google()
         mavenCentral()
     }
+      configurations.all {
+    resolutionStrategy {
+      // force ALL play‑services‑ads references down to 24.2.0
+      force "com.google.android.gms:play-services-ads:24.2.0"
+    }
+  }
     gradle.projectsEvaluated {
         tasks.withType(JavaCompile) {
             options.compilerArgs << "-Xlint:deprecation"

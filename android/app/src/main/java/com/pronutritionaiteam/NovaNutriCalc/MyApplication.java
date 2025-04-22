@@ -1,17 +1,19 @@
 // MyApplication.java
+//public static final String TEST_DEVICE_HASHED_ID = "59043FEB822E30C97456D5FDDDB5A73D";
+
+// MyApplication.java
 package com.pronutritionaiteam.NovaNutriCalc;
 
 import android.app.Activity;
 import android.app.Application;
-import android.app.Application.ActivityLifecycleCallbacks;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.DefaultLifecycleObserver;
-import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
 
 import com.google.android.gms.ads.AdError;
@@ -27,154 +29,138 @@ import java.util.Arrays;
 import java.util.Date;
 
 /**
- * Application class care iniţializează Google Mobile Ads imediat, încarcă un App‑Open‑Ad
- * şi îl afişează când aplicaţia intră în foreground.
+ * Application class that shows an App‑Open ad whenever
+ * aplicația trece în prim‑plan.
  */
 public class MyApplication extends Application
-        implements ActivityLifecycleCallbacks, DefaultLifecycleObserver {
+        implements Application.ActivityLifecycleCallbacks, LifecycleObserver {
 
-    /** Device‑ul real de test – ID obţinut din logcat. În producţie lasă şirul gol. */
+    // Test‑device ID (hash) – lasă‑l doar în faza de testare
     public static final String TEST_DEVICE_HASHED_ID = "59043FEB822E30C97456D5FDDDB5A73D";
 
-    private static final String TAG = "MyApplication";
-    private AppOpenAdManager appOpenAdManager = new AppOpenAdManager();  // ① create first;
+    private AppOpenAdManager appOpenAdManager;
     private Activity currentActivity;
 
-    //────────────────────────────   APP LIFECYCLE   ────────────────────────────//
+    /* --------------------- ciclul de viață Application --------------------- */
 
     @Override
     public void onCreate() {
         super.onCreate();
+
+        // 1) Inițializează Mobile Ads pe UI thread
+        MobileAds.initialize(this, initializationStatus -> {
+            Log.d("MyApplication", "MobileAds init complet.");
+            // 2) După init, încarcă prima reclamă
+            appOpenAdManager.loadAd(this);
+        });
+
+        // 3) Configurează dispozitivele de test
+        RequestConfiguration config = new RequestConfiguration.Builder()
+                .setTestDeviceIds(Arrays.asList(TEST_DEVICE_HASHED_ID))
+                .build();
+        MobileAds.setRequestConfiguration(config);
+
+        // 4) Observă viața aplicației + activitățile
         registerActivityLifecycleCallbacks(this);
         ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
 
-        // 1️⃣   Configurează dispozitivul de test (debug only)
-        if (!TEST_DEVICE_HASHED_ID.isEmpty()) {
-            RequestConfiguration cfg = new RequestConfiguration.Builder()
-                    .setTestDeviceIds(Arrays.asList(TEST_DEVICE_HASHED_ID))
-                    .build();
-            MobileAds.setRequestConfiguration(cfg);
-        }
-
-        // 2️⃣   Iniţializează SDK‑ul; după init construieşte AppOpenAdManager
-        MobileAds.initialize(this, status -> {
-            Log.d(TAG, "MobileAds SDK initializat");
-            
-            // Dacă avem deja un activity (posibil când onCreate rulează după start Splash)
-            if (currentActivity != null) {
-                appOpenAdManager.loadAd(currentActivity);
-            }
-        });
+        appOpenAdManager = new AppOpenAdManager();
     }
 
-    /** Când aplicaţia reintră în foreground, încearcă să afişeze ad‑ul. */
-    @Override
-    public void onStart(@NonNull LifecycleOwner owner) {
-        if (appOpenAdManager != null && currentActivity != null) {
-            appOpenAdManager.showAdIfAvailable(currentActivity);
-        }
+    /* --------------------- când aplicația revine în prim‑plan --------------------- */
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
+    public void onMoveToForeground() {
+        appOpenAdManager.showAdIfAvailable(
+                currentActivity,
+                () -> Log.d("MyApplication", "AppOpen ad terminat sau indisponibil")
+        );
     }
 
-    //────────────────────────   ACTIVITY CALLBACKS   ──────────────────────────//
+    /* --------------------- callbacks ActivityLifecycle --------------------- */
 
-    @Override public void onActivityCreated(@NonNull Activity a, @Nullable Bundle b) {}
+    @Override public void onActivityStarted(@NonNull Activity activity) { currentActivity = activity; }
+    @Override public void onActivityCreated(@NonNull Activity activity, Bundle b) { }
+    @Override public void onActivityResumed(@NonNull Activity activity) { }
+    @Override public void onActivityPaused(@NonNull Activity activity) { }
+    @Override public void onActivityStopped(@NonNull Activity activity) { }
+    @Override public void onActivitySaveInstanceState(@NonNull Activity a, @NonNull Bundle b) { }
+    @Override public void onActivityDestroyed(@NonNull Activity activity) { }
 
-    @Override public void onActivityStarted(@NonNull Activity activity) {
-        if (appOpenAdManager != null && !appOpenAdManager.isShowingAd) {
-            currentActivity = activity;
-        }
-    }
+    /* --------------------- manager App Open Ads --------------------- */
 
-    @Override public void onActivityResumed(@NonNull Activity a) {}
-    @Override public void onActivityPaused(@NonNull Activity a) {}
-    @Override public void onActivityStopped(@NonNull Activity a) {}
-    @Override public void onActivitySaveInstanceState(@NonNull Activity a, @NonNull Bundle s) {}
-    @Override public void onActivityDestroyed(@NonNull Activity a) {}
-
-    //──────────────────────────────   HELPERS   ───────────────────────────────//
-
-    /** Expune către Splash/alte activităţi posibilitatea de a încărca manual un ad. */
-    public void loadAd(@NonNull Activity activity) {
-        if (appOpenAdManager != null) appOpenAdManager.loadAd(activity);
-    }
-
-    /** Expune posibilitatea de a afişa ad‑ul imediat ce este gata. */
-    public void showAdIfAvailable(@NonNull Activity activity,
-                                  @NonNull OnShowAdCompleteListener listener) {
-        if (appOpenAdManager != null) appOpenAdManager.showAdIfAvailable(activity, listener);
-        else listener.onShowAdComplete();
-    }
-
-    public interface OnShowAdCompleteListener { void onShowAdComplete(); }
-
-    //─────────────────────────────   MANAGER   ────────────────────────────────//
-
-    private class AppOpenAdManager {
-        private static final String LOG_TAG = "AppOpenAdManager";
-        // Unitatea Google de test pentru App‑Open (înlocuieşte cu unitatea ta reală la release)
+    private static class AppOpenAdManager {
+        private static final String TAG = "AppOpenAdManager";
+        // unit‑id de TEST – schimbă‑l în producție!
         private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/9257395921";
 
         private AppOpenAd appOpenAd;
-        private long loadTime = 0;
-        private boolean isLoadingAd = false;
-        private boolean isShowingAd = false;
+        private long loadTimeMillis = 0L;
+        private boolean isLoading    = false;
+        private boolean isShowing    = false;
 
-        /*============   PUBLIC  ============*/
-        void loadAd(@NonNull Context context) {
-            if (isLoadingAd || isAdAvailable()) return;
-            isLoadingAd = true;
+        /** Încărcăm o reclamă dacă nu avem deja una validă */
+        void loadAd(Context context) {
+            if (isLoading || isAdAvailable()) return;
+
+            isLoading = true;
+            AdRequest request = new AdRequest.Builder().build();
             AppOpenAd.load(
                     context,
                     AD_UNIT_ID,
-                    new AdRequest.Builder().build(),
+                    request,
                     new AppOpenAdLoadCallback() {
-                        @Override public void onAdLoaded(@NonNull AppOpenAd ad) {
+                        @Override
+                        public void onAdLoaded(@NonNull AppOpenAd ad) {
                             appOpenAd = ad;
-                            loadTime = System.currentTimeMillis();
-                            isLoadingAd = false;
-                            Log.d(LOG_TAG, "onAdLoaded");
+                            loadTimeMillis = System.currentTimeMillis();
+                            isLoading = false;
+                            Log.d(TAG, "AppOpen ad încărcat cu succes");
                         }
-                        @Override public void onAdFailedToLoad(@NonNull LoadAdError err) {
-                            isLoadingAd = false;
-                            Log.w(LOG_TAG, "onAdFailedToLoad: " + err.getMessage());
+
+                        @Override
+                        public void onAdFailedToLoad(@NonNull LoadAdError err) {
+                            isLoading = false;
+                            Log.w(TAG, "Eroare la load: " + err.getCode() + " – " + err.getMessage());
                         }
-                    });
+                    }
+            );
         }
 
-        void showAdIfAvailable(@NonNull Activity activity) {
-            showAdIfAvailable(activity, () -> {});
+        /** Valabil timp de 4 ore de la încărcare */
+        boolean isAdAvailable() {
+            long ageMillis = System.currentTimeMillis() - loadTimeMillis;
+            return appOpenAd != null && ageMillis < 4 * 60 * 60 * 1000L;
         }
 
-        void showAdIfAvailable(@NonNull Activity activity,
-                               @NonNull OnShowAdCompleteListener listener) {
-            if (isShowingAd) return;
+        /** Afișează reclama sau continuă execuția imediat */
+        void showAdIfAvailable(@NonNull Activity activity, @NonNull Runnable onFinish) {
+            if (isShowing) { onFinish.run(); return; }
+
             if (!isAdAvailable()) {
+                Log.d(TAG, "Nicio reclamă disponibilă – încarc una nouă");
+                onFinish.run();
                 loadAd(activity);
-                listener.onShowAdComplete();
                 return;
             }
+
             appOpenAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-                @Override public void onAdDismissedFullScreenContent() {
-                    reset();
-                    listener.onShowAdComplete();
-                    loadAd(activity); // preload următorul
+                @Override public void onAdShowedFullScreenContent() { isShowing = true; }
+                @Override public void onAdDismissedFullScreenContent() { resetAndContinue(activity, onFinish); }
+                @Override public void onAdFailedToShowFullScreenContent(@NonNull AdError err) {
+                    Log.w(TAG, "Eroare la show: " + err.getCode() + " – " + err.getMessage());
+                    resetAndContinue(activity, onFinish);
                 }
-                @Override public void onAdFailedToShowFullScreenContent(@NonNull AdError e) {
-                    Log.w(LOG_TAG, "onAdFailedToShow: " + e.getMessage());
-                    reset();
-                    listener.onShowAdComplete();
-                    loadAd(activity);
-                }
-                @Override public void onAdShowedFullScreenContent() { isShowingAd = true; }
             });
-            isShowingAd = true;
+
             appOpenAd.show(activity);
         }
 
-        /*============   UTILITY  ============*/
-        boolean isAdAvailable() {
-            return appOpenAd != null && (System.currentTimeMillis() - loadTime) < 4 * 60 * 60 * 1000;
+        private void resetAndContinue(Context ctx, Runnable onFinish) {
+            appOpenAd = null;
+            isShowing = false;
+            onFinish.run();
+            loadAd(ctx); // pregătește următoarea
         }
-        void reset() { appOpenAd = null; isShowingAd = false; }
     }
 }

@@ -79,11 +79,12 @@ private boolean shouldShow() {
                }
         });
     }
-
+    //o metodă de a preveni afișarea unor reclame stocate prea mult timp, 
+    //care ar putea expira sau fi invalide.
     private boolean isAdAvailable() {
         return appOpenAd != null
-               && (System.currentTimeMillis() - loadTime) < 4 * 60 * 60 * 1000;
-               // (System.currentTimeMillis() - loadTime) < 4 * 60 * 60 * 1000;
+               && (System.currentTimeMillis() - loadTime) < 15_000;
+               // (System.currentTimeMillis() - loadTime) < 2 * 60 * 60 * 1000;
     }
 
  public void showAdIfAvailable(Activity activity) {

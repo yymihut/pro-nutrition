@@ -26,7 +26,7 @@ allprojects {
       configurations.all {
     resolutionStrategy {
       // force ALL play‑services‑ads references down to 24.2.0
-      force "com.google.android.gms:play-services-ads:24.2.0"
+      force "com.google.android.gms:play-services-ads:23.0.0"
     }
   }
     gradle.projectsEvaluated {

@@ -1,5 +1,6 @@
 import { registerPlugin } from "@capacitor/core";
 
+
 /* instanțiem pluginul  */
 const RemoveAds = registerPlugin("RemoveAds");
 
@@ -18,7 +19,7 @@ export async function isPremium() {
 export async function buy() {
   try {
     await RemoveAds.purchase(); // deschide Google Play Billing
-    return await isPremium(); // re‑verificăm după plată
+    return await isPremium(); //   re‑verificăm după plată
   } catch (e) {
     console.error("purchase failed", e);
     return false;

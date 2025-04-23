@@ -109,7 +109,7 @@ public class AppOpenAdManager {
         Log.d(LOG_TAG, "👑 Premium – nu mai afișăm ad‑uri");
         return;
             }
-        // respect cool‑down
+        // respect  cool‑down
         if (!shouldShow()) {
             Log.d(LOG_TAG, "⌛ Cool‑down active – won't show ad yet");
             return;

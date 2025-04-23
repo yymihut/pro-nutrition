@@ -12,17 +12,24 @@ public class MyApplication extends Application
     private static final String LOG_TAG = "MyApplication";
 
     private AppOpenAdManager appOpenAdManager;
+    private BillingManager    billingManager;    // ➊
+
+    public BillingManager getBillingManager() {  // ➋  acces global
+        return billingManager;
+    }
     private Activity currentActivity;
 
     // ❶  Ținem un getter simplu – FĂRĂ @Override
     public Activity getCurrentActivity() {
         return currentActivity;
     }
+    
 
     @Override
     public void onCreate() {
         super.onCreate();
         registerActivityLifecycleCallbacks(this);
+        billingManager   = new BillingManager(this);     // ➌
 
         // ❷  Pasăm referința aplicației în constructor
         appOpenAdManager = new AppOpenAdManager(this);
@@ -31,6 +38,11 @@ public class MyApplication extends Application
             Log.d(LOG_TAG, "📦 MobileAds initializat");
             appOpenAdManager.loadAd(this);
         });
+    }
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        billingManager.destroy();   // bun‑simț
     }
 
     @Override

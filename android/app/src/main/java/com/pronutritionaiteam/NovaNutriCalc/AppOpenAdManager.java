@@ -12,6 +12,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.appopen.AppOpenAd;
+import com.pronutritionaiteam.removeads.RemoveAdsPlugin;
 
 /**
  * Manages loading and showing Google App Open Ads using Mobile Ads SDK 24.0.0+
@@ -103,6 +104,11 @@ public class AppOpenAdManager {
 
     /** Shows the ad if one is cached and all conditions allow it */
     public void showAdIfAvailable(Activity activity) {
+        /* NEW: dacă user‑ul a plătit, ieșim imediat */
+        if (app.getBillingManager().isPremium()) {
+        Log.d(LOG_TAG, "👑 Premium – nu mai afișăm ad‑uri");
+        return;
+            }
         // respect cool‑down
         if (!shouldShow()) {
             Log.d(LOG_TAG, "⌛ Cool‑down active – won't show ad yet");

@@ -6,6 +6,8 @@ import foodsData from "./Data/foods.json";
 import DietInfo from "./Components/DietInfo";
 import Footer from "./Components/Footer";
 import { LanguageContext } from "./LanguageContext";
+import { isPremium, buy } from './removeAds';
+
 import "./App.css";
 
 const dietLabels = {
@@ -79,7 +81,7 @@ const App = () => {
   const [selectedFoods, setSelectedFoods] = useState([]);
   const { language } = useContext(LanguageContext); // 🔥 Obținem limba curentă
   const [selectedCategory, setSelectedCategory] = useState("");
-
+  const [premium, setPremium] = useState(false);
 
   // ✅ Use computed name in rendering (if needed)
   // const getLocalizedName = (food) => food[`name_${language.toUpperCase()}`];
@@ -92,6 +94,11 @@ const App = () => {
     setSelectedCategory(""); // 🔁 Resetează categoria la toate
   };
 
+  // la prima pornire întrebăm status‑ul
+  useEffect(() => {
+    (async () => setPremium(await isPremium()))();
+  }, []);
+
   // Încarcă alimentele din localStorage la montare
   useEffect(() => {
     const storedFoods = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
@@ -102,6 +109,12 @@ const App = () => {
   useEffect(() => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(selectedFoods));
   }, [selectedFoods]);
+
+   /* funcția cu reclame sau fara transmisă Header‑ului */
+   const buyRemoveAds = async () => {
+    const ok = await buy();
+    setPremium(ok);          // actualizăm state‑ul
+  };
 
   // ✅ Funcție pentru a verifica dacă cantitatea este validă
   const isValidQuantity = (qty) => {
@@ -340,6 +353,7 @@ const App = () => {
           resetSelections={resetSelections} // ✅ se reseteaza selectiile
           selectedCategory={selectedCategory}
           setSelectedCategory={setSelectedCategory}
+          buyRemoveAds={buyRemoveAds} // daca se cumpara fara reclame
         />
 
         {/* CONȚINUTUL paginii – se asigură că nu este acoperit de header */}

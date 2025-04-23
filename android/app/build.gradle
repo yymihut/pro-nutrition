@@ -6,7 +6,7 @@ android {
     compileSdkVersion 36
     defaultConfig {
         applicationId "com.pronutritionaiteam.NovaNutriCalc"
-        minSdkVersion 23
+        minSdkVersion 24
         multiDexEnabled true
         targetSdkVersion 36
         versionCode 28
@@ -31,7 +31,8 @@ android {
 }
 
 dependencies {
-
+    implementation project(':removeads')
+    def billing_version = "7.1.1" 
     implementation "com.android.billingclient:billing:7.1.1"
     implementation 'com.google.android.gms:play-services-ads:24.0.0'
     implementation 'androidx.lifecycle:lifecycle-process:2.8.7'

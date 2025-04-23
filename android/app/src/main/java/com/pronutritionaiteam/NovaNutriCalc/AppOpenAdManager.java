@@ -12,7 +12,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.appopen.AppOpenAd;
-import com.pronutritionaiteam.removeads.RemoveAdsPlugin;
+//import com.pronutritionaiteam.removeads.RemoveAdsPlugin;
 
 /**
  * Manages loading and showing Google App Open Ads using Mobile Ads SDK 24.0.0+

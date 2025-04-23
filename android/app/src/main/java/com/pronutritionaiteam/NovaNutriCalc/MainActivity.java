@@ -9,6 +9,6 @@ public class MainActivity extends BridgeActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // No changes needed here; App Open Ads handled in Application class
-        registerPlugin(com.pronutritionaiteam.removeads.RemoveAdsPlugin.class);
+       registerPlugin(com.pronutritionaiteam.removeads.RemoveAdsPlugin.class);
     }
 }

@@ -5,6 +5,7 @@ import android.app.Application;
 import android.os.Bundle;
 import android.util.Log;
 import com.google.android.gms.ads.MobileAds;
+import com.pronutritionaiteam.removeads.BillingManager;
 
 public class MyApplication extends Application
         implements Application.ActivityLifecycleCallbacks {

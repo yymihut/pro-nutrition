@@ -25,6 +25,7 @@ const Header = ({
   onSearchInteractionEnd,
   selectedCategory,
   setSelectedCategory,
+  removeAds,
 }) => {
   const { language, toggleLanguage } = useContext(LanguageContext);
   const [filteredFoods, setFilteredFoods] = useState([]);
@@ -187,6 +188,10 @@ const Header = ({
           {/* // reset buton */}
           <Button className="reset-button" onClick={resetSelections}>
             {t("reset_button")}
+          </Button>
+          {/* // remove aads */}
+          <Button className="reset-button" onClick={removeAds}>
+            {t("fara_reclame")}
           </Button>
         </div>
       </div>

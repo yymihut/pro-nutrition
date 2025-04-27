@@ -10,7 +10,7 @@ import { Capacitor }    from '@capacitor/core';
 // ────────────────────────────────────────────────────────────────────────────
 // CONFIGURARE
 // ────────────────────────────────────────────────────────────────────────────
-const PRODUCT_ID = 'remove_ads_sku';        // SKU definit în Google Play Console
+const PRODUCT_ID = 'remove_ads_sku';        // 'remove_ads_sku' -pt productie SKU definit în Google Play Console
 const ADS_KEY    = 'adsRemoved';            // cheie salvată cu Capacitor Preferences
 
 // promisiuni interne – se vor rezolva după initialize şi după ce magazinul

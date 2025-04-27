@@ -53,7 +53,7 @@ public class AppOpenAdManager {
     private long    loadTime    = 0;
 
     /** Cool‑down between two consecutive impressions (ms) */
-    private static final long COOLDOWN_MS = 30_000;
+    private static final long COOLDOWN_MS = 45_000;
     private long lastShown = 0;
 
     private boolean shouldShow() {
@@ -112,7 +112,8 @@ public class AppOpenAdManager {
 
     /** Returns true if we have an ad that has not expired (15 min) */
     private boolean isAdAvailable() {
-        return appOpenAd != null && (System.currentTimeMillis() - loadTime) < 15 * 60 * 1000;
+        return appOpenAd != null && (System.currentTimeMillis() - loadTime) < 30_000;  
+        //  - loadTime) < 15 * 60 * 1000; 
     }
 
     /** Shows the ad if one is cached and all conditions allow it */

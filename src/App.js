@@ -8,6 +8,7 @@ import Footer from "./Components/Footer";
 import { LanguageContext } from "./LanguageContext";
 import "./App.css";
 import { initBilling, buyRemoveAds, hasRemoveAds } from "./Services/BillingService"
+import { Capacitor }  from '@capacitor/core';
 
 const dietLabels = {
   unknown: {
@@ -97,10 +98,30 @@ const App = () => {
   const handleRemoveAds = () => {
     if (!adsRemoved) buyRemoveAds();
   };
-
   useEffect(() => {
-    hasRemoveAds().then(setAdsRemoved);      // citim din Preferences
-    initBilling(() => setAdsRemoved(true));  // facem subscribe la evenimente
+    hasRemoveAds().then((result) => setAdsRemoved(result)); // citim din Preferences
+  }, []);
+
+   useEffect(() => {
+    const onDeviceReady = () => {
+      console.log('Device ready!');
+      if (typeof window.store !== 'undefined') {
+        console.log('Store detected, initializing billing...');
+        initBilling(() => setAdsRemoved(true));
+      } else {
+        console.warn('window.store nu este disponibil.');
+      }
+    };
+
+    if (Capacitor.isNativePlatform()) {
+      document.addEventListener('deviceready', onDeviceReady);
+    } else {
+      console.warn('Not a native platform. Skipping billing.');
+    }
+
+    return () => {
+      document.removeEventListener('deviceready', onDeviceReady);
+    };
   }, []);
 
   // Încarcă alimentele din localStorage la montare

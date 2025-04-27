@@ -15,6 +15,7 @@
       "splashImmersive": false
     },
     "AdMob": {},
-    "InAppPurchases": {}
+    "InAppPurchases": {},
+    "Preferences":{}
   }
 }

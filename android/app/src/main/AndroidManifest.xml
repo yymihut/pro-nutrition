@@ -18,14 +18,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!-- SplashActivity (dacă o mai foloseşti) -->
-        <!-- <activity
-            android:name=".SplashActivity"
-            android:exported="true"
-            android:noHistory="true"
-            android:theme="@style/SplashTheme" /> -->
-
-        <!-- MainActivity – punct de intrare după splash -->
         <activity
             android:name=".MainActivity"
             android:exported="true"

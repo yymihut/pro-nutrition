@@ -7,6 +7,7 @@ import DietInfo from "./Components/DietInfo";
 import Footer from "./Components/Footer";
 import { LanguageContext } from "./LanguageContext";
 import "./App.css";
+import { initBilling, buyRemoveAds, hasRemoveAds } from "./Services/BillingService"
 
 const dietLabels = {
   unknown: {
@@ -79,6 +80,7 @@ const App = () => {
   const [selectedFoods, setSelectedFoods] = useState([]);
   const { language } = useContext(LanguageContext); // 🔥 Obținem limba curentă
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [adsRemoved, setAdsRemoved] = useState(false);
 
 
   // ✅ Use computed name in rendering (if needed)
@@ -91,6 +93,15 @@ const App = () => {
     setQuantity(""); // 🔥 Resetează câmpul de cantitate
     setSelectedCategory(""); // 🔁 Resetează categoria la toate
   };
+
+  const handleRemoveAds = () => {
+    if (!adsRemoved) buyRemoveAds();
+  };
+
+  useEffect(() => {
+    hasRemoveAds().then(setAdsRemoved);      // citim din Preferences
+    initBilling(() => setAdsRemoved(true));  // facem subscribe la evenimente
+  }, []);
 
   // Încarcă alimentele din localStorage la montare
   useEffect(() => {
@@ -303,6 +314,8 @@ const App = () => {
       <div className="app-container">
         {/* HEADER FIX - acesta rămâne fix în partea de sus */}
         <Header
+          adsRemoved={adsRemoved}
+          removeAds={handleRemoveAds}
           foods={foodsData}
           search={search}
           setSearch={setSearch}

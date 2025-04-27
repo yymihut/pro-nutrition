@@ -19,6 +19,3 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
-
-# Google Play LVL - prevent code obfuscation for licensing classes
--keep class com.google.android.vending.licensing.** { *; }

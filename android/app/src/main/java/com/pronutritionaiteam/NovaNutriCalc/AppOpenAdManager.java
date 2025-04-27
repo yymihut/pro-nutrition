@@ -8,6 +8,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import android.content.SharedPreferences;
+import android.content.Context;
+
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
@@ -23,6 +26,10 @@ import com.google.android.gms.ads.appopen.AppOpenAd;
  */
 public class AppOpenAdManager {
 
+    private final SharedPreferences prefs;
+    private static final String PREFS_NAME = "CapacitorStorage";
+    private static final String ADS_KEY    = "adsRemoved";
+
     private static final String LOG_TAG = "AppOpenAdManager";
 
     /** Test ad‑unit; replace with your own live ID before publishing */
@@ -32,8 +39,13 @@ public class AppOpenAdManager {
     private final MyApplication app;
 
     public AppOpenAdManager(MyApplication app) {
-        this.app = app;
+    this.app   = app;
+    this.prefs = app.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
     }
+    private boolean adsRemoved() {
+    return "true".equals(prefs.getString(ADS_KEY, "false"));
+    }
+
 
     private AppOpenAd appOpenAd;
     private boolean isLoadingAd = false;
@@ -45,11 +57,13 @@ public class AppOpenAdManager {
     private long lastShown = 0;
 
     private boolean shouldShow() {
+        if (adsRemoved()) return false;    //  ⛔️ utilizator premium
         return System.currentTimeMillis() - lastShown > COOLDOWN_MS;
     }
 
     /** Initiates an async load if none is in progress & no valid ad cached */
     public void loadAd(Context context) {
+        if (adsRemoved()) return;        //  ⛔️ utilizator premium
         if (isLoadingAd || isAdAvailable()) return;
 
         isLoadingAd = true;
@@ -103,7 +117,7 @@ public class AppOpenAdManager {
 
     /** Shows the ad if one is cached and all conditions allow it */
     public void showAdIfAvailable(Activity activity) {
-        // respect cool‑down
+        // respect cool‑downcumpara app fara reclame
         if (!shouldShow()) {
             Log.d(LOG_TAG, "⌛ Cool‑down active – won't show ad yet");
             return;

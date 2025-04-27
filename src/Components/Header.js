@@ -26,6 +26,7 @@ const Header = ({
   selectedCategory,
   setSelectedCategory,
   removeAds,
+  adsRemoved,
 }) => {
   const { language, toggleLanguage } = useContext(LanguageContext);
   const [filteredFoods, setFilteredFoods] = useState([]);
@@ -190,9 +191,11 @@ const Header = ({
             {t("reset_button")}
           </Button>
           {/* // remove aads */}
-          <Button className="reset-button" onClick={removeAds}>
-            {t("fara_reclame")}
-          </Button>
+          {!adsRemoved && (
+           <Button className="reset-button" onClick={removeAds}>
+                {t("fara_reclame")}
+           </Button>
+          )}
         </div>
       </div>
 

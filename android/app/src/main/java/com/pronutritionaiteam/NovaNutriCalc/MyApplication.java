@@ -36,7 +36,6 @@ public class MyApplication extends Application
     @Override
     public void onActivityResumed(Activity activity) {
         currentActivity = activity;
-        currentActivity = activity;
         appOpenAdManager.showAdIfAvailable(activity);   // no postDelayed, no second path
         // la reluare rămâne logica existentă
         /* activity.getWindow().getDecorView().postDelayed(() -> {

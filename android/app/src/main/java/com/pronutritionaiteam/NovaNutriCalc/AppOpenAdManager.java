@@ -2,14 +2,12 @@ package com.pronutritionaiteam.NovaNutriCalc;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-
-import android.content.SharedPreferences;
-import android.content.Context;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
@@ -17,158 +15,175 @@ import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.appopen.AppOpenAd;
 
 /**
- * Manages loading and showing Google App Open Ads using Mobile Ads SDK 24.0.0+
- *
- * Changes for 24.0.0:
- * • Removed AppOpenAdLoadConfiguration – AppOpenAd.load now takes an AdRequest directly.
- * • Orientation constants have been removed; orientation is handled automatically.
- * • API level 23+ is required by SDK‑24, so minSdkVersion must be 23.
+ * Manages loading and showing Google App-Open Ads.
+ * – ad-unitul din test este „ca-app-pub-3940256099942544/9257395921”.
  */
-public class AppOpenAdManager {
+public class AppOpenAdManager
+        implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private final SharedPreferences prefs;
+    /*––––––––––– Config & state –––––––––––*/
+    private static final String LOG_TAG    = "AppOpenAdManager";
     private static final String PREFS_NAME = "CapacitorStorage";
     private static final String ADS_KEY    = "adsRemoved";
-
-    private static final String LOG_TAG = "AppOpenAdManager";
-
-    /** Test ad‑unit; replace with your own live ID before publishing */
     private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/9257395921";
 
-    // Reference to custom Application class for retrieving the current activity
-    private final MyApplication app;
+    private final MyApplication  app;
+    private final SharedPreferences prefs;
 
-    public AppOpenAdManager(MyApplication app) {
-    this.app   = app;
-    this.prefs = app.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-    }
-    private boolean adsRemoved() {
-    return "true".equals(prefs.getString(ADS_KEY, "false"));
-    }
-
+    /* Se actualizează din listener-ul de mai jos */
+    private volatile boolean adsRemoved;
 
     private AppOpenAd appOpenAd;
-    private boolean isLoadingAd = false;
-    private boolean isShowingAd = false;
-    private long    loadTime    = 0;
+    private boolean   isLoadingAd  = false;
+    private boolean   isShowingAd  = false;
+    private long      loadTime     = 0;
 
-    /** Cool‑down between two consecutive impressions (ms) */
     private static final long COOLDOWN_MS = 45_000;
     private long lastShown = 0;
 
+    private static final long LOAD_TIMEOUT_MS = 10_000;      // 10 s
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private Runnable timeoutTask  = null;
+    private Runnable showLaterTask = null;
+
+    /*––––––––––– Constructor –––––––––––*/
+    public AppOpenAdManager(MyApplication app) {
+        this.app  = app;
+        this.prefs = app.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        Log.d(LOG_TAG, "🔄 [AppOpenAdManager] this.prefs = app.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);--: " + this.prefs );
+        // 1️⃣ citire iniţială
+        adsRemoved = "true".equals(prefs.getString(ADS_KEY, "false"));
+
+        // 2️⃣ ascultăm toate modificările făcute de partea JS
+        prefs.registerOnSharedPreferenceChangeListener(this);
+    }
+
+    /*––––––––––– SharedPreferences callback –––––––––––*/
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
+        Log.d(LOG_TAG, "🔄 [AppOpenAdManager] if (!ADS_KEY.equals(key)) return; --: " + ADS_KEY + key );
+        
+        if (!ADS_KEY.equals(key)) return;
+
+        boolean newValue = "true".equals(sp.getString(ADS_KEY, "false"));
+        if (newValue == adsRemoved) return;           // nimic nou
+
+        adsRemoved = newValue;
+        Log.d(LOG_TAG, "🔄 [AppOpenAdManager] adsRemoved set to " + adsRemoved);
+
+        // Dacă user-ul a primit refund: renunţăm la orice ad pre-încărcat
+        if (!isShowingAd && adsRemoved && appOpenAd != null) {
+            Log.d(LOG_TAG, "🔄 [AppOpenAdManager] if (!isShowingAd && adsRemoved && appOpenAd != null) { " + !isShowingAd + adsRemoved + appOpenAd);
+            appOpenAd = null;
+        }
+
+        // Dacă user-ul NU mai deţine produsul, forţăm încărcarea unei reclame
+        if (!adsRemoved) {
+            loadAd(app.getApplicationContext());
+        }
+    }
+
+    /*––––––––––– Utilitar –––––––––––*/
     private boolean shouldShow() {
-        if (adsRemoved()) return false;    //  ⛔️ utilizator premium
-        return System.currentTimeMillis() - lastShown > COOLDOWN_MS;
+        return !adsRemoved && (System.currentTimeMillis() - lastShown > COOLDOWN_MS);
     }
 
-    /** Initiates an async load if none is in progress & no valid ad cached */
-    public void loadAd(Context context) {
-        if (adsRemoved()) return;        //  ⛔️ utilizator premium
-        if (isLoadingAd || isAdAvailable()) return;
+    /*––––––––––– Public API –––––––––––*/
+    public void loadAd(Context ctx) {
+        if (adsRemoved || isLoadingAd || isAdAvailable()) return;
 
-        isLoadingAd = true;
+    isLoadingAd = true;
 
-        AdRequest request = new AdRequest.Builder().build();
+    /*––––  Îmbunătățirea #1 – timeout pe încărcare  ––––*/
+    timeoutTask = () -> {
+        if (isLoadingAd) {
+            Log.w(LOG_TAG, "⏰ [AppOpenAdManager] Ad-load timeout");
+            isLoadingAd = false;
+        }
+    };
+    handler.postDelayed(timeoutTask, LOAD_TIMEOUT_MS);
 
-        AppOpenAd.load(
-                context,
-                AD_UNIT_ID,
-                request,
-                new AppOpenAd.AppOpenAdLoadCallback() {
+    AppOpenAd.load(
+        ctx,
+        AD_UNIT_ID,
+        new AdRequest.Builder().build(),
+        new AppOpenAd.AppOpenAdLoadCallback() {
+                
+            @Override public void onAdLoaded(@NonNull AppOpenAd ad) {
+                // 3️ – ştergem timeout-ul
+                if (timeoutTask != null) handler.removeCallbacks(timeoutTask);
 
-                    @Override
-                    public void onAdLoaded(@NonNull AppOpenAd ad) {
-                        Log.d(LOG_TAG, "✅ Ad loaded");
-                        appOpenAd  = ad;
-                        isLoadingAd = false;
-                        loadTime    = System.currentTimeMillis();
+                Log.d(LOG_TAG, "✅ [AppOpenAdManager]  Ad loaded");
+                appOpenAd  = ad;
+                isLoadingAd = false;
+                loadTime    = System.currentTimeMillis();
 
-                        Activity activity = app.getCurrentActivity();
-                        long timeSinceLast = System.currentTimeMillis() - lastShown;
-                        long delay         = COOLDOWN_MS - timeSinceLast;
+                /*––––  Îmbunătățirea #2 – afişare după cool-down  ––––*/
+                long delay = COOLDOWN_MS - (System.currentTimeMillis() - lastShown);
+                Activity current = app.getCurrentActivity();
 
-                        if (delay <= 0) {
-                            if (activity != null && activity.hasWindowFocus()) {
-                                showAdIfAvailable(activity);
-                            }
-                        } else {
-                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                                Activity act = app.getCurrentActivity();
-                                if (act != null && act.hasWindowFocus()) {
-                                    showAdIfAvailable(act);
-                                }
-                            }, delay);
-                            Log.d(LOG_TAG, "⏳ Ad ready, will show in " + delay + " ms");
+                if (delay <= 0) {
+                    if (current != null && current.hasWindowFocus()) {
+                        showAdIfAvailable(current);
+                    }
+                } else {
+                    // 3️ – anulăm orice alt callback „showLater” existent
+                    if (showLaterTask != null) handler.removeCallbacks(showLaterTask);
+
+                    showLaterTask = () -> {
+                        Activity again = app.getCurrentActivity();
+                        if (again != null && again.hasWindowFocus()) {
+                            showAdIfAvailable(again);
                         }
-                    }
+                    };
+                    handler.postDelayed(showLaterTask, delay);
+                    Log.d(LOG_TAG, "⏳ [AppOpenAdManager] Ad ready, will show in " + delay + " ms");
+                }
+            }
+                @Override public void onAdFailedToLoad(@NonNull LoadAdError e) {
+                    if (timeoutTask != null) handler.removeCallbacks(timeoutTask);  // 3️
+                    Log.e(LOG_TAG, "❌  Failed to load: " + e);
+                    isLoadingAd = false;
+                }
+                  });
+             }
 
-                    @Override
-                    public void onAdFailedToLoad(@NonNull LoadAdError e) {
-                        Log.e(LOG_TAG, "❌ Failed to load: " + e);
-                        isLoadingAd = false;
-                    }
-                });
+                public void showAdIfAvailable(Activity activity) {
+                 if (!shouldShow()) return;
+
+                    if (!isAdAvailable()) {
+                     loadAd(activity);
+                 return;
+                 }
+
+                      appOpenAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                    @Override public void onAdShowedFullScreenContent() {
+                     isShowingAd = true;
+                        lastShown   = System.currentTimeMillis();
+                  }
+                       @Override public void onAdDismissedFullScreenContent() {
+                     isShowingAd = false;
+                     appOpenAd   = null;
+                     loadAd(activity);                      // pre-încarcă următoarea
+                      }
+                      @Override public void onAdFailedToShowFullScreenContent(
+                                           com.google.android.gms.ads.AdError err) {
+                          isShowingAd = false;
+                          appOpenAd   = null;
+                          }
+                     });
+
+                  appOpenAd.show(activity);
     }
 
-    /** Returns true if we have an ad that has not expired (15 min) */
+    /*––––––––––– Helpers –––––––––––*/
     private boolean isAdAvailable() {
-        return appOpenAd != null && (System.currentTimeMillis() - loadTime) < 30_000;  
-        //  - loadTime) < 15 * 60 * 1000; 
+        return appOpenAd != null &&
+               (System.currentTimeMillis() - loadTime) < 15 * 60 * 1000;
     }
 
-    /** Shows the ad if one is cached and all conditions allow it */
-    public void showAdIfAvailable(Activity activity) {
-        // respect cool‑downcumpara app fara reclame
-        if (!shouldShow()) {
-            Log.d(LOG_TAG, "⌛ Cool‑down active – won't show ad yet");
-            return;
-        }
-
-        if (isShowingAd) {
-            Log.d(LOG_TAG, "🚫 An ad is already showing");
-            return;
-        }
-
-        if (!isAdAvailable()) {
-            Log.d(LOG_TAG, "📭 No ad available – invoking load");
-            loadAd(activity);
-            return;
-        }
-
-        appOpenAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-            @Override
-            public void onAdShowedFullScreenContent() {
-                isShowingAd = true;
-                lastShown   = System.currentTimeMillis();
-                Log.d(LOG_TAG, "📢 Ad showed");
-            }
-
-            @Override
-            public void onAdDismissedFullScreenContent() {
-                appOpenAd  = null;
-                isShowingAd = false;
-
-                long timeSinceLast = System.currentTimeMillis() - lastShown;
-                long delay = COOLDOWN_MS - timeSinceLast;
-
-                new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                    Activity act = app.getCurrentActivity();
-                    if (act != null && act.hasWindowFocus()) {
-                        showAdIfAvailable(act); // will pass shouldShow
-                    }
-                }, Math.max(delay, 0));
-
-                loadAd(activity); // preload next
-            }
-
-            @Override
-            public void onAdFailedToShowFullScreenContent(com.google.android.gms.ads.AdError adError) {
-                appOpenAd = null;
-                isShowingAd = false;
-                lastShown = System.currentTimeMillis(); // avoid blocking cool‑down
-            }
-        });
-
-        appOpenAd.show(activity);
+    /*––––––––––– Cleanup (dacă vrei) –––––––––––*/
+    public void dispose() {
+        prefs.unregisterOnSharedPreferenceChangeListener(this);
     }
 }

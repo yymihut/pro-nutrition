@@ -95,19 +95,17 @@ const App = () => {
     setSelectedCategory(""); // 🔁 Resetează categoria la toate
   };
 
-  const handleRemoveAds = () => {
-    if (!adsRemoved) buyRemoveAds();
-  };
-  useEffect(() => {
-    hasRemoveAds().then((result) => setAdsRemoved(result)); // citim din Preferences
-  }, []);
-
+ // doar o singură chemare – fără if/else încrucișat
+const handleRemoveAds = () => {
+  buyRemoveAds((owned) => setAdsRemoved(owned));
+};
+  
    useEffect(() => {
     const onDeviceReady = () => {
       console.log('Device ready!');
       if (typeof window.store !== 'undefined') {
-        console.log('Store detected, initializing billing...');
-        initBilling(() => setAdsRemoved(true));
+        console.log('[App.js] Store detected, initializing billing... :', window.store);
+        initBilling((owned) => setAdsRemoved(owned));
       } else {
         console.warn('window.store nu este disponibil.');
       }

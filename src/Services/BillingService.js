@@ -27,7 +27,7 @@ export const hasRemoveAds = async () =>
 // ────────────────────────────────────────────────────────────────────────────
 // INITIALIZARE BILLING
 // ────────────────────────────────────────────────────────────────────────────
-export const initBilling = (onSuccess) => {
+export const initBilling = (onChange) => {
   if (!Capacitor.isNativePlatform()) return;
 
   document.addEventListener(
@@ -54,12 +54,34 @@ export const initBilling = (onSuccess) => {
             },
           ]);
 
-          // Tratează achiziţia odată ce este aprobată de Google Play
-          store.when(PRODUCT_ID).approved(async (purchase) => {
-            await Preferences.set({ key: ADS_KEY, value: 'true' });
-            await purchase.finish();
-            onSuccess?.();
-          });
+          // Tranzacţia aprobată (cumpărare nouă)
+store.when(PRODUCT_ID).approved(async (p) => {
+  await Preferences.set({ key: ADS_KEY, value: 'true' });
+  await p.finish();
+  onChange?.(true);
+});
+
+// Refund / revocare
+const revokedOrCancelled =
+  store.when(PRODUCT_ID).revoked   // v14+
+  ?? store.when(PRODUCT_ID).cancelled; // ≤ v13
+
+revokedOrCancelled?.(async () => {
+  await Preferences.set({ key: ADS_KEY, value: 'false' });
+  onChange?.(false);
+});
+
+// Siguranţă: sincronizare la fiecare refresh/launch
+store.when(PRODUCT_ID).updated(async (prod) => {
+    /* ignoră prima sincronizare (care vine imediat după initialize)
+       dacă a existat deja un eveniment revoked()/cancelled() în aceeaşi sesiune */
+    const current = (await Preferences.get({ key: ADS_KEY })).value === 'true';
+    const next    = !!prod.owned;
+    if (current === next) return;        // nu mai suprascrie cu aceiaşi valoare
+  
+  await Preferences.set({ key: ADS_KEY, value: next ? 'true' : 'false' });
+   onChange?.(next);
+  });
 
           // Porneşte iniţializarea platformelor (fetch produse, etc.)
           _initPromise = store.initialize([gp]);
@@ -84,13 +106,12 @@ export const initBilling = (onSuccess) => {
 // ────────────────────────────────────────────────────────────────────────────
 // COMANDĂ DE CUMPĂRARE
 // ────────────────────────────────────────────────────────────────────────────
-export const buyRemoveAds = async () => {
+export const buyRemoveAds = async (onOwnedChange) => {
   if (!Capacitor.isNativePlatform()) {
-    alert('In‑app purchases sunt disponibile doar pe dispozitiv.');
+    alert('In-app purchases sunt disponibile doar pe dispozitiv.');
     return;
   }
 
-  // aşteptăm init & ready
   try {
     if (_initPromise) await _initPromise;
     if (_readyPromise) await _readyPromise;
@@ -101,30 +122,39 @@ export const buyRemoveAds = async () => {
 
   const store = window.CdvPurchase?.store;
   if (!store) {
+    console.log('[Billing] if if (!store) { – :', !store);
     console.warn('[Billing] Store nu este disponibil – abort order.');
     return;
   }
 
-  // obţinem produsul
+  /* 🔄 sincronează inventarul cu serverul Play înainte de orice test */
+  try { await store.update(); } catch (e) {
+    console.log('[Billing] try { await store.update(); } – :', store); 
+    console.warn('[Billing] refresh', e); 
+  }
+
   const product = store.get(PRODUCT_ID);
-  if (!product) {
-    console.warn('[Billing] Produsul nu a fost găsit în catalog – execut store.refresh() şi re‑încearcă.');
-    try {
-      await store.refresh();
-    } catch (e) {
-      console.error('[Billing] refresh failed', e);
-    }
+   if (!product) {                       // fallback de siguranţă
+    console.log('[Billing] if (!product) { – :', !product);
+       alert('Produsul nu este disponibil momentan. Încearcă mai târziu.');
+       return;
+     }
+   /*–––––––––––––––––––––––––––––––––––––––––––––––––––––––––
+     Dacă utilizatorul îl deţine deja → ascundem butonul imediat
+    ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ */
+   if (!product || !product.canPurchase) { 
+    console.log('[Billing] if (!product || !product.canPurchase) {  – :', product, !product.canPurchase);              //  ↔  already owned
+     alert('Deţii deja acest articol.');
+     await Preferences.set({ key: ADS_KEY, value: 'true' });
+     console.log("[Billing] await Preferences.set({ key: ADS_KEY, value: 'true' });  – :", ADS_KEY ); 
+     onOwnedChange?.(true);                  // trimite update în UI
     return;
   }
 
-  if (!product.canPurchase) {
-    alert('Produsul nu poate fi achiziţionat (deja deţinut sau indisponibil).');
-    return;
-  }
-
-  const offer = product.getOffer(); // NON_CONSUMABLE are un singur offer implicit
+  const offer = product.getOffer();
   try {
-    await store.order(offer ?? product); // preferăm offer când există
+    await store.order(offer ?? product);
+    console.log("[Billing] await store.order(offer ?? product);  – :", offer, product );
   } catch (e) {
     console.error('[Billing] order() a eşuat', e);
   }

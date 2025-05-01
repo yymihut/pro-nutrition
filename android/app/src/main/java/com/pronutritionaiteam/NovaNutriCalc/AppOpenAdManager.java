@@ -149,32 +149,34 @@ public class AppOpenAdManager
              }
 
                 public void showAdIfAvailable(Activity activity) {
-                 if (!shouldShow()) return;
+                    if (!shouldShow()) {
+                           return;
+                        }
 
                     if (!isAdAvailable()) {
-                     loadAd(activity);
-                 return;
-                 }
+                           loadAd(activity);
+                           return;
+                         }
 
-                      appOpenAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-                    @Override public void onAdShowedFullScreenContent() {
-                     isShowingAd = true;
-                        lastShown   = System.currentTimeMillis();
-                  }
-                       @Override public void onAdDismissedFullScreenContent() {
-                     isShowingAd = false;
-                     appOpenAd   = null;
-                     loadAd(activity);                      // pre-încarcă următoarea
-                      }
-                      @Override public void onAdFailedToShowFullScreenContent(
-                                           com.google.android.gms.ads.AdError err) {
-                          isShowingAd = false;
-                          appOpenAd   = null;
+                    appOpenAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                         @Override public void onAdShowedFullScreenContent() {
+                             isShowingAd = true;
+                             lastShown   = System.currentTimeMillis();
                           }
-                     });
+                         @Override public void onAdDismissedFullScreenContent() {
+                              isShowingAd = false;
+                              appOpenAd   = null;
+                              loadAd(activity);                      // pre-încarcă următoarea
+                           }
+                          @Override public void onAdFailedToShowFullScreenContent(
+                               com.google.android.gms.ads.AdError err) {
+                                isShowingAd = false;
+                                appOpenAd   = null;
+                             }
+                    });
 
-                  appOpenAd.show(activity);
-    }
+                    appOpenAd.show(activity);
+                }
 
     /*––––––––––– Helpers –––––––––––*/
     private boolean isAdAvailable() {

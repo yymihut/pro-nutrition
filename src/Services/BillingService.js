@@ -1,161 +1,141 @@
-// Services/BillingService.js – compatibil cu „cordova-plugin-purchase” v13+
-// -------------------------------------------------------------------------
-// Foloseşte noul spaţiu de nume global `CdvPurchase` (Google Play Billing v6).
-// Dacă vrei tip‑safety poţi adăuga în TS: `declare const CdvPurchase: any;`
-/* global CdvPurchase */
+// BillingService.js – v4.1  (single listener, debounce false)
 
-import { Preferences } from '@capacitor/preferences';
-import { Capacitor }    from '@capacitor/core';
+/* ─ CONFIG ─ */
+import { Capacitor }          from '@capacitor/core';
+import { Preferences }        from '@capacitor/preferences';
+import {
+  Purchases,
+  PRODUCT_CATEGORY,
+  PURCHASES_ERROR_CODE,
+}                             from '@revenuecat/purchases-capacitor';
 
-// ────────────────────────────────────────────────────────────────────────────
-// CONFIGURARE
-// ────────────────────────────────────────────────────────────────────────────
-const PRODUCT_ID = 'remove_ads_sku';        // 'remove_ads_sku' -pt productie SKU definit în Google Play Console
-const ADS_KEY    = 'adsRemoved';            // cheie salvată cu Capacitor Preferences
+const RC_PUBLIC_API_KEY = 'goog_ICPUybykxyEWprixoBdQrEXeQkl';
+const RC_SECRET_API_KEY = 'sk_XwhSCZGjMwAurmQlZrNcZFEXvFmlg';   // QA only
+const RC_PROJECT_ID     = 'projd457dd74';
 
-// promisiuni interne – se vor rezolva după initialize şi după ce magazinul
-// devine "ready" (toate produsele au fost descărcate şi validate)
-let _initPromise  = null;
-let _readyPromise = null;
+const ENTITLEMENT_ID    = 'remove_ads';
+const STORE_PRODUCT_ID  = 'remove_ads_sku2';
 
-// ────────────────────────────────────────────────────────────────────────────
-// HELPER: verifică dacă user‑ul a cumpărat deja pachetul „remove ads”
-// ────────────────────────────────────────────────────────────────────────────
-export const hasRemoveAds = async () =>
-  (await Preferences.get({ key: ADS_KEY })).value === 'true';
+const PREF_ADS_REMOVED  = 'adsRemoved';
+const PREF_PURCHASE_ID  = 'removeAdsPurchaseId';
 
-// ────────────────────────────────────────────────────────────────────────────
-// INITIALIZARE BILLING
-// ────────────────────────────────────────────────────────────────────────────
-export const initBilling = (onChange) => {
-  if (!Capacitor.isNativePlatform()) return;
+/* ─ STATE ─ */
+let listenerAttached = false;
 
-  document.addEventListener(
-    'deviceready',
-    () => {
-      const waitForCdvPurchase = () => {
-        if (!window.CdvPurchase) {
-          console.warn('[Billing] CdvPurchase încă nu e disponibil … retry in 400 ms');
-          setTimeout(waitForCdvPurchase, 400);
-          return;
-        }
+/* ─ INIT ─ */
+export function initBilling(cb = null) {
+  if (listenerAttached) return () => {};
+  listenerAttached = true;
 
-        const { store, Platform, ProductType } = window.CdvPurchase;
-        const gp = Platform.GOOGLE_PLAY;
+  let cleanup = () => {};
 
-        // evităm să re‑înregistrăm dacă init a fost deja făcut
-        if (!_initPromise) {
-          // Înregistrăm produsul (NON_CONSUMABLE => se cumpără o singură dată)
-          store.register([
-            {
-              id:       PRODUCT_ID,
-              type:     ProductType.NON_CONSUMABLE,
-              platform: gp,
-            },
-          ]);
+  (async () => {
+    try {
+      await Purchases.configure({ apiKey: RC_PUBLIC_API_KEY, observerMode: false });
 
-          // Tranzacţia aprobată (cumpărare nouă)
-store.when(PRODUCT_ID).approved(async (p) => {
-  await Preferences.set({ key: ADS_KEY, value: 'true' });
-  await p.finish();
-  onChange?.(true);
-});
+      /* ◀- sincronizează token-urile locale cu backend-ul RC */
+      await Purchases.syncPurchases();
 
-// Refund / revocare
-const revokedOrCancelled =
-  store.when(PRODUCT_ID).revoked   // v14+
-  ?? store.when(PRODUCT_ID).cancelled; // ≤ v13
+      /* 1️⃣  Restore */
+      const first = await Purchases.restorePurchases();
+      await handleCustomerInfo(first, cb);
 
-revokedOrCancelled?.(async () => {
-  await Preferences.set({ key: ADS_KEY, value: 'false' });
-  onChange?.(false);
-});
+      /* 2️⃣  Listener unic */
+      const id = Purchases.addCustomerInfoUpdateListener((ci) =>
+        handleCustomerInfo(ci, cb)
+      );
 
-// Siguranţă: sincronizare la fiecare refresh/launch
-store.when(PRODUCT_ID).updated(async (prod) => {
-    /* ignoră prima sincronizare (care vine imediat după initialize)
-       dacă a existat deja un eveniment revoked()/cancelled() în aceeaşi sesiune */
-    const current = (await Preferences.get({ key: ADS_KEY })).value === 'true';
-    const next    = !!prod.owned;
-    if (current === next) return;        // nu mai suprascrie cu aceiaşi valoare
-  
-  await Preferences.set({ key: ADS_KEY, value: next ? 'true' : 'false' });
-   onChange?.(next);
-  });
-
-          // Porneşte iniţializarea platformelor (fetch produse, etc.)
-          _initPromise = store.initialize([gp]);
-          _initPromise.catch((e) => console.error('[Billing] initialize failed', e));
-
-          // Creează promisiune ce se rezolvă la `store.ready()`
-          _readyPromise = new Promise((resolve) => {
-            store.ready(() => {
-              console.log('[Billing] Store READY – produse încărcate');
-              resolve();
-            });
-          });
-        }
+      cleanup = () => {
+        Purchases.removeCustomerInfoUpdateListener(id);
+        listenerAttached = false;
       };
+    } catch (e) {
+      console.error('[Billing] init error', e);
+    }
+  })();
 
-      waitForCdvPurchase();
-    },
-    { once: true }
-  );
-};
+  return () => cleanup();
+}
 
-// ────────────────────────────────────────────────────────────────────────────
-// COMANDĂ DE CUMPĂRARE
-// ────────────────────────────────────────────────────────────────────────────
-export const buyRemoveAds = async (onOwnedChange) => {
-  if (!Capacitor.isNativePlatform()) {
-    alert('In-app purchases sunt disponibile doar pe dispozitiv.');
-    return;
-  }
-
+/* ─ BUY ─ */
+export async function buyRemoveAds(cb = null) {
   try {
-    if (_initPromise) await _initPromise;
-    if (_readyPromise) await _readyPromise;
+    const { products } = await Purchases.getProducts({
+      productIdentifiers: [STORE_PRODUCT_ID],
+      type: PRODUCT_CATEGORY.NON_SUBSCRIPTION,
+    });
+    if (!products?.length) {
+      alert('Produsul nu este disponibil momentan.');
+      return;
+    }
+
+    const { customerInfo, storeTransaction } =
+      await Purchases.purchaseStoreProduct({ product: products[0] });
+
+    if (storeTransaction?.revenuecatId) {
+      await Preferences.set({
+        key: PREF_PURCHASE_ID,
+        value: storeTransaction.revenuecatId,
+      });
+    }
+
+    await handleCustomerInfo(customerInfo, cb);
   } catch (e) {
-    console.error('[Billing] init / ready error', e);
+    if (e?.code === PURCHASES_ERROR_CODE.PRODUCT_ALREADY_PURCHASED_ERROR) {
+      const info = await Purchases.restorePurchases();
+      await handleCustomerInfo(info, cb);
+      alert('Achiziţia era deja activă şi a fost restaurată.');
+      return;
+    }
+    if (!e?.userCancelled) alert(e?.message ?? 'Eroare la achiziţie.');
+    console.error('[Billing] purchase error', e);
+  }
+}
+
+/* ─ REFUND (QA) ─ */
+export async function refundRemoveAds() {
+  const { value: purchaseId } = await Preferences.get({ key: PREF_PURCHASE_ID });
+  if (!purchaseId) {
+    alert('Nicio achiziţie activă pentru refund.');
     return;
   }
-
-  const store = window.CdvPurchase?.store;
-  if (!store) {
-    console.log('[Billing] if if (!store) { – :', !store);
-    console.warn('[Billing] Store nu este disponibil – abort order.');
-    return;
-  }
-
-  /* 🔄 sincronează inventarul cu serverul Play înainte de orice test */
-  try { await store.update(); } catch (e) {
-    console.log('[Billing] try { await store.update(); } – :', store); 
-    console.warn('[Billing] refresh', e); 
-  }
-
-  const product = store.get(PRODUCT_ID);
-   if (!product) {                       // fallback de siguranţă
-    console.log('[Billing] if (!product) { – :', !product);
-       alert('Produsul nu este disponibil momentan. Încearcă mai târziu.');
-       return;
-     }
-   /*–––––––––––––––––––––––––––––––––––––––––––––––––––––––––
-     Dacă utilizatorul îl deţine deja → ascundem butonul imediat
-    ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾ */
-   if (!product || !product.canPurchase) { 
-    console.log('[Billing] if (!product || !product.canPurchase) {  – :', product, !product.canPurchase);              //  ↔  already owned
-     alert('Deţii deja acest articol.');
-     await Preferences.set({ key: ADS_KEY, value: 'true' });
-     console.log("[Billing] await Preferences.set({ key: ADS_KEY, value: 'true' });  – :", ADS_KEY ); 
-     onOwnedChange?.(true);                  // trimite update în UI
-    return;
-  }
-
-  const offer = product.getOffer();
   try {
-    await store.order(offer ?? product);
-    console.log("[Billing] await store.order(offer ?? product);  – :", offer, product );
+    const res = await fetch(
+      `https://api.revenuecat.com/v2/projects/${RC_PROJECT_ID}/purchases/${purchaseId}/actions/refund`,
+      { method: 'POST', headers: { Authorization: `Bearer ${RC_SECRET_API_KEY}` } }
+    );
+    if (!res.ok) throw new Error(await res.text());
+    alert('Refund trimis.');
+    await handleCustomerInfo(await Purchases.getCustomerInfo());
   } catch (e) {
-    console.error('[Billing] order() a eşuat', e);
+    console.error('[Billing] refund error', e);
+    alert('Refund a eşuat.');
   }
-};
+}
+
+/* ─ HELPERS ─ */
+async function handleCustomerInfo(info, cb) {
+    const owned =
+    /* a) entitlement legat în Dashboard */
+    Boolean(info?.entitlements?.active?.[ENTITLEMENT_ID]) ||
+
+    /* b) tranzacție non-subscription prezentă */
+    info?.nonSubscriptionTransactions?.some(
+      (t) => t.productIdentifier === STORE_PRODUCT_ID
+    );
+
+  // Nu suprascriem true cu false
+  const { value: old } = await Preferences.get({ key: PREF_ADS_REMOVED });
+  if (owned || old !== 'true') {
+    await Preferences.set({
+      key: PREF_ADS_REMOVED,
+      value: owned ? 'true' : 'false',
+    });
+  }
+
+  // Salvăm purchaseId când există
+  const pid = info?.nonSubscriptions?.[STORE_PRODUCT_ID]?.[0]?.purchaseIdentifier;
+  if (pid) await Preferences.set({ key: PREF_PURCHASE_ID, value: pid });
+
+  cb?.(owned);
+}

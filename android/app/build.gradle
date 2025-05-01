@@ -8,13 +8,21 @@ android {
         minSdkVersion 23
         multiDexEnabled true
         targetSdkVersion 36
-        versionCode 32
-        versionName "32.0"
+        versionCode 41
+        versionName "41.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
              // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
             ignoreAssetsPattern '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+        }           
+    }
+    splits {
+        abi {
+            enable true         // lasă Google Play să facă APK-urile “per-ABI”
+            reset()             // curăță orice listă anterioară
+            include "armeabi-v7a", "arm64-v8a"
+            universalApk false  // nu e obligatoriu universal (salvează spațiu)
         }
     }
     buildTypes {
@@ -25,11 +33,6 @@ android {
     }
 }
 
-repositories {
-    flatDir{
-        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
-    }
-}
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')

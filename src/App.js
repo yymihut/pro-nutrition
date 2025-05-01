@@ -9,6 +9,7 @@ import { LanguageContext } from "./LanguageContext";
 import "./App.css";
 import { initBilling, buyRemoveAds, hasRemoveAds } from "./Services/BillingService"
 import { Capacitor }  from '@capacitor/core';
+import { Preferences } from '@capacitor/preferences';
 
 const dietLabels = {
   unknown: {
@@ -83,7 +84,7 @@ const App = () => {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [adsRemoved, setAdsRemoved] = useState(false);
 
-
+  
   // ✅ Use computed name in rendering (if needed)
   // const getLocalizedName = (food) => food[`name_${language.toUpperCase()}`];
 
@@ -99,28 +100,13 @@ const App = () => {
 const handleRemoveAds = () => {
   buyRemoveAds((owned) => setAdsRemoved(owned));
 };
-  
-   useEffect(() => {
-    const onDeviceReady = () => {
-      console.log('Device ready!');
-      if (typeof window.store !== 'undefined') {
-        console.log('[App.js] Store detected, initializing billing... :', window.store);
-        initBilling((owned) => setAdsRemoved(owned));
-      } else {
-        console.warn('window.store nu este disponibil.');
-      }
-    };
 
-    if (Capacitor.isNativePlatform()) {
-      document.addEventListener('deviceready', onDeviceReady);
-    } else {
-      console.warn('Not a native platform. Skipping billing.');
-    }
-
-    return () => {
-      document.removeEventListener('deviceready', onDeviceReady);
-    };
-  }, []);
+useEffect(() => {
+  if (Capacitor.isNativePlatform()) {
+    const remove = initBilling((owned) => setAdsRemoved(owned));
+    return () => remove();           // cleanup în dev/hot-reload
+  }
+}, []);
 
   // Încarcă alimentele din localStorage la montare
   useEffect(() => {

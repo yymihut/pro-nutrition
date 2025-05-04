@@ -115,27 +115,39 @@ export async function refundRemoveAds() {
 
 /* ─ HELPERS ─ */
 async function handleCustomerInfo(info, cb) {
-    const owned =
-    /* a) entitlement legat în Dashboard */
-    Boolean(info?.entitlements?.active?.[ENTITLEMENT_ID]) ||
-
-    /* b) tranzacție non-subscription prezentă */
-    info?.nonSubscriptionTransactions?.some(
-      (t) => t.productIdentifier === STORE_PRODUCT_ID
+    /* a) Entitlement activ (dacă RC a sincronizat deja cu backend-ul) */
+    const viaEntitlement = Boolean(
+      info?.entitlements?.active?.[ENTITLEMENT_ID]
     );
+  
+    /* b) Non-subscription deținute – TOTDEAUNA prezent imediat după syncPurchases */
+    const viaList = info?.allPurchasedProductIdentifiers?.includes(
+      STORE_PRODUCT_ID
+    );
+    console.log('[Billing] *** v2 logic loaded ***');
+    console.log('[Billing]', info.entitlements.active,
+      info.allPurchasedProductIdentifiers);
+    const owned = viaEntitlement || viaList;
 
-  // Nu suprascriem true cu false
-  const { value: old } = await Preferences.get({ key: PREF_ADS_REMOVED });
-  if (owned || old !== 'true') {
-    await Preferences.set({
-      key: PREF_ADS_REMOVED,
-      value: owned ? 'true' : 'false',
-    });
-  }
+   /* Nu dăm niciodată înapoi de la true → false decât la refund real */
+   const { value: old } = await Preferences.get({ key: PREF_ADS_REMOVED });
+   const prev = old === 'true';
+   if (prev !== owned) {
+     await Preferences.set({
+       key: PREF_ADS_REMOVED,
+       value: owned ? 'true' : 'false',
+     });
+   }
 
-  // Salvăm purchaseId când există
-  const pid = info?.nonSubscriptions?.[STORE_PRODUCT_ID]?.[0]?.purchaseIdentifier;
-  if (pid) await Preferences.set({ key: PREF_PURCHASE_ID, value: pid });
+   /* Salvează id-ul achiziției pentru QA / refund */
+   const pid =
+     info?.nonSubscriptions?.[STORE_PRODUCT_ID]?.[0]?.purchaseIdentifier;
+   if (pid) await Preferences.set({ key: PREF_PURCHASE_ID, value: pid });
 
-  cb?.(owned);
+   cb?.(owned);
 }
+
+export async function hasRemoveAds() {
+    const { value } = await Preferences.get({ key: PREF_ADS_REMOVED });
+    return value === 'true';
+  }

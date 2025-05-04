@@ -7,7 +7,7 @@ import DietInfo from "./Components/DietInfo";
 import Footer from "./Components/Footer";
 import { LanguageContext } from "./LanguageContext";
 import "./App.css";
-import { initBilling, buyRemoveAds, hasRemoveAds } from "./Services/BillingService"
+import { initBilling, buyRemoveAds, hasRemoveAds } from './Services/BillingService';
 import { Capacitor }  from '@capacitor/core';
 import { Preferences } from '@capacitor/preferences';
 
@@ -96,17 +96,22 @@ const App = () => {
     setSelectedCategory(""); // 🔁 Resetează categoria la toate
   };
 
- // doar o singură chemare – fără if/else încrucișat
-const handleRemoveAds = () => {
-  buyRemoveAds((owned) => setAdsRemoved(owned));
-};
+    // ①  init rapid, direct din storage
+    useEffect(() => {
+      if (Capacitor.isNativePlatform()) {
+        hasRemoveAds().then(setAdsRemoved).catch(() => {});
+     }
+    }, []);
 
-useEffect(() => {
-  if (Capacitor.isNativePlatform()) {
-    const remove = initBilling((owned) => setAdsRemoved(owned));
-    return () => remove();           // cleanup în dev/hot-reload
-  }
-}, []);
+    const handleRemoveAds = () => buyRemoveAds(setAdsRemoved);
+
+   // ②  init RevenueCat + listener
+   useEffect(() => {
+    if (Capacitor.isNativePlatform()) {
+      const dispose = initBilling(setAdsRemoved);   // ← callback simplificat
+      return dispose;
+    }
+  }, []);
 
   // Încarcă alimentele din localStorage la montare
   useEffect(() => {
